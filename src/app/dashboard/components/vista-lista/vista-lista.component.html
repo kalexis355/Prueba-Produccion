@@ -1,0 +1,56 @@
+
+
+
+<div class="container"  >
+  <div class="row">
+    <div class="col-1">
+      {{carpetasSeleccionadas?.length}}
+    </div>
+    <div class="col-2">
+      <h1>Nombre</h1>
+    </div>
+    <!-- <div class="col-4 text-center">
+      <h1>Creador</h1>
+    </div> -->
+    <!-- <div class="col-5 text-center">
+      <h1>Fecha Creación</h1>
+    </div> -->
+    <hr>
+    <div *ngFor="let carpeta of carpetasActivas" >
+
+      <!-- <app-arrastrar-soltar [carpetaIdFocu]="carpeta.id"> -->
+<!--                     [checked]="ischecked(carpeta.id)"
+                    (change)="toggleCheckbox(carpeta.id)" -->
+<!-- [ngClass]="{ 'selected-border': ischecked(carpeta.id) }" -->
+          <div class="row " >
+            <div class="col-1">
+              <input type="checkbox"  class="form-check-input"
+>
+            </div>
+            <div class="col-2 text-truncate d-flex align-items-center">
+              <a [routerLink]="['/dashboard/carpeta',carpeta.Cod]" class="etiqueta d-flex">
+                <img class="me-2" [src]="'data:image/png;base64,' + carpeta.Icono" alt="carpeta" width="25" height="25">
+                <span [title]="carpeta.Nombre" class="texto">{{carpeta.Nombre}}</span>
+              </a>
+
+            </div>
+            <!-- <div class="col-4 text-center" >
+              <span class="boton-estilo rounded-circle">{{carpeta.creador| primeraUltima }}</span>
+
+            </div> -->
+            <!-- <div class="col-5 text-center">
+              {{carpeta.fechaCreacion | date:'dd/MM/yyyy'}}
+            </div> -->
+          </div>
+
+
+        <hr>
+      <!-- </app-arrastrar-soltar> -->
+
+
+    </div>
+
+
+  </div>
+
+</div>

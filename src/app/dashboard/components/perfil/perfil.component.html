@@ -1,0 +1,54 @@
+<div class=" d-flex justify-content-end pe-3" >
+  <button class="btn">
+    <i class="fa-solid fa-question "></i>
+  </button>
+  <button class="btn ">
+    <i class="fa-solid fa-gear "></i>
+  </button>
+
+  <button type="button" class="btn btun dropdown-toggle position-relative" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" >
+    <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">
+      99+
+    </span>
+  </button>
+
+
+  <div class="dropdown-menu contene" aria-labelledby="dropdownMenuButton">
+    <div class="container">
+      <div class="row">
+        <div class="col-6 d-flex align-content-center">
+      <img class="py-2 px-2 " src="/assets/imgs/icloud.png" alt="archivo" width="50" height="50">
+      <div class="col d-flex  align-items-center">
+        <h5 class="m-0 pt-1">Cloud</h5>
+        <h5 class="m-0 pt-1 texto">File</h5>
+      </div>
+        </div>
+        <div class="col-6 d-flex  justify-content-end align-items-center ">
+          <button class="btn btun2 " (click)="onLogout()!" ><span>cerrar sesión </span><i class="fa-solid fa-right-from-bracket "></i></button>
+        </div>
+        <div class="col-5  d-flex justify-content-center ">
+          <div *ngIf="usuario" class="avatar mt-4 mb-3 rounded-circle d-flex justify-content-center align-items-center">
+           <h1>{{usuario.Nombres | primeraUltima |uppercase}}</h1>
+          </div>
+        </div>
+        <div *ngIf="usuario" class="col-7 mt-4  d-flex flex-column justify-content-center align-items-center  ">
+          <h2 class="fs-4">¡Hola {{usuario.Nombres}}!</h2>
+          <!-- <h5>{{procesoUsuarioServicio.getRol()}}</h5> -->
+          <h6>{{usuario.NombreEntidad}}</h6>
+        </div>
+        <div class="row d-flex justify-content-center">
+          <hr class=" ms-4 border-3">
+        </div>
+        <div class="d-flex flex-column  align-items-center">
+          <label for="" class="form-label">Cambiar de rol</label>
+          <select name="" id="" class="form-select w-75" (change)="onRoleChange($event)">
+          <option >Cambiar rol</option>
+          <option *ngFor="let rol of rolesNombres" [value]="rol">{{rol}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--
+ -->

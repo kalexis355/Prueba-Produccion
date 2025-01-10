@@ -1,0 +1,140 @@
+<!--
+
+
+  <div class="row g-5">
+
+    <div class="col-md-2 " *ngFor="let carpeta of carpetas" >
+      <app-arrastrar-soltar [hijo]="'hijo1'"
+                            [deshabilitado]="persmisoService.permisoArrastrar(carpeta,'write')"
+                            [carpetaIdFocu]="carpeta.id">
+          <div class="btun d-flex flex-column justify-content-between align-items-end "
+          [ngClass]="{ 'selected-border': isChecked(carpeta.id) }" >
+
+
+             <input
+             type="checkbox"
+             class="form-check-input"
+             [checked]="isChecked(carpeta.id)"
+             (change)="toggleCheckbox(carpeta.id)"
+             >
+
+            <button class="btn btun flex-grow-1 " (click)="guardarRuta(carpeta)"  [routerLink]="['/dashboard/carpeta',carpeta.id]" >
+
+              <img class="" src="/assets/imgs/carpeta-vacia2.png" alt="carpeta" width="100" height="100">
+              <h4 class="mt-2 mb-0 texto" [title]="carpeta.nombre">{{carpeta.nombre }}</h4>
+              <span class="texto2">{{carpeta.fechaCreacion | date:'dd/MM/yyyy'}}</span>
+            </button>
+          </div>
+
+
+
+      </app-arrastrar-soltar>
+
+    </div>
+  </div> -->
+
+
+
+
+
+
+  <div class="row g-5">
+
+    <div class="col-md-2 " *ngFor="let carpeta of carpetasActivas" >
+
+      <!-- <app-arrastrar-soltar > -->
+        <div class="btun d-flex flex-column justify-content-between align-items-end "
+        (contextmenu)="mostrarMenuContextual($event,carpeta)">
+
+          <input
+          type="checkbox"
+          class="form-check-input"
+
+          >
+
+         <button class="btn btun flex-grow-1 "
+         (click)="guardarCodigo(carpeta)"
+        [routerLink]="['/dashboard/carpeta',carpeta.Cod]"
+        [state]="{ carpeta: carpeta }">
+
+           <img class="" [src]="'data:image/png;base64,' + carpeta.Icono" alt="carpeta" width="100" height="100">
+           <h4 class="mt-2 mb-0 texto" [title]="carpeta.Nombre">{{carpeta.Nombre }}</h4>
+           {{carpeta.Cod}}
+           <!-- <span class="texto2">{{carpeta.fechaCreacion | date:'dd/MM/yyyy'}}</span> -->
+         </button>
+       </div>
+      <!-- </app-arrastrar-soltar> -->
+
+    </div>
+
+  </div>
+     <!-- Menú contextual -->
+     <div class="menu-contextual" *ngIf="menuVisible" [style.left.px]="menuPosX" [style.top.px]="menuPosY">
+      <ul>
+        <li><i class="fa-regular fa-share-from-square"></i> Compartir</li>
+        <li><i class="fa-regular fa-circle-down"></i> Descargar</li>
+        <li (click)="otraOpcion()"><i class="fa-regular fa-pen-to-square"></i> Cambiar Nombre</li>
+        <li *ngIf="habilitarOpcionPegar" (click)="pegarCarpetaCortadaOCopiada(carpetaSeleccionada)"><i class="fa-solid fa-paste"></i> Pegar </li>
+        <li class="nav-item" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"
+          (click)="verDetalles(carpetaSeleccionada)"><i class="fa-solid fa-bars"></i> Ver detalles</li>
+          <li (click)="eliminarAccion()" class="cancelar" *ngIf="hayCarpetaSeleccionada">
+            <i class="fa-solid fa-circle-xmark"></i> Cancelar
+          </li>
+      </ul>
+
+  </div>
+
+
+
+
+
+  <div class="offcanvas offcanvas-end w-25" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="container">
+
+      <div class="mt-3 d-flex justify-content-center">
+        <p class="fs-4 fw-light"><i class="fa-regular fa-folder-open"></i> {{carpetaSeleccionada.CodSerie}}.
+          {{carpetaSeleccionada.Nombre}}</p>
+      </div>
+      <hr>
+
+      <div class="d-flex justify-content-center">
+        <button class="btn btun " data-bs-dismiss="offcanvas"
+          [routerLink]="['/dashboard/carpeta',carpetaSeleccionada.Cod]">
+          <img class="mt-2" [src]="'data:image/png;base64,' + carpetaSeleccionada.Icono" [alt]="carpetaSeleccionada.Nombre " width="100" height="100">
+        </button>
+      </div>
+
+
+      <hr>
+
+      <div class="ms-2 detalles-carpeta">
+        <p>Detalles de la carpeta</p>
+        <p class="subtitulo mb-0">Indice Electrónico</p>
+                <div *ngIf="indiceElectronico">
+                  <app-arbol-indice [indiceElectronico]="indiceElectronico"></app-arbol-indice>
+                </div>
+
+
+        <p class="subtitulo mb-0">Tipo</p>
+        <p class="mt-0 subtitulo2">{{carpetaSeleccionada.NombreTipoCarpeta}}</p>
+
+        <p *ngIf="carpetaSeleccionada.TipoCarpeta===2" class="subtitulo mb-0">Codigo Subserie</p>
+        <p *ngIf="carpetaSeleccionada.TipoCarpeta===2" class="mt-0 subtitulo2">{{carpetaSeleccionada.CodSubSerie}}</p>
+
+
+        <p class="subtitulo mb-0">Descripción</p>
+        <p class="mt-0 subtitulo2">{{carpetaSeleccionada.Descripcion}}</p>
+
+        <p class="subtitulo mb-0">Copia</p>
+        <p class="mt-0 subtitulo2">{{ carpetaSeleccionada.Copia ? 'Si es una copia' : 'No es una copia' }}</p>
+
+
+        <p class="subtitulo mb-0">Fecha de Creación</p>
+        <p class="mt-0 subtitulo2">{{ carpetaSeleccionada.FechaCreacion | date: 'dd/MM/yyyy' }}</p>
+
+
+      </div>
+
+    </div>
+  </div>
+

@@ -1,0 +1,49 @@
+.indice-container {
+  font-family: Arial, sans-serif;
+}
+
+.indice-item {
+  margin: 2px 0;
+}
+
+.item-header {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.item-header:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+.item-icon {
+  margin-right: 8px;
+  width: 24px;
+  text-align: center;
+}
+
+.item-nombre {
+  flex: 1;
+  font-weight: 500;
+}
+
+.item-path {
+  color: #666;
+  margin-left: 16px;
+  font-size: 0.9em;
+}
+
+/* .tipo-1 {
+  background-color: #e3f2fd;
+}
+
+.tipo-2 {
+  background-color: #e8f5e9;
+}
+
+.tipo-3 {
+  background-color: #fff3e0;
+} */

@@ -1,0 +1,86 @@
+<div class="container-fluid">
+  <div class="row d-flex justify-content-center align-items-center">
+    <div class="col-10">
+      <h1 class="mb-3 mt-4 fs-3 text-center">{{editarUSuario(rolesSeleccionados)? 'Editar Roles': 'Asignar Roles'  }}</h1>
+      <form autocomplete="off" [formGroup]="rolForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3" >
+          <Label class="form-label">Rol:</Label>
+          <select class="form-select" formControlName="rol">
+            <!-- [disabled]="rol.asignado" -->
+            <option *ngFor="let rol of roles" [value]="rol.Cod" >{{rol.Nombre}}</option>
+          </select>
+        </div>
+
+        <div class="mb-3" *ngIf="rolEncargadoUsuario()">
+          <label >Oficina:</label>
+          <select class="form-select" formControlName="oficina">
+            <option *ngFor="let oficina of oficinas" [value]="oficina.Cod" >{{oficina.Nombre}}</option>
+          </select>
+        </div>
+
+        <div class="mb-3 d-flex justify-content-center">
+          <button type="submit" class="btn btn-info">
+            Asignar <i class="fa-regular fa-floppy-disk"></i>
+          </button>
+        </div>
+      </form>
+      <table class="table table-striped table-bordered">
+        <thead class="table-info text-center">
+          <tr>
+            <th  scope="col">Rol</th>
+            <th  scope="col">Fecha Inicio</th>
+            <th  scope="col">Fecha Fin</th>
+            <th  scope="col">Estado</th>
+            <th  scope="col">Dependencia</th>
+            <th  scope="col">Gestión</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let rol of rolesSeleccionados, let i= index" class="text-center">
+            <td>{{obtenerNombreRol(rol.Rol)}}</td>
+            <td>{{ rol.FechaInicio | date:'dd/MM/yyyy' }}</td>
+            <td>{{ rol.FechaFin ? (rol.FechaFin | date:'dd/MM/yyyy') : 'Sin Fecha' }}</td>
+            <td>{{ rol.Estado === true ? 'Activo' : (rol.Estado === false ? 'Inactivo' : '') }}</td>
+
+            <td>
+            {{abrirListadoDependencias(rol.Oficina)}}
+            </td>
+
+            <td>
+              <button class="btn btn-warning me-2"
+              (click)="desactivarRol(rol.CodRolUsuario)"
+              *ngIf="this.data.modoEdicion === true && rol.CodRolUsuario" >
+                <i class="fa-regular fa-eye-slash"></i>
+                </button>
+
+                <!-- Botón para eliminar -->
+                <!-- *ngIf="rolesSeleccionados.length>0"  -->
+                <button  class="btn btn-danger"
+                 *ngIf="this.data.modoEdicion===true "
+                  (click)="borrarRolAsignadoBaseDatos(rol.CodRolUsuario!)"
+                  title="Borrar Rol">
+                <i class="fa-regular fa-trash-can"></i>
+                </button>
+
+                <button  class="btn btn-danger"
+                 *ngIf="this.data.modoEdicion===false "
+                  (click)="borrarRolAsignado(rol.Rol!)"
+                  title="No asignar rol">
+                  <i class="fa-regular fa-trash-can"></i>
+                  </button>
+            </td>
+          </tr>
+
+
+        </tbody>
+      </table>
+
+
+       <!-- Botones -->
+       <div class="d-flex justify-content-end fixed-buttons">
+        <button type="button" class="btn btn-secondary me-2" (click)="cancelar()" >Cancelar</button>
+        <button type="submit" class="btn btn-primary " (click)="guardar()" >Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>

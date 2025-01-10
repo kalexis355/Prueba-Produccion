@@ -1,0 +1,8 @@
+
+.custom-tooltip {
+  background-color: #4CAF50; /* Fondo verde */
+  color: white; /* Texto blanco */
+  font-size: 16px; /* Tamaño de fuente personalizado */
+  border-radius: 8px; /* Bordes redondeados */
+  padding: 8px; /* Espaciado interno */
+}

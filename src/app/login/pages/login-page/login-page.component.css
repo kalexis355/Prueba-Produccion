@@ -1,0 +1,76 @@
+.butn:hover{
+  border: none;
+}
+.large-icon {
+  font-size: 48px; /* Ajusta el tamaño según tus necesidades */
+  width: 48px;
+  height: 48px;
+}
+
+.fondo{
+  /* background-color: rgba(201, 201, 201, 0.342); */
+  background-color: #d5eaeb;
+
+}
+
+.btn3{
+background-color: #84dcdf;
+font-size: 24px;
+border-bottom: 5px solid #2dcdd3;
+}
+
+.btn3:hover{
+  background-color: #a1dddf;
+}
+
+.olvido{
+  color: #2dcdd3;
+}
+
+.olvido:hover{
+  color: #03b5bb;
+}
+
+.card{
+  box-shadow: 1px 1px 12px 4px #a1dddf;
+}
+.form-check-input{
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+
+.form-check-label{
+  cursor: pointer;
+}
+
+
+
+
+
+@media (max-width: 960px) and (max-height: 540px) and (orientation: landscape) {
+
+  .olvido {
+font-size: 9px;
+  }
+  .olvido2 {
+    /* Cambia el tamaño del checkbox */
+    font-size: 12px;
+
+    /* Ajustes adicionales según tus necesidades */
+  }
+
+  .btn3{
+    font-size: 20px;
+  }
+}
+@media (max-width: 540px) and (max-height: 960px) and (orientation: portrait) {
+  .olvido {
+    font-size: 12px; /* Estilos específicos para dispositivos móviles en vertical */
+  }
+
+  .olvido2 {
+    font-size: 13px; /* Estilos específicos para el mat-checkbox en dispositivos móviles en vertical */
+    /* Ajustes adicionales según tus necesidades */
+  }
+}

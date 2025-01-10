@@ -1,0 +1,11 @@
+.btun2{
+  /* height: 60px; */
+  width: 250px;
+  background-color: rgb(97, 255, 252);
+  box-shadow: 1px 1px 7px 1px rgba(128, 128, 128, 0.507);
+}
+.btun2:hover{
+  background-color: rgba(85, 202, 241, 0.786);;
+  box-shadow: 1px 1px 10px 1px rgba(128, 128, 128, 0.599);
+
+}

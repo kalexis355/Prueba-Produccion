@@ -1,0 +1,45 @@
+
+.btn1{
+  background-color: rgb(245, 245, 245);
+  border: 1px solid black;
+}
+
+.btn1:hover{
+  background-color: rgba(219, 219, 219, 0.473);
+}
+
+
+
+
+
+.contenedor::-webkit-scrollbar {
+  width: 0.3em; /* Ancho de la barra de desplazamiento */
+  border-radius: 5px;
+}
+
+.contenedor::-webkit-scrollbar-thumb {
+  background-color: #55cfd3b9;
+  border-radius: 4px; /* Color del pulgar de la barra de desplazamiento */
+
+}
+
+.contenedor::-webkit-scrollbar-thumb:active {
+  background-color: #1cc4cade; /* Cambia el color a tu preferencia */
+}
+
+.active {
+  background-color: #87e2e7d7; /* Ejemplo de color de fondo para el botón activo */
+  color: black;
+}
+
+a{
+  cursor: pointer;
+}
+
+a:hover{
+background-color: #9dd2d477;
+}
+.opciones{
+  background-color: rgb(245, 245, 245);
+  box-shadow: 1px 1px 7px 1px rgba(128, 128, 128, 0.507);
+}

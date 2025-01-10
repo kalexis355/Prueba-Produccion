@@ -1,0 +1,8 @@
+.fixed-buttons {
+  position: sticky;
+  bottom: 0;
+  background-color: white; /* Para que no se superponga con el contenido */
+  padding: 1rem;
+  border-top: 1px solid #dee2e6;
+  z-index: 10;
+}

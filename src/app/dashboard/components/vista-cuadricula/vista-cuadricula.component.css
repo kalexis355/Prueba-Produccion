@@ -1,0 +1,79 @@
+.texto2 {
+  font-size: 13px;
+  color: rgb(12, 126, 126);
+}
+.texto {
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+.btun {
+  width: 140px;
+}
+
+
+
+
+
+.opciones{
+  background-color: rgb(245, 245, 245);
+  box-shadow: 1px 1px 7px 1px rgba(128, 128, 128, 0.507);
+}
+.selected-border {
+  border: 2px solid #24a3eca9;
+  border-radius: 5px; /* Opcional: para redondear las esquinas */
+}
+
+.menu-contextual {
+  position: fixed;
+  z-index: 1000;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 0;
+  min-width: 230px;
+}
+
+.menu-contextual ul {
+  list-style: none;
+  /* margin: 0; */
+  /* padding: 0; */
+  margin: 5px;
+  padding: 0;
+}
+
+.menu-contextual ul li {
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.menu-contextual ul li:hover {
+  background-color: #f0f0f0;
+}
+
+.subtitulo{
+  font-size: 14px;
+}
+
+.subtitulo2{
+  color: rgb(107, 107, 107);
+}
+
+.detalles-carpeta {
+  max-height: 400px;   /* Ajusta este valor según el tamaño deseado */
+  overflow-y: auto;
+}
+
+
+.cancelar {
+  border-top: 1px solid #e0e0e0;
+  margin-top: 8px;
+  padding-top: 8px;
+}

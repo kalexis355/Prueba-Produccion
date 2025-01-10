@@ -1,0 +1,16 @@
+.btun{
+  /* height: 60px; */
+  background-color: rgb(245, 245, 245);
+  box-shadow: 1px 1px 7px 1px rgba(128, 128, 128, 0.507);
+  width: 190px;
+}
+
+.btun:hover{
+  background-color: rgb(219, 219, 219, 0.473);
+  box-shadow: 1px 1px 10px 1px rgba(128, 128, 128, 0.599);
+
+}
+
+.texto{
+font-size: 19px;
+}

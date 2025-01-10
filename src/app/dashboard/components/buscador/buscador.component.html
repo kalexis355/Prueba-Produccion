@@ -1,0 +1,31 @@
+<!-- la funcion (keyuo) funciona para emitir un valor despues de presionar una tecla -->
+<!-- <div class="input-icon">
+  <input type="text"
+  placeholder="Buscar en Archivador..."
+  class="form-control form-input mt-4 mt-md-1 "
+
+  (keyup)="emitirModelPresionando()"
+  [value]="termino"
+  #valorInput>
+  <i class="fa fa-search icon"></i>
+</div> -->
+<form class="input-icon">
+    <input type="text"
+           class="form-control form-input mt-4 mt-md-1 "
+           placeholder="Buscar en Archivador..."
+           matInput
+           [formControl]="myControl"
+           [matAutocomplete]="auto">
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+      @for (option of filteredOptions | async; track option) {
+        <!-- <mat-option [value]="option">{{option}}</mat-option> -->
+
+        <mat-option [value]="option.nombre" [routerLink]="['/dashboard/carpeta',option.id]" (click)="imprimirRuta(option)" ><i class="fa fa-search icon"></i> {{option.nombre}}</mat-option>
+      }
+    </mat-autocomplete>
+  <i class="fa fa-search icon"></i>
+
+</form>
+
+
+

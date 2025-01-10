@@ -1,0 +1,46 @@
+<div class="container-fluid d-flex flex-column h-100 ">
+  <div class="d-flex justify-content-center pt-4">
+    <div class="col-6  text-center">
+        <h4>{{user()?.Nombres}}, Te damos la bienvenida <h5 class="pt-1">a tu archivador digital</h5></h4>
+    </div>
+  </div>
+  <div class="d-flex justify-content-end mt-3 ">
+
+    <!-- <div class="col-3   ">
+    <dashboard-btn-mas ></dashboard-btn-mas>
+    </div> -->
+
+    <div class="col-6 opciones rounded-pill" *ngIf="carpetasSeleccion.length>0">
+      <app-opciones-carpeta [carpetasSeleccionadas]="carpetasSeleccion"></app-opciones-carpeta>
+    </div>
+
+    <div class="col-3      text-end  pe-2">
+      <button class="btn btn1 rounded-start-pill dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
+        <img src="/assets/imgs/orden.png" alt="" width="20" height="20"> Ordenar
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" [ngClass]="{'active': criterio === 'modic'}" (click)="sortList('modic')"><i class="fa-regular fa-pen-to-square"></i> Más reciente</a></li>
+        <li><a class="dropdown-item" [ngClass]="{'active': criterio === 'asc'}" (click)="sortList('asc')"><i class="fa-solid fa-arrow-up-a-z"></i> Ascendente</a></li>
+        <li><a class="dropdown-item " [ngClass]="{'active': criterio === 'desc'}" (click)="sortList('desc')"><i class="fa-solid fa-arrow-down-z-a"></i> Descendente</a></li>
+      </ul>
+      <button class="btn btn1 rounded-0" routerLink="lista" routerLinkActive="active" title="Elementos en lista">
+       <img src="/assets/imgs/lista.png" alt="" width="20" height="20">
+      </button>
+      <button class="btn btn1 rounded-0 rounded-end-circle" routerLink="cuadricula" routerLinkActive="active" title="Elementos en cuadricula">
+        <img src="/assets/imgs/mosaico.png" alt="" width="20" height="20">
+      </button>
+  </div>
+
+</div>
+
+<div class=" d-flex flex-grow-1 overflow-x-hidden contenedor  mt-4" style="height: 50px; overflow-y: auto;">
+
+  <div class="container mt-0">
+    <router-outlet ></router-outlet>
+  </div>
+</div>
+
+</div>
+
+
+

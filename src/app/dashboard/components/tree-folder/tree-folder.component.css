@@ -1,0 +1,33 @@
+
+.texto {
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+a{
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
+}
+.item2{
+  background-color: #dee0e0;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.item2:hover{
+  cursor: pointer;
+  background-color: #bcf4f7d7;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.active2 {
+  border-radius: 10px;
+  background-color: #bcf4f7d7;
+  font-weight: 600;
+
+}

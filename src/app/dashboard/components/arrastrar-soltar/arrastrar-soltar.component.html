@@ -1,0 +1,17 @@
+<div  style="height: 100%;"
+  [ngClass]="{'dragging': arrastre}"
+  (dragover)="onDragOver($event)"
+  (drop)="onDrop($event)"
+  (dragleave)="onDragLeave($event)">
+
+  <!-- Mensaje de arrastre -->
+  <div *ngIf="arrastre" class="alert alert-primary position-fixed bottom-0 start-50 translate-middle-x mb-2" style="z-index: 1000;">
+    Suelta los archivos para subirlos
+  </div>
+
+  <p-toast></p-toast>
+
+  <ng-content></ng-content>
+</div>
+<!--  -->
+<!-- bord rounded-4 -->

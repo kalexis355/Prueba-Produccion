@@ -1,0 +1,10 @@
+<mat-tab-group #tabGroup>
+  <mat-tab label="Listado de Usuarios">
+    <!-- Aquí iría la tabla o listado de usuarios -->
+    <app-todos-usuarios (editarUsuario)="onEditarUsuario($event)"></app-todos-usuarios>
+  </mat-tab>
+  <mat-tab label="Registro / Modificación">
+    <!-- Aquí el formulario de registro o modificación de usuarios -->
+     <app-formulario [usuarioAEditar]="usuarioParaEditar"></app-formulario>
+  </mat-tab>
+</mat-tab-group>

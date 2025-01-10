@@ -1,0 +1,38 @@
+.boton-estilo {
+  padding: 9px 9px;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: #b2e3e6d7; /* Cambia este color según tu diseño */
+  text-align: center;
+}
+
+h1{
+  font-size: 25px;
+  font-weight: 500;
+}
+.texto {
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.etiqueta
+{
+color: black;
+text-decoration: none;
+cursor: pointer;
+}
+
+ .etiqueta:hover .fondo{
+  background-color: rgba(207, 207, 207, 0.678);
+  border-radius: 5px;
+
+}
+.selected-border {
+  border: 2px solid #24a3eca9;
+  border-radius: 5px; /* Opcional: para redondear las esquinas */
+}

@@ -1,0 +1,75 @@
+<div *ngIf="isLoading" class="loading-screen vh-100  w-100 fondo2">
+  <span class="loader"></span>
+</div>
+
+<div *ngIf="!isLoading" class="fondo vh-100  w-100 d-flex flex-column">
+  <div class="d-flex justify-content-between w-100 ">
+    <div class="col-3 d-flex align-items-center ">
+      <img class="py-2 px-2 " src="/assets/imgs/icloud.png" alt="archivo" width="70" height="70">
+      <div class="col d-flex  align-content-center">
+        <h4 class="m-0 pt-1">Cloud</h4>
+        <h4 class="m-0 pt-1 texto">File</h4>
+      </div>
+
+    </div>
+    <div class="col-7 align-content-center text-center">
+      <div class="d-inline-block  ancho">
+        <app-buscador></app-buscador>
+      </div>
+    </div>
+    <div class="col-2 align-content-center">
+      <app-perfil [usuario]="user()" ></app-perfil>
+    </div>
+
+  </div >
+
+  <div class="d-flex flex-grow-1 "  style="height: 5px;">
+    <div class="col-2 contenedor  overflow-auto  ">
+      <app-opciones></app-opciones>
+    </div>
+    <app-arrastrar-soltar class="col-10 bord rounded-4">
+      <router-outlet></router-outlet>
+    </app-arrastrar-soltar>
+  </div>
+</div>
+
+<!-- <div class="col-10 bord rounded-4 bg-warning  ">
+    <router-outlet></router-outlet>
+</div> -->
+<!-- <app-arrastrar-soltar class="col-10 bord rounded-4 bg-warning">
+  <router-outlet></router-outlet>
+</app-arrastrar-soltar> -->
+
+
+
+
+<!-- <div  class="fondo vh-100  w-100 d-flex flex-column">
+  <div class="d-flex justify-content-between w-100 ">
+    <div class="col-3 d-flex align-items-center ">
+      <img class="py-2 px-2 " src="/assets/imgs/icloud.png" alt="archivo" width="70" height="70">
+      <div class="col d-flex  align-content-center">
+        <h4 class="m-0 pt-1">Cloud</h4>
+        <h4 class="m-0 pt-1 texto">File</h4>
+      </div>
+
+    </div>
+    <div class="col-7 align-content-center text-center">
+      <div class="d-inline-block  ancho">
+        <app-buscador></app-buscador>
+      </div>
+    </div>
+    <div class="col-2 align-content-center">
+      <app-perfil [usuario]="user()" ></app-perfil>
+    </div>
+
+  </div >
+
+  <div class="d-flex flex-grow-1 "  style="height: 5px;">
+    <div class="col-2 contenedor  overflow-auto  ">
+      <app-opciones></app-opciones>
+    </div>
+    <app-arrastrar-soltar class="col-10 bord rounded-4">
+      <router-outlet></router-outlet>
+    </app-arrastrar-soltar>
+  </div>
+</div> -->

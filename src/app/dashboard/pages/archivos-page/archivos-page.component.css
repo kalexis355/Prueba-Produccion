@@ -1,0 +1,236 @@
+
+.contenedor::-webkit-scrollbar {
+  width: 0.5em; /* Ancho de la barra de desplazamiento */
+  border-radius: 5px;
+}
+
+.contenedor::-webkit-scrollbar-thumb {
+  background-color: #55cfd3b9;
+  border-radius: 4px; /* Color del pulgar de la barra de desplazamiento */
+
+}
+
+.contenedor::-webkit-scrollbar-thumb:active {
+  background-color: #1cc4cade; /* Cambia el color a tu preferencia */
+}
+
+.texto3{
+ color: #0ba7acd8;
+}
+.texto2 {
+  font-size: 13px;
+  color: rgb(12, 126, 126);
+}
+.texto {
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+.btun{
+  width: 140px;
+
+}
+
+.btun:hover{
+  background-color: #dee0e0;
+}
+
+.btun2{
+  /* height: 60px; */
+  width: 190px;
+  background-color: rgb(245, 245, 245);
+  box-shadow: 1px 1px 7px 1px rgba(128, 128, 128, 0.507);
+}
+.btun2:hover{
+  background-color: rgb(219, 219, 219, 0.473);;
+  box-shadow: 1px 1px 10px 1px rgba(128, 128, 128, 0.599);
+
+}
+
+.ruta{
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.active{
+ color: #0cb9be;
+
+}
+
+.ruta:hover{
+  color: #0c9abe;
+}
+
+.opciones{
+  background-color: rgb(245, 245, 245);
+  box-shadow: 1px 1px 7px 1px rgba(128, 128, 128, 0.507);
+}
+
+
+  /* .menu-contextual {
+    position: fixed;
+    z-index: 1000;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 0;
+    min-width: 230px;
+  }
+
+  .menu-contextual ul {
+    list-style: none;
+
+    margin: 5px;
+    padding: 0;
+
+  } */
+
+  /* .menu-contextual ul li {
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background-color 0.2s ease;
+  }
+
+  .menu-contextual ul li:hover {
+    background-color: #f0f0f0;
+  }
+
+
+  .menu-contextual ul li.cancelar{
+    background-color: rgb(223, 52, 52);
+
+  }
+
+  .menu-contextual ul li.cancelar:hover{
+    background-color: rgb(135, 37, 37);
+    color: white;
+  } */
+
+  .menu-contextual {
+    position: fixed;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    border-radius: 4px;
+    min-width: 200px;
+    z-index: 1000;
+  }
+
+  .menu-contextual ul {
+    list-style: none;
+    padding: 8px 0;
+    margin: 0;
+  }
+
+  .menu-contextual li {
+    padding: 8px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .menu-contextual li:hover {
+    background-color: #f5f5f5;
+  }
+
+  /* Estilos para el submenú */
+  .submenu {
+    position: relative;
+  }
+
+  .submenu span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .submenu span .fa-chevron-right {
+    margin-left: auto;
+    font-size: 0.8em;
+  }
+
+  .submenu-content {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    border-radius: 4px;
+    display: none;
+    min-width: 200px;
+  }
+
+  .submenu-content.left {
+    left: auto;
+    right: 100%;
+  }
+
+  .submenu:hover .submenu-content {
+    display: block;
+  }
+
+  .disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .cancelar {
+    border-top: 1px solid #e0e0e0;
+    margin-top: 8px;
+    padding-top: 8px;
+  }
+
+
+
+  /* Iconos */
+  i {
+    width: 20px;
+    text-align: center;
+  }
+
+  .subtitulo{
+    font-size: 14px;
+  }
+
+  .subtitulo2{
+    color: rgb(107, 107, 107);
+  }
+
+  .detalles-carpeta {
+    max-height: 50%;   /* Ajusta este valor según el tamaño deseado */
+    overflow-y: auto;
+  }
+
+  .disabled {
+    pointer-events: none;
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+
+  .carpeta-cortar {
+    border: 2px dashed #1a73e8 !important; /* Color azul de Google Drive */
+    border-radius: 8px;
+    padding: 4px;
+    background-color: rgba(26, 115, 232, 0.04) !important; /* Fondo azul muy suave */
+  }
+
+  /* Si quieres agregar una animación para hacerlo más visible */
+  @keyframes borderPulse {
+    0% { border-color: #1a73e8; }
+    50% { border-color: #4285f4; }
+    100% { border-color: #1a73e8; }
+  }
+
+  .carpeta-cortar {
+    animation: borderPulse 2s infinite;
+  }

@@ -1,0 +1,9 @@
+
+.dragging {
+  border: 4px dashed #55cfd3b9;
+}
+.custom-snackbar {
+  background-color: #4caf50; /* Color de fondo verde para éxito */
+  color: white;
+  margin-top: 10px; /* Espaciado superior para evitar superposición */
+}

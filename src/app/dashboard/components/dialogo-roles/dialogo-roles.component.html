@@ -1,0 +1,24 @@
+<div class="">
+  <mat-dialog-content class="col mb-0" style="height: 130px;">
+    <h4 class="text-center">Selecciona tu rol</h4>
+    <div class="col text-center">
+      <div class="input-group mb-3">
+        <button class="btn btn-light" style="cursor: auto;"
+        matTooltip="Selecciona tu rol"
+        matTooltipPosition="below"
+        matTooltipClass="custom-tooltip">
+          <i class="fa-regular fa-user"></i>
+        </button>
+        <select class="form-select"  [(ngModel)]="selectedRole" aria-label="Selección de rol">
+          <option selected disabled>Seleccionar rol</option>
+          <option *ngFor="let role of rolesNombres" [value]="role">{{ role }}</option>
+        </select>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="d-flex justify-content-center mt-0">
+    <button class="btn btn-primary" (click)="aceptar()" >Aceptar</button>
+  </mat-dialog-actions>
+</div>
+

@@ -1,0 +1,20 @@
+<div class="">
+  <mat-dialog-content class="col mb-0">
+    <h4>Cambiar nombre</h4>
+    <div class="col  text-center ">
+      <mat-form-field appearance="outline" class="w-100 mb-0">
+        <mat-label> <mat-icon> <i class="fa-regular fa-folder "></i></mat-icon> Carpeta</mat-label>
+              <input
+                matInput
+                placeholder="Digite el nuevo nombre"
+                [(ngModel)]="nombreCarpeta"
+              />
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="d-flex justify-content-between mt-0">
+    <button class="btn btn-danger"  (click)="onNoClick()">Cancelar</button>
+    <button class="btn btn-primary"  (click)="onSaveClick()" >Aceptar</button>
+  </mat-dialog-actions>
+  </div>

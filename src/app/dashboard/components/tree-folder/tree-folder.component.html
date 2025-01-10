@@ -1,0 +1,20 @@
+
+<div *ngIf="carpeta" class="ps-3 pt-1">
+  <div *ngIf="carpeta.tipo === 'carpeta'">
+    <a (click)="toggleCollapse()"
+
+        [routerLink]="['carpeta',carpeta.id]"
+
+       class="texto item2"
+       [title]="carpeta.nombre">
+      <img [src]="isCollapsed ? '/assets/imgs/a-derecha.png' : '/assets/imgs/abajo.png'" alt="">
+      <i class="fa-regular fa-folder-closed"></i> {{carpeta.nombre}}
+    </a>
+    <div *ngIf="!isCollapsed" class="list-group">
+      <div *ngFor="let hijo of carpeta.hijos">
+        <dash-tree-folder [carpeta]="hijo" *ngIf="hijo.tipo==='carpeta'" ></dash-tree-folder>
+      </div>
+    </div>
+  </div>
+</div>
+<!--  [ngClass]="{'active2': !isCollapsed}" -->

@@ -1,0 +1,48 @@
+  //metodo para checkear el estus del usuario logueado
+  checkAuthStatus():Observable<boolean>{
+    //se crea la url con el endpoint correspondiente al chequeo del token
+    //  const url = `${this.baseUrl}/auth/check-token`
+     // se trae el token que se guardo cuando el usuario inicio sesión
+     const token = localStorage.getItem('token');
+
+     //si no hay un token guardado
+     if(!token){
+      //se cierra sesion de una vez
+      this.logout()
+      this._authStatus.set(AuthStatus.notAuthenticated);
+
+      // y se retorna falso lo cual significa que no se puede hacer persistente la sesion
+       return of(false);
+    }
+    //   //si si hay un token guardado se crea la constante headers para enviar el token
+    //  const headers = new HttpHeaders()
+    //  //meidante el encabezado authorization y el tipo de token se envia para verificarlo en el backend
+    //  .set('Authorization',`Bearer ${token}`);
+
+    //  // se usa la propiedad http mediante el metodo get, el cual la respuesta es segun la interfaz checkTokenResponse
+    //  // se envia la url y el encabezado para la verificacion del usuario
+    //  return this.http.get<CheckTokenResponse>(url,{headers})
+    //  .pipe(
+    //   //se usa la funcion map debido a que este endopoint retorna un nuevo token
+    //   // por tal razon se llama de nuevo al metodo setAuthentication y se envia el usuario y el nuevo token
+    //   map(({user,token})=> this.setAuthentication(user,token)),
+    //   catchError(() => {
+    //     //si hayb algun error se cambia el estado de la señal status a no autenticado
+    //     this._authStatus.set(AuthStatus.notAuthenticated);
+    //     //y se retorna false
+    //     return of(false)})
+    //  )
+    this._authStatus.set(AuthStatus.authenticated);
+
+    return of(true)
+  }
+
+
+div perfil roles
+  <div class="d-flex flex-column justify-content-center align-items-center text-center" *ngIf="authService.currentUSer2()!.RolesUsuario.length>1">
+          <h5>Cambiar rol</h5>
+          <select class="form-select w-75"  [(ngModel)]="selectedRole" (change)="onRoleChange($event)" aria-label="Selección de rol">
+            <option selected disabled>Seleccionar rol</option>
+            <!-- <option *ngFor="let role of authService.getUserRoles()" [value]="role">{{ role }}</option> -->
+          </select>
+        </div>

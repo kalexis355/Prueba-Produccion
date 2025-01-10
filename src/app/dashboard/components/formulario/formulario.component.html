@@ -1,0 +1,78 @@
+<div class="container-fluid">
+  <div class="row d-flex justify-content-center">
+    <div class="col-9">
+      <h1 class="text-center fs-3 mt-4">
+        {{esModoEdicion ? 'Editar Usuario': 'Crear nuevo usuario'}}
+      </h1>
+      <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <!-- Nombre completo -->
+        <div class="mb-3">
+          <label for="nombreCompleto" class="form-label">Nombres</label>
+          <input type="text" class="form-control" formControlName="nombre" placeholder="Ingrese sus nombres" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="nombreCompleto" class="form-label">Apellidos</label>
+          <input type="text" class="form-control" formControlName="apellido" placeholder="Ingrese sus apellidos" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="nombreCompleto" class="form-label">Telefono</label>
+          <input type="text" class="form-control" formControlName="telefono" placeholder="Ingrese telefono" required>
+        </div>
+
+        <!-- Número de identificación -->
+        <div class="mb-3">
+          <label for="numeroIdentificacion" class="form-label">Número de identificación</label>
+          <input type="text" class="form-control" formControlName="identificacion"
+            placeholder="Ingrese el número de identificación" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="correoElectronico" class="form-label">Usuario (NickName)</label>
+          <input type="text" class="form-control" formControlName="usuario" placeholder="Ingrese el usuario o nickName"
+            required>
+        </div>
+
+        <!-- Contraseña -->
+        <div class="mb-3">
+          <label for="contraseña" class="form-label">Contraseña</label>
+          <input type="password" class="form-control" formControlName="contrasena" placeholder="Ingrese la contraseña"
+            required>
+        </div>
+
+        <!-- Confirmación de contraseña -->
+        <div class="mb-3">
+          <label for="confirmacionContraseña" class="form-label">Confirmación de contraseña</label>
+          <input type="password" class="form-control" formControlName="repetircontraseña"
+            placeholder="Confirme la contraseña" required>
+        </div>
+
+        <div class="mb-3 d-flex">
+          <label class="form-label me-3">Estado Usuario</label>
+          <mat-slide-toggle formControlName="estado"></mat-slide-toggle>
+          <!-- <input class="form-check-input" type="checkbox" id="estadoToggle" formControlName="estado"> -->
+        </div>
+
+
+
+        <div class="mb-3">
+          <label class="form-label">Asignar Roles:</label>
+          <button class="btn btn-info ms-3"
+          type="button"
+          (click)="abrirDialogoRoles()">Roles</button>
+        </div>
+        <p *ngIf="!tieneRolesAsignados() && esModoEdicion===false" class="text-danger mt-2">Debe asignar al menos un rol para guardar.</p>
+
+
+        <!-- Botones -->
+        <div class="d-flex justify-content-end">
+          <button type="button" class="btn btn-secondary me-2" (click)="cancelar()">Cancelar</button>
+          <button *ngIf="esModoEdicion === false" type="submit" class="btn btn-primary" [disabled]="!tieneRolesAsignados()">Crear</button>
+          <button *ngIf="esModoEdicion" type="submit" class="btn btn-primary" >Editar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>

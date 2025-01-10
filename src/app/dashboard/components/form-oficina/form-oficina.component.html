@@ -1,0 +1,57 @@
+<div class="container-fluid ">
+  <div class="row h-100 d-flex justify-content-center align-items-center ">
+    <div class="col-9   " style="height: 550px; display: flex; flex-direction: column; justify-content: center;">
+      <h1 class="text-center fs-3 mt-4">
+       {{esModoEdicion ? 'Editar dependencia': 'Crear Nueva dependencia'}}
+      </h1>
+      <form [formGroup]="officeForm" (ngSubmit)="onSubmit()">
+        <!-- Nombre de la oficina -->
+         <div class="mb-3">
+          <label class="form-label">Nombre de la Dependencia:</label>
+          <input class="form-control" formControlName="nombre" type="text" required />
+         </div>
+
+         <!-- Numero de serie de la oficina -->
+         <div class="mb-3">
+          <label class="form-label">Codigo de serie </label>
+          <input type="number" formControlName="codigoSerie" class="form-control" required>
+         </div>
+
+         <div class="mb-3 d-flex">
+          <label class="form-label me-3">Estado Dependencia</label>
+          <mat-slide-toggle formControlName="estado"></mat-slide-toggle>
+        </div>
+
+        <div class="mb-3" *ngIf="esModoEdicion && oficinaAEditar?.Icono">
+          <label class="form-label">Icono Elegido</label>
+          <div >
+            <img [src]=" 'data:image/png;base64,' + oficinaAEditar?.Icono" alt="Icono actual" width="100" height="100">
+          </div>
+        </div>
+
+
+         <div class="mb-3">
+          <label class="form-label">Icono (Opcional)</label>
+          <label class="btn btun2 rounded-pill d-flex align-items-center">
+            <i class="fa-solid fa-icons"></i>
+            <span class="fs-5 ps-2">{{esModoEdicion? 'Escoger nuevo Icono':'Escoger Icono'}}</span>
+
+            <input type="file" formControlName="icono" (change)="onFileSelected($event)"  accept="image/png, image/jpeg, image/jpg" style="display: none;">
+          </label>
+         </div>
+
+         <!-- Botones -->
+         <div class="d-flex justify-content-end">
+          <button type="button" class="btn btn-secondary me-2" (click)="cancelar()">Cancelar</button>
+          <button type="submit" *ngIf="esModoEdicion===false" class="btn btn-primary " >Guardar</button>
+          <button *ngIf="esModoEdicion===true" type="submit" class="btn btn-primary" >Editar</button>
+        </div>
+
+      </form>
+
+
+    </div>
+  </div>
+
+</div>
+

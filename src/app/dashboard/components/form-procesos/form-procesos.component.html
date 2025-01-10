@@ -1,0 +1,42 @@
+<div class="container-fluid">
+  <div class="row d-flex justify-content-center">
+    <div class="col-9 " style="height: 550px; display: flex; flex-direction: column; justify-content: center;">
+      <h1 class="text-center fs-3">
+        {{esModoEdicion ? 'Editar Proceso' : 'Crear nuevo Proceso'}}
+      </h1>
+      <form [formGroup]="processForm" (ngSubmit)="onSubmit()">
+
+          <!-- Nombre proceso -->
+          <div class="mb-3">
+            <label class="form-label">Nombre del proceso:</label>
+            <input class="form-control" formControlName="nombre" type="text" required />
+           </div>
+
+        <!-- Participantes -->
+        <div class="mb-3 d-flex flex-column">
+          <label class="form-label" >Oficinas participantes:</label>
+          <!-- <select class="form-select" formControlName="participantes" multiple>
+            <option *ngFor="let office of offices" [value]="office.id">{{ office.nombre }}</option>
+          </select> -->
+          <mat-form-field class="custom-form-field">
+            <mat-label>Participantes</mat-label>
+            <mat-select formControlName="participantes" multiple class="custom-select">
+              <mat-option *ngFor="let oficina of oficinas" [value]="oficina.Cod">{{ oficina.Nombre }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+
+         <!-- Botones -->
+         <div class="d-flex justify-content-end">
+          <button type="button" class="btn btn-secondary me-2" (click)="cancelar()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+
+

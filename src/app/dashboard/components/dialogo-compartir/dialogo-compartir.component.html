@@ -1,0 +1,34 @@
+<div class="">
+  <mat-dialog-content class="col mb-0" style="height: 250px;">
+    <h4 class="text-center">Compartir {{nombreCarpetaDom()}}</h4>
+    <div class="col  text-center ">
+      <div class="input-group mb-3">
+        <button class="btn btn-light " style="cursor: auto;"
+        matTooltip="Agregar un nombre o correo electrónico"
+        matTooltipPosition="below"
+        matTooltipClass="custom-tooltip">
+        <i class="fa-regular fa-user"></i>
+      </button>
+        <input type="text" class="form-control" aria-label="Text input with dropdown button">
+        <select class="form-select" aria-label="Default select example">
+          <option selected>Permisos</option>
+          <option value="1"> Editar</option>
+          <option value="2">Ver</option>
+        </select>
+        <br>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 ">
+        <textarea name="" id="" class="w-100 form-control  " rows="4" placeholder="Ingresa tu mensaje aqui..."></textarea>
+      </div>
+    </div>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="d-flex justify-content-between mt-0">
+    <button class="btn btn-danger"  (click)="onNoClick()">Cancelar</button>
+    <button class="btn btn-primary"  (click)="onSaveClick()" >Aceptar</button>
+  </mat-dialog-actions>
+  </div>
+

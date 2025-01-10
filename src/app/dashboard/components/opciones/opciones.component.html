@@ -1,0 +1,40 @@
+
+
+<div class="container">
+  <ul class="list-group list-unstyled ps-3 py-3 me-2">
+    <li class="item" routerLinkActive="active">
+      <a href="" routerLink="principal" (click)="borrarTodaRuta()">
+        <img src="/assets/imgs/casa.png" alt=""> Pagina principal
+      </a>
+    </li>
+    <!-- <li class="item">
+      <div class="list-group">
+        <a href="#item1" class="" data-bs-toggle="collapse" aria-expanded="false" (click)="setActive()">
+          <img [src]="isActive ? '/assets/imgs/abajo.png' : '/assets/imgs/a-derecha.png'" alt="">
+          <img src="/assets/imgs/carpeta.png" alt=""> Mis archivos
+        </a>
+      </div>
+    </li>
+    <div class="collapse" id="item1">
+      <div class="list-group">
+        <div *ngFor="let carpeta of carpetas; let i = index">
+            <dash-tree-folder [carpeta]="carpeta"   ></dash-tree-folder>
+        </div>
+      </div>
+    </div> -->
+    <!-- *ngIf="rolAdministrador()"  -->
+    <li class="item" routerLinkActive="active" *ngIf="rolAdminSa()">
+      <a routerLink="gestion" >
+        <img src="/assets/imgs/gestion.png" alt="Gestion" height="25"> Gestion administrativa
+      </a>
+    </li>
+    <li class="item">
+      <a  (click)="onLogout()">
+        <img src="/assets/imgs/cerrado.png" alt=""> Cerrar sesión
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+

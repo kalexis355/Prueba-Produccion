@@ -1,0 +1,23 @@
+<div   class="d-flex justify-content-center align-items-center" >
+  <button class="btn btun" (click)="abrirDialogoCompartir()">
+    <i class="fa-regular fa-share-from-square"></i><span> Compartir</span>
+  </button>
+  <button class="btn btun" (click)="descargarCarpetas()">
+    <i class="fa-regular fa-circle-down"></i><span> Descargar</span>
+  </button>
+
+  <button *ngIf="(carpetasSeleccionadas?.length && permisoEliminar(carpetasSeleccionadas || [], 'delete')) ||
+               (archivosSeleccionados?.length && permisoEliminarArchivo(archivosSeleccionados || [], 'delete'))"
+                 class="btn btun" (click)="borrarCarpetas()">
+    <i class="fa-regular fa-trash-can"></i><span> Eliminar</span>
+  </button>
+  <button  class="btn btun" (click)="abrirDialogo()"
+           *ngIf="archivosTotal.length <2  && permisoCambiarNombre('rename') "
+           >
+    <i class="fa-regular fa-pen-to-square"></i><span> Cambiar nombre</span>
+  </button>
+
+  <span class="btun "> {{archivosTotal.length}} Seleccionados </span>
+
+</div>
+

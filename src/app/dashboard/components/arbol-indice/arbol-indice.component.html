@@ -1,0 +1,23 @@
+<!-- Agregamos un console.log para debugging -->
+<!-- <pre>{{ indiceElectronico | json }}</pre> -->
+
+<div *ngFor="let item of indiceElectronico" class="indice-item">
+  <div class="item-header"
+       [style.padding-left.px]="item.Nivel * 20"
+       [ngClass]="getTipoCarpetaClass(item)">
+    <span class="item-icon">
+      {{ getTipoCarpetaIcon(item.TipoCarpeta) }}
+    </span>
+    <span class="item-nombre" [routerLink]="['/dashboard/carpeta', item.Cod]">{{ item.Nombre }}</span>
+    <span class="item-path">{{ item.Path }}</span>
+  </div>
+
+  <!-- Llamada recursiva para las subcarpetas -->
+  <app-arbol-indice
+    *ngIf="item.Subcarpetas?.length"
+    [indiceElectronico]="item.Subcarpetas">
+  </app-arbol-indice>
+</div>
+
+
+

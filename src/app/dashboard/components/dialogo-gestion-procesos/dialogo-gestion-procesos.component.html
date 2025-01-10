@@ -1,0 +1,54 @@
+<mat-tab-group #tabGroup>
+  <mat-tab label="Listado de Procesos">
+    <!-- Aquí iría la tabla o listado de usuarios -->
+     <div class="container-fluid">
+      <div class="row  d-flex justify-content-center align-content-center">
+        <div class="col-10">
+          <h1 class="text-center fs-3 mb-3 mt-4">
+            Procesos Creados
+          </h1>
+
+          <app-buscador-generico placeHolder="Buscar en Procesos..."></app-buscador-generico>
+
+
+          <table class="table table-striped table-bordered">
+            <thead class="table-info text-center">
+              <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Oficinas</th>
+                <th scope="col">Gestion</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let proceso of procesosObtenidos" class="text-center">
+                <td>{{proceso.Nombre}}</td>
+                <td>{{ proceso.Estado ? 'Activo' : 'Inactivo' }}</td>
+                <td>
+                  <button class="btn btn-light-info" (click)="verListaOficina(proceso.Cod)">
+                    Ver <i class="fa-regular fa-eye"></i>
+                  </button>
+                </td>
+                <td>
+                  <button class="btn btn-primary me-2"  (click)="editarProceso(proceso)">
+                  <i class="fa-regular fa-pen-to-square " ></i>
+                  </button>
+
+                <!-- Botón para eliminar -->
+                  <button class="btn btn-danger" (click)="borrarProceso(proceso.Cod,proceso.Nombre)" >
+                  <i class="fa-regular fa-trash-can"></i>
+                  </button>
+              </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+     </div>
+  </mat-tab>
+  <mat-tab label="Registro / Modificación">
+    <!-- Aquí el formulario de registro o modificación de usuarios -->
+     <app-form-procesos [procesoAEditar]="procesoSeleccionado"></app-form-procesos>
+  </mat-tab>
+</mat-tab-group>
+

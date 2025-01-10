@@ -1,0 +1,81 @@
+<div class="container-fluid">
+  <div class="row d-flex justify-content-center align-items-center">
+    <div class="col-10">
+      <h1 class="text-center mb-4 fs-3 mt-4">Usuarios Creados</h1>
+      <app-buscador-generico placeHolder="Buscar en Usuarios..."></app-buscador-generico>
+      <div class="container-fluid">
+        <div class="row d-flex justify-content-center align-content-center">
+            <table class="table table-striped table-bordered">
+              <thead class="table-info text-center">
+                <tr>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Apellidos</th>
+                  <th scope="col">Teléfono</th>
+                  <th scope="col">Documento</th>
+                  <th scope="col">Usuario</th>
+                  <th scope="col">Estado</th>
+                  <th scope="col">
+                    <div style="overflow-x: auto; ">Rol</div>
+                  </th>
+                  <th scope="col">Gestion</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="usuarios">
+                <tr *ngFor="let usuario of usuarios" class="text-center">
+                  <td>{{ usuario.Nombres }}</td>
+                  <td>{{ usuario.Apellidos }}</td>
+                  <td>{{ usuario.Telefono }}</td>
+                  <td>{{ usuario.Documento }}</td>
+                  <td>{{ usuario.Usuario }}</td>
+                  <td>{{ usuario.DescripcionEstado }}</td>
+                  <td>
+                    <div style="white-space: nowrap; overflow-x: auto; max-width: 150px;">
+                      <!-- {{ obtenerNombresRoles(usuario.RolesUsuario!) || 'No tiene Roles' }} -->
+                      {{ usuario.RolesUsuario ? obtenerNombresRoles(usuario.RolesUsuario) : 'No tiene Roles' }}
+                    </div>
+                  </td>
+                  <td>   <!-- Botón para modificar -->
+                    <button class="btn btn-primary me-2"
+                    (click)="modificarUsuario(usuario)"
+                    title="Modificar usuario">
+                      <i class="fa-regular fa-pen-to-square " ></i>
+                    </button>
+
+                    <!-- Botón para eliminar -->
+
+                    <button class="btn btn-danger me-2"
+                     (click)="eliminarUsuario(+usuario.Cod!)"
+                     title="Eliminar usuario">
+                      <i class="fa-regular fa-trash-can"></i>
+                    </button>
+
+                    <button class="btn btn-warning"
+                    *ngIf="usuario.Estado === true"
+                    title="Deshabilitar usuario"
+                    (click)="modificarEstadoUsuario(usuario)">
+                      <i class="fa-solid fa-user-slash"></i>
+                    </button>
+
+                    <button class="btn btn-success"
+                    *ngIf="usuario.Estado === false"
+                    title="Habilitar usuario"
+                    (click)="modificarEstadoUsuario(usuario)">
+                    <i class="fa-solid fa-user"></i>
+                    </button>
+                  </td>
+
+
+                </tr>
+              </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
