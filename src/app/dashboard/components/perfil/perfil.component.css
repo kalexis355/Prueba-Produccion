@@ -1,14 +1,14 @@
 .btun{
   width: 40px;
   height: 40px;
-  background-image: url('assets/imgs/avatar4.png');
+  background-image: url('/assets/imgs/avatar4.png');
   background-repeat: no-repeat;
   background-size: cover; /* Puedes usar 'contain' si prefieres que la imagen se ajuste sin recortarse */
   background-position: center; /* Centra la imagen en el botón */
   color: transparent;
 }
 .btun:hover{
-  background-image: url('assets/imgs/avatar3.png');
+  background-image: url('/assets/imgs/avatar3.png');
   color: transparent;
 
 }
