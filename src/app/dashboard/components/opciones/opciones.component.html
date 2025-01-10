@@ -4,7 +4,7 @@
   <ul class="list-group list-unstyled ps-3 py-3 me-2">
     <li class="item" routerLinkActive="active">
       <a href="" routerLink="principal" (click)="borrarTodaRuta()">
-        <img src="/assets/imgs/casa.png" alt=""> Pagina principal
+        <img src="assets/imgs/casa.png" alt=""> Pagina principal
       </a>
     </li>
     <!-- <li class="item">
@@ -25,12 +25,12 @@
     <!-- *ngIf="rolAdministrador()"  -->
     <li class="item" routerLinkActive="active" *ngIf="rolAdminSa()">
       <a routerLink="gestion" >
-        <img src="/assets/imgs/gestion.png" alt="Gestion" height="25"> Gestion administrativa
+        <img src="assets/imgs/gestion.png" alt="Gestion" height="25"> Gestion administrativa
       </a>
     </li>
     <li class="item">
       <a  (click)="onLogout()">
-        <img src="/assets/imgs/cerrado.png" alt=""> Cerrar sesión
+        <img src="assets/imgs/cerrado.png" alt=""> Cerrar sesión
       </a>
     </li>
   </ul>

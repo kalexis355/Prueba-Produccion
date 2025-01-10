@@ -7,7 +7,7 @@
 
        class="texto item2"
        [title]="carpeta.nombre">
-      <img [src]="isCollapsed ? '/assets/imgs/a-derecha.png' : '/assets/imgs/abajo.png'" alt="">
+      <img [src]="isCollapsed ? 'assets/imgs/a-derecha.png' : 'assets/imgs/abajo.png'" alt="">
       <i class="fa-regular fa-folder-closed"></i> {{carpeta.nombre}}
     </a>
     <div *ngIf="!isCollapsed" class="list-group">

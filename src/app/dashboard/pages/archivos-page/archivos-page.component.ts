@@ -802,26 +802,26 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
   obtenerImagenPrevisualizacion(formato: string): string {
     switch (formato) {
       case 'jpg':
-        return '/assets/imgs/imagenDefault.png'; // Crea una URL para mostrar imagen
+        return 'assets/imgs/imagenDefault.png'; // Crea una URL para mostrar imagen
       case 'png':
-        return '/assets/imgs/imagenDefault.png'; // Crea una URL para mostrar imagen
+        return 'assets/imgs/imagenDefault.png'; // Crea una URL para mostrar imagen
       case 'gif':
-        return '/assets/imgs/imagenDefault.png'; // Crea una URL para mostrar imagen
+        return 'assets/imgs/imagenDefault.png'; // Crea una URL para mostrar imagen
       case 'pdf':
-        return '/assets/imgs/pdf.png';
+        return 'assets/imgs/pdf.png';
       case 'docx':
-        return '/assets/imgs/word.png';
+        return 'assets/imgs/word.png';
       case 'xlsx':
-        return '/assets/imgs/excel.png';
+        return 'assets/imgs/excel.png';
       case 'mp4':
-        return '/assets/imgs/video.png';
+        return 'assets/imgs/video.png';
       case 'zip':
       case 'rar':
-        return '/assets/imgs/winrar.png';
+        return 'assets/imgs/winrar.png';
       case 'pptx':
-        return '/assets/imgs/power.png';
+        return 'assets/imgs/power.png';
       default:
-        return '/assets/imgs/archivoDe.png';
+        return 'assets/imgs/archivoDe.png';
     }
   }
 
