@@ -780,8 +780,12 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
               console.log(archivo, 'body archivo');
 
               this.gestionArchivosService.crearArchivo(archivo).subscribe({
-                next: (respuesta) => {
-                  console.log(respuesta, 'respuesta al crear un archivito');
+                next: async (respuesta) => {
+                  try {
+                    console.log(respuesta, 'respuesta al crear un archivito');
+                  } catch (error) {
+                    console.error('Error en el callback:', error);
+                  }
                 },
               });
             }
