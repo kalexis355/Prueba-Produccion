@@ -1,0 +1,18 @@
+.btun{
+  width: 140px;
+
+}
+
+.btun:hover{
+  background-color: #dee0e0;
+}
+
+.texto {
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}

@@ -1,0 +1,46 @@
+<div class="menu-contextual" *ngIf="menuVisible" [style.left.px]="menuPosX" [style.top.px]="menuPosY">
+  <ul>
+    <li><i class="fa-regular fa-share-from-square"></i> Compartir</li>
+    <li><i class="fa-regular fa-circle-down"></i> Descargar</li>
+    <li><i class="fa-regular fa-pen-to-square"></i> Cambiar Nombre</li>
+
+    <!-- Submenú Organizar -->
+    <li class="submenu">
+      <span><i class="fa-regular fa-folder"></i> Organizar
+        <i  class="fa-solid" [class.fa-chevron-right]="submenuPosition === 'right'"
+        [class.fa-chevron-left]="submenuPosition === 'left'"></i></span>
+
+      <ul class="submenu-content" [class.left]="submenuPosition === 'left'">
+        <li (click)="eliminarCarpeta(carpetaSeleccionada)"
+        [class.disabled]="habilitarOpcionEliminar"
+        [attr.disabled]="habilitarOpcionEliminar ? true : null">
+        <i class="fa-regular fa-trash-can"></i> Eliminar
+        </li>
+        <li (click)="cortarCarpeta(carpetaSeleccionada)"
+            [class.disabled]="habilitarOpcionCortar"
+            [attr.disabled]="habilitarOpcionCortar ? true : null">
+          <i class="fa-solid fa-scissors"></i> Cortar
+        </li>
+        <li (click)="pegarCarpeta(carpetaSeleccionada)"
+        [class.disabled]="habilitarParaPegar"
+        [attr.disabled]="habilitarParaPegar ? true : null">
+          <i class="fa-solid fa-paste"></i> Pegar
+        </li>
+        <li (click)="copiarCarpeta(carpetaSeleccionada)"
+        [class.disabled]="habilitarOpcionCopiar"
+        [attr.disabled]="habilitarOpcionCopiar ? true : null">
+          <i class="fa-solid fa-copy"></i> Copiar
+        </li>
+      </ul>
+    </li>
+
+    <li class="nav-item" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+        aria-controls="offcanvasRight" (click)="verDetalles(carpetaSeleccionada)">
+      <i class="fa-solid fa-bars"></i> Ver detalles
+    </li>
+
+    <li (click)="eliminarAccion()" class="cancelar" *ngIf="hayCarpetaSeleccionada">
+      <i class="fa-solid fa-circle-xmark"></i> Cancelar
+    </li>
+  </ul>
+</div>

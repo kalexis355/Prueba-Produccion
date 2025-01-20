@@ -44,7 +44,7 @@
         <div class="d-flex flex-column  align-items-center">
           <label for="" class="form-label">Cambiar de rol</label>
           <select name="" id="" class="form-select w-75" (change)="onRoleChange($event)">
-          <option >Cambiar rol</option>
+          <option disabled>Cambiar rol</option>
           <option *ngFor="let rol of rolesNombres" [value]="rol">{{rol}}</option>
           </select>
         </div>

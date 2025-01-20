@@ -25,8 +25,8 @@ import { MenuContextualService } from '../../services/gestionMenuContextual.serv
 
 @Component({
   selector: 'app-archivos-page',
-  templateUrl: './archivos-page.component.html',
-  styleUrl: './archivos-page.component.css',
+  template: ``,
+  styles: ``,
 })
 export class ArchivosPageComponent implements OnInit, OnDestroy {
   //propiedad que contendra la informacion de la carpeta a mostrar
@@ -463,6 +463,31 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
   }
 
 
+  esVisible(carpeta:CarpetaContenido):boolean{
+    const idOficina = localStorage.getItem('idOficina')
+    const role = localStorage.getItem('role')
+     // Si la carpeta tiene nivel de visualización 2
+
+  if(role && idOficina)
+
+    if (carpeta.NivelVisualizacion === 2) {
+    // Verificar si el usuario es Administrador
+    const esUsuarioAdministrador = +role ===2
+    //  ||
+    // Verificar si el usuario es inicio como encargado y si pertenece a la oficina
+    const esUsuarioOEncargado = +role === 3 && this.rolesUsuario.some(
+      (rol)=> rol.Rol === 3 && rol.Oficina === +idOficina
+    );
+
+
+
+    // La carpeta será visible si ambas condiciones se cumplen
+    return esUsuarioAdministrador || esUsuarioOEncargado;
+  }
+
+  return false;
+
+  }
 
   puedeElimarCarpetas(carpeta:CarpetaContenido){
     const rolAdmin = localStorage.getItem('role');
@@ -551,14 +576,76 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
   }
 
 
+
+
+  esVisibleUltimoNivel(carpeta:CarpetaContenido):boolean{
+
+    const role = localStorage.getItem('role')
+    const idOficina = localStorage.getItem('idOficina')
+    const idUsuario = this.auth2Service.currentUSer2()?.Cod
+
+    if(role && idOficina)
+    if(carpeta.NivelVisualizacion === 3){
+      const esAdmin = +role ===2
+      // Verificar si el usuario tiene un rol válido en la oficina correspondiente
+    const perteneceOficina = this.rolesUsuario.some(
+      (rol) => rol.Rol === 3 && rol.Oficina === +idOficina
+
+    );
+
+    const esDelegado = idUsuario === carpeta.Delegado
+    // console.log(this.rolesUsuario,'roles del usuario');
+
+    // console.log(esDelegado,'usuario es delegado de esta carpeta');
+
+    // console.log(perteneceOficina,'holaaaaaa');
+
+
+      return esAdmin || perteneceOficina || esDelegado;
+    }
+
+
+
+
+    return false;
+  }
+
+
+
+  get carpetasFiltradas() {
+    return this.carpetaContenido.filter((carpeta) => {
+      switch (carpeta.NivelVisualizacion) {
+        case 0:
+          return true;
+        case 1:
+          return true;
+
+        case 2:
+          // console.log(this.rolesUSuario);
+          return this.esVisible(carpeta);
+          // return true;
+        case 3:
+          return this.esVisibleUltimoNivel(carpeta);
+
+        default:
+          return false;
+          // return true;
+
+      }
+    });
+  }
+
   esSerieSubserie() {
     const carpeta = this.carpetaPadre || this.carpetaHija;
     if (carpeta) {
       this.esSerieOSubserie =
         carpeta.TipoCarpeta !== 1 && carpeta.TipoCarpeta !== 2;
     } else {
+      // console.warn('No se encontró ni carpetaPadre ni carpetaHija.');
     }
 
+    // console.log(this.carpetaPadre, 'Esta es la carpetaaaaaaaaaaa');
+    // console.log(this.carpetaHija, 'estaaaaaaaaaaaaa es la hijaaaaaaaa');
   }
 
   ngOnDestroy(): void {
@@ -575,11 +662,123 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
         // Asigna los valores de la respuesta a las propiedades
         this.carpetaContenido = respuesta.Carpetas || [];
         this.DocumentoContenido = respuesta.Documentos || [];
+
+        // console.log('Carpetas cargadas:', this.carpetaContenido);
+        // console.log('Documentos cargados:', this.DocumentoContenido);
       },
       error: (error) => {
         console.error('Error al cargar contenido:', error);
       },
     });
+  }
+
+  obtenerNombreRol(rolId: number): string {
+    switch (rolId) {
+      case 1:
+        return 'Sa';
+      case 2:
+        return 'Administrador';
+      case 3:
+        return 'Encargado';
+      case 5:
+        return 'Usuario';
+      default:
+        return 'Desconocido';
+    }
+  }
+
+  subirArchivo(event: Event) {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files.length > 0) {
+      for (let i = 0; i < input.files.length; i++) {
+        const archivo = input.files[i];
+
+        const reader = new FileReader();
+
+        console.log(archivo.name, 'este es el archivo');
+
+        reader.onload = () => {
+          const arregloBits = new Uint8Array(reader.result as ArrayBuffer);
+
+          console.log(arregloBits, 'Archivo en bits');
+
+          const dialogRef = this.dialog.open(DialogoSubirArchivoComponent, {
+            width: '450px',
+            height: '550px',
+            data: {
+              archivo, // Archivo original
+              archivoBits: arregloBits, // Arreglo de bits
+            },
+            disableClose: true, // Desactiva cerrar fuera del diálogo
+          });
+
+          dialogRef.afterClosed().subscribe((result) => {
+            if (result !== undefined && result !== '') {
+              console.log(result, 'valores archivo');
+              const archivo: Documento = {
+                Nombre: result.nombre,
+                Carpeta: this.id,
+                FimarPor: result.firmarPor,
+                TipoArchivo: +result.tipoArchivo,
+                Formato: result.formato,
+                NumeroHojas: result.numeroHojas,
+                Duracion: result.duracion,
+                Tamaño: result.tamaño,
+                Indice: 0,
+                Archivo: Array.from(arregloBits),
+              };
+
+              console.log(archivo, 'body archivo');
+
+              this.gestionArchivosService.crearArchivo(archivo).subscribe({
+                next: async (respuesta) => {
+                  try {
+                    console.log(respuesta, 'respuesta al crear un archivito');
+                  } catch (error) {
+                    console.error('Error en el callback:', error);
+                  }
+                },
+              });
+            }
+          });
+        };
+
+        reader.readAsArrayBuffer(archivo);
+      }
+      input.value = ''; // Limpiar el input después de subir los archivos
+    }
+  }
+
+  obtenerCarpetas() {
+    console.log();
+  }
+
+  // Función para obtener la previsualización según la extensión del archivo
+  obtenerImagenPrevisualizacion(formato: string): string {
+    switch (formato) {
+      case 'jpg':
+        return 'assets/imgs/imagenDefault.png'; // Crea una URL para mostrar imagen
+      case 'png':
+        return 'assets/imgs/imagenDefault.png'; // Crea una URL para mostrar imagen
+      case 'gif':
+        return 'assets/imgs/imagenDefault.png'; // Crea una URL para mostrar imagen
+      case 'pdf':
+        return 'assets/imgs/pdf.png';
+      case 'docx':
+        return 'assets/imgs/word.png';
+      case 'xlsx':
+        return 'assets/imgs/excel.png';
+      case 'mp4':
+        return 'assets/imgs/video.png';
+      case 'zip':
+      case 'rar':
+        return 'assets/imgs/winrar.png';
+      case 'pptx':
+        return 'assets/imgs/power.png';
+      default:
+        return 'assets/imgs/archivoDe.png';
+    }
   }
 
   permisoCrearCarpetasyarchivos() {
@@ -637,7 +836,15 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
     }
   }
 
-
+  openVisualizador(documento: DocumentoContenido) {
+    const dialogRef = this.dialog.open(VisualizadorArchivosComponent, {
+      width: '900px',
+      height: '550px',
+      maxWidth: '100%',
+      // disableClose: true,
+      data: documento,
+    });
+  }
 
 
 

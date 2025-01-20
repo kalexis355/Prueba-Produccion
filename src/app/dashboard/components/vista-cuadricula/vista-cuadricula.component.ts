@@ -94,10 +94,12 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
     this.checkService.checkboxStates.set({});
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
 
-    if(this.authService2.currentUSer2()){
-      this.rolesUsuario = this.authService2.currentUSer2()!.RolesUsuario
+    await this.esperarPorRole();
+
+    if (this.authService2.currentUSer2()) {
+      this.rolesUsuario = this.authService2.currentUSer2()!.RolesUsuario;
     }
     this.cargarListadoDependencias();
     // Inicializar los estados de los checkboxes
@@ -114,6 +116,19 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
 
     //   }
     // })
+  }
+
+  private esperarPorRole(): Promise<void> {
+    return new Promise((resolve) => {
+      const checkRole = () => {
+        if (localStorage.getItem('role')) {
+          resolve();
+        } else {
+          setTimeout(checkRole, 100);
+        }
+      };
+      checkRole();
+    });
   }
 
   // carpetaEstado(){

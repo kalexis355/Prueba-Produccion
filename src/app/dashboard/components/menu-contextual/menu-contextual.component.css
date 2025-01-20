@@ -1,0 +1,64 @@
+.menu-contextual {
+  position: fixed;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  border-radius: 4px;
+  min-width: 200px;
+  z-index: 1000;
+}
+
+.menu-contextual ul {
+  list-style: none;
+  padding: 8px 0;
+  margin: 0;
+}
+
+.menu-contextual li {
+  padding: 8px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.menu-contextual li:hover {
+  background-color: #f5f5f5;
+}
+
+
+ /* Estilos para el submenú */
+ .submenu {
+  position: relative;
+}
+
+.submenu span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.submenu span .fa-chevron-right {
+  margin-left: auto;
+  font-size: 0.8em;
+}
+
+.submenu-content {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  border-radius: 4px;
+  display: none;
+  min-width: 200px;
+}
+
+.submenu-content.left {
+  left: auto;
+  right: 100%;
+}
+
+.submenu:hover .submenu-content {
+  display: block;
+}

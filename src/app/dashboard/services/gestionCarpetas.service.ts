@@ -1,14 +1,17 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environments2 } from '../../../environments/environments-dev';
-import { catchError, map, Observable, of, Subject, tap } from 'rxjs';
+import { catchError, delay, finalize, map, Observable, of, Subject, tap } from 'rxjs';
 import { CarpetaRaiz, CopiarPegar, CortarPegar, CrearCarpeta, CrearCarpetaResponse, EstadoCarpeta, NivelVisualizacion, TipoCarpeta } from '../interfaces/carpeta.interface';
 import { CarpetaContenido, DocumentoContenido } from '../interfaces/contenidoCarpeta';
+import { LoaderService } from './gestionLoader.service';
+
 
 @Injectable({providedIn: 'root'})
 export class GestionCarpetasService {
 
   private http = inject(HttpClient);
+  private loaderService = inject(LoaderService)
   private readonly baseUrl2: string = environments2.baseUrl
 
 
@@ -27,6 +30,7 @@ export class GestionCarpetasService {
   }
 
   obtenerCarpetaRaiz(codUsuario:number):Observable<CarpetaRaiz[]>{
+    this.loaderService.mostrar();
     const token = localStorage.getItem('token')
     const url = `${this.baseUrl2}/Api/Carpetas?CarpetasRaizIdUser=${codUsuario}`;
 
@@ -36,9 +40,9 @@ export class GestionCarpetasService {
 
     return this.http.get<CarpetaRaiz[]>(url,{headers})
     .pipe(
-      catchError(()=>of([]))
+      catchError(()=>of([])),
+      finalize(() => this.loaderService.ocultar())
     )
-
 
   }
 
@@ -90,7 +94,8 @@ export class GestionCarpetasService {
     )
   }
 
-  CargarContenidoCarpeta(id:number): Observable<{ Carpetas: CarpetaContenido[], Documentos: DocumentoContenido[] }> {
+  CargarContenidoCarpeta(id: number): Observable<{ Carpetas: CarpetaContenido[], Documentos: DocumentoContenido[] }> {
+    this.loaderService.mostrar();
     const token = localStorage.getItem('token');
     const url = `${this.baseUrl2}/Api/Carpetas?ContenidoCarpetaId=${id}`;
 
@@ -99,31 +104,48 @@ export class GestionCarpetasService {
     });
 
     return this.http.get(url, { headers, responseType: 'text' }).pipe(
+      delay(500),
       map((response: string) => {
+        if (!response?.trim()) {
+          throw new Error('Respuesta vacía del servidor');
+        }
+
         try {
+          // Limpiamos y validamos la respuesta
+          const cleanResponse = response.trim();
+          if (!cleanResponse.includes('][')) {
+            throw new Error('Formato de respuesta inválido');
+          }
+
           // Separar los arrays de texto
-          const [carpetas, documentos] = response
-            .trim()
+          const [carpetas, documentos] = cleanResponse
             .split('][')
-            .map((part, index) =>
-              JSON.parse((index === 0 ? part + "]" : "[" + part).trim())
-            );
+            .map((part, index) => {
+              const jsonString = index === 0 ? part + "]" : "[" + part;
+              try {
+                return JSON.parse(jsonString.trim());
+              } catch {
+                throw new Error(`Error al parsear ${index === 0 ? 'carpetas' : 'documentos'}`);
+              }
+            });
 
           return {
             Carpetas: carpetas as CarpetaContenido[],
             Documentos: documentos as DocumentoContenido[]
           };
         } catch (e) {
-          console.error('Error al analizar la respuesta:', e);
-          throw new Error('Respuesta no válida');
+          console.error('Error al procesar la respuesta:', e);
+          throw e; // Relanzamos el error para que lo maneje catchError
         }
       }),
-      tap((contenidoObtenido) => {
-        // console.log(contenidoObtenido, 'contenido de la carpeta',id);
-      }),
       catchError((error) => {
-        console.error('Error al cargar contenido:', error);
+        console.error('Error al cargar contenido de la carpeta:', error);
+        // Podríamos mostrar un mensaje al usuario aquí si lo deseas
+        // this.messageService.showError('No se pudo cargar el contenido de la carpeta');
         return of({ Carpetas: [], Documentos: [] });
+      }),
+      finalize(() => {
+        this.loaderService.ocultar();
       })
     );
   }

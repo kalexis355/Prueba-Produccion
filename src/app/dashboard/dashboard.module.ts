@@ -40,6 +40,12 @@ import { DialogoAsignarRolesComponent } from './components/dialogo-asignar-roles
 import { DialogoSubirArchivoComponent } from './components/dialogo-subir-archivo/dialogo-subir-archivo.component';
 import { VisualizadorArchivosComponent } from './components/visualizador-archivos/visualizador-archivos.component';
 import { ArbolIndiceComponent } from './components/arbol-indice/arbol-indice.component';
+import { LoaderPersonalizadoComponent } from './components/loader-personalizado/loader-personalizado.component';
+import { MenuContextualComponent } from './components/menu-contextual/menu-contextual.component';
+import { DetallesCarpetaComponent } from './components/detalles-carpeta/detalles-carpeta.component';
+import { CarpetasContenidoComponent } from './components/carpetas-contenido/carpetas-contenido.component';
+import { ArchivosContenidoComponent } from './components/archivos-contenido/archivos-contenido.component';
+import { BtnSubirArchivoComponent } from './components/btn-subir-archivo/btn-subir-archivo.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +79,13 @@ import { ArbolIndiceComponent } from './components/arbol-indice/arbol-indice.com
     DialogoAsignarRolesComponent,
     DialogoSubirArchivoComponent,
     VisualizadorArchivosComponent,
-    ArbolIndiceComponent
+    ArbolIndiceComponent,
+    LoaderPersonalizadoComponent,
+    MenuContextualComponent,
+    DetallesCarpetaComponent,
+    CarpetasContenidoComponent,
+    ArchivosContenidoComponent,
+    BtnSubirArchivoComponent
 
   ],
   imports: [

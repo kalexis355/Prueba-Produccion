@@ -1,0 +1,21 @@
+.btun{
+  width: 140px;
+
+}
+
+.btun:hover{
+  background-color: #dee0e0;
+}
+
+.detalles-carpeta {
+  max-height: 50%;   /* Ajusta este valor según el tamaño deseado */
+  overflow-y: auto;
+}
+
+.subtitulo{
+  font-size: 14px;
+}
+
+.subtitulo2{
+  color: rgb(107, 107, 107);
+}

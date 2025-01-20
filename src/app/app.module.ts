@@ -5,10 +5,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { ReactiveFormsModule } from '@angular/forms';
-import {  provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
+import {  HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
 import { MaterialModule } from './material/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { AuthInterceptor } from './interceptores/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     provideAnimationsAsync(),
     provideHttpClient(withInterceptorsFromDi(), withFetch()),
     { provide: LocationStrategy, useClass: HashLocationStrategy },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
   ],
   bootstrap: [AppComponent]
 })

@@ -1,0 +1,55 @@
+<div class="menu-contextual" *ngIf="visible" [style.left.px]="posX" [style.top.px]="posY">
+  <ul>
+    <li><i class="fa-regular fa-share-from-square"></i> Compartir</li>
+    <li><i class="fa-regular fa-circle-down"></i> Descargar</li>
+    <li><i class="fa-regular fa-pen-to-square"></i> Cambiar Nombre</li>
+
+    <!-- Submenú Organizar -->
+    <li class="submenu">
+      <span>
+        <i class="fa-regular fa-folder"></i> Organizar
+        <i class="fa-solid"
+          [class.fa-chevron-right]="submenuPosition === 'right'"
+          [class.fa-chevron-left]="submenuPosition === 'left'">
+        </i>
+      </span>
+
+      <ul class="submenu-content" [class.left]="submenuPosition === 'left'">
+        <li (click)="onEliminar()"
+            [class.disabled]="permisoEliminar"
+            [attr.disabled]="permisoEliminar ? true : null">
+          <i class="fa-regular fa-trash-can"></i> Eliminar
+        </li>
+        <li (click)="onCortar()"
+            [class.disabled]="permisoCortar"
+            [attr.disabled]="permisoCortar ? true : null">
+          <i class="fa-solid fa-scissors"></i> Cortar
+        </li>
+        <li (click)="onPegar()"
+            [class.disabled]="permisoPegar"
+            [attr.disabled]="permisoPegar ? true : null">
+          <i class="fa-solid fa-paste"></i> Pegar
+        </li>
+        <li (click)="onCopiar()"
+            [class.disabled]="permisoCopiar"
+            [attr.disabled]="permisoCopiar ? true : null">
+          <i class="fa-solid fa-copy"></i> Copiar
+        </li>
+      </ul>
+    </li>
+
+    <li class="nav-item"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasRight"
+        aria-controls="offcanvasRight"
+        >
+      <i class="fa-solid fa-bars"></i> Ver detalles
+    </li>
+
+    <li
+        class="cancelar"
+        *ngIf="hayCarpetaSeleccionada">
+      <i class="fa-solid fa-circle-xmark"></i> Cancelar
+    </li>
+  </ul>
+</div>
