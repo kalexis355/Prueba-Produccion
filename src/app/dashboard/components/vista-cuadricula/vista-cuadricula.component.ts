@@ -210,7 +210,7 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
         .obtenerCarpetaRaiz(CodUsuario)
         .subscribe((oficinas) => {
           this.CarpetasRaiz = oficinas;
-          console.log(this.CarpetasRaiz);
+          console.log(this.CarpetasRaiz.length);
         });
     }
   }

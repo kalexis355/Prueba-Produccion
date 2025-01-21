@@ -40,6 +40,8 @@ export class GestionCarpetasService {
 
     return this.http.get<CarpetaRaiz[]>(url,{headers})
     .pipe(
+      tap((datos)=>console.log('datos servicio',datos.length)
+      ),
       catchError(()=>of([])),
       finalize(() => this.loaderService.ocultar())
     )

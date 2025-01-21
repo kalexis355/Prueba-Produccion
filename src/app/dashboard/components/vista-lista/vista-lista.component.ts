@@ -58,6 +58,8 @@ export class VistaListaComponent implements OnInit{
     this.oficinaService.obtenerOficinas()
     .subscribe(oficinas=>{
       this.CarpetasRaiz = oficinas
+      console.log(this.CarpetasRaiz.length);
+
     })
   }
 

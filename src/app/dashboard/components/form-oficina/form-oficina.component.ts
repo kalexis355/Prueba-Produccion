@@ -26,6 +26,7 @@ export class FormOficinaComponent implements OnInit,OnChanges {
   public oficinaAEditar!: Oficinas | null;
 
   esModoEdicion:boolean = false;
+  estaCreando = false;
 
 
 
@@ -128,10 +129,21 @@ export class FormOficinaComponent implements OnInit,OnChanges {
       });
 
     }else{
-      this.oficinaService.crearOficina(body).subscribe(() => {
-        Swal.fire('Éxito', 'Dependencia creada', 'success');
-        this.oficinaService.actualizarOficinas()
-        this.officeForm.reset()
+      this.estaCreando = true; // Desactiva el botón
+
+      this.oficinaService.crearOficina(body).subscribe({
+        next: () => {
+          Swal.fire('Éxito', 'Dependencia creada', 'success');
+          this.oficinaService.actualizarOficinas();
+          this.officeForm.reset();
+        },
+        error: (error) => {
+          // Manejar el error si es necesario
+          Swal.fire('Error', 'No se pudo crear la dependencia', 'error');
+        },
+        complete: () => {
+          this.estaCreando = false; // Reactiva el botón cuando termina
+        }
       });
     }
 

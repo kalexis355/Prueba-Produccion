@@ -43,7 +43,7 @@
          <!-- Botones -->
          <div class="d-flex justify-content-end">
           <button type="button" class="btn btn-secondary me-2" (click)="cancelar()">Cancelar</button>
-          <button type="submit" *ngIf="esModoEdicion===false" class="btn btn-primary " >Guardar</button>
+          <button type="submit" *ngIf="esModoEdicion===false" [disabled]="estaCreando" class="btn btn-primary " >{{ estaCreando ? 'Creando...' : 'Crear Oficina' }}</button>
           <button *ngIf="esModoEdicion===true" type="submit" class="btn btn-primary" >Editar</button>
         </div>
 
