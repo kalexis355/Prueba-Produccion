@@ -27,6 +27,7 @@ export class FormOficinaComponent implements OnInit,OnChanges {
 
   esModoEdicion:boolean = false;
   estaCreando = false;
+  estaEditando = false;
 
 
 
@@ -104,7 +105,7 @@ export class FormOficinaComponent implements OnInit,OnChanges {
     }
 
     if(this.oficinaAEditar && this.esModoEdicion){
-
+      this.estaEditando = true; // Desactiva el boton
       console.log('icono',this.oficinaAEditar.Icono);
 
 
@@ -119,13 +120,20 @@ export class FormOficinaComponent implements OnInit,OnChanges {
       }
       console.log('bodyActualizar',bodyActualizar);
 
-      this.oficinaService.actualizarDependencia(bodyActualizar).subscribe(() => {
-        Swal.fire('Éxito', 'Dependencia actualizada', 'success');
-        this.oficinaService.actualizarOficinas()
-        this.officeForm.reset()
-        this.esModoEdicion= false;
-        this.oficinaAEditar = null;
-
+      this.oficinaService.actualizarDependencia(bodyActualizar).subscribe({
+        next: () => {
+          Swal.fire('Éxito', 'Dependencia actualizada', 'success');
+          this.oficinaService.actualizarOficinas();
+          this.officeForm.reset();
+          this.esModoEdicion = false;
+          this.oficinaAEditar = null;
+        },
+        error: (error) => {
+          Swal.fire('Error', 'No se pudo actualizar la dependencia', 'error');
+        },
+        complete: () => {
+          this.estaEditando = false;
+        }
       });
 
     }else{

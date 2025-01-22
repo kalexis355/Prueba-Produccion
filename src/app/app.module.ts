@@ -10,6 +10,9 @@ import { MaterialModule } from './material/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { AuthInterceptor } from './interceptores/auth.interceptor';
+import { LoaderInterceptor } from './interceptores/loader.interceptor';
+import { SharedModule } from './shared/shared.module';
+import { errorTiempoInterceptor } from './interceptores/errorTiempo.interceptor';
 
 @NgModule({
   declarations: [
@@ -21,6 +24,7 @@ import { AuthInterceptor } from './interceptores/auth.interceptor';
     MaterialModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    SharedModule,
   ],
   providers: [
     provideClientHydration(),
@@ -28,6 +32,8 @@ import { AuthInterceptor } from './interceptores/auth.interceptor';
     provideHttpClient(withInterceptorsFromDi(), withFetch()),
     { provide: LocationStrategy, useClass: HashLocationStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: errorTiempoInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

@@ -26,6 +26,7 @@ import { Oficinas } from '../../../login/interfaces/oficina.interface';
 import { GestionCarpetasService } from '../../services/gestionCarpetas.service';
 import Swal from 'sweetalert2';
 import { RolesUsuario } from '../../../login/interfaces';
+import { catchError, of, timeout } from 'rxjs';
 
 @Component({
   selector: 'app-vista-cuadricula',

@@ -1,18 +1,22 @@
-import { Injectable } from '@angular/core';
+import { Injectable,NgZone  } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class LoaderService {
   private isLoading = new BehaviorSubject<boolean>(false);
 
-  constructor() { }
+  constructor(private ngZone: NgZone) { }
 
   mostrar() {
-    this.isLoading.next(true);
+    this.ngZone.run(() => {
+      this.isLoading.next(true);
+    });
   }
 
   ocultar() {
-    this.isLoading.next(false);
+    this.ngZone.run(() => {
+      this.isLoading.next(false);
+    });
   }
 
   get cargando$() {

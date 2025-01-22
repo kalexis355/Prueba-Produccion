@@ -9,6 +9,9 @@ import { LoaderService } from './gestionLoader.service';
 
 @Injectable({providedIn: 'root'})
 export class GestionCarpetasService {
+  pipe(arg0: any, arg1: any) {
+    throw new Error('Method not implemented.');
+  }
 
   private http = inject(HttpClient);
   private loaderService = inject(LoaderService)
