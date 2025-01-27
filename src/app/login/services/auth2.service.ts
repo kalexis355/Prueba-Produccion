@@ -89,9 +89,10 @@ export class Auth2Service {
             }
         }),
         catchError(error => {
-            Swal.fire('Error','Error en el servidor','error')
-
-            return of(false);  // Regresar un valor por defecto o false en caso de error
+          console.log('Error completo:', error); // Para debugging
+          const errorMessage = JSON.stringify(error.error) || error.message || 'Error del servidor';
+          Swal.fire('Error', errorMessage, 'error');
+          return of(false);
         })
     );
 }

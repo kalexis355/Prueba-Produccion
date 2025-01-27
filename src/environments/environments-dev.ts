@@ -6,5 +6,5 @@ export const environments = {
 }
 
 export const environments2 = {
-  baseUrl:'https://api.nublu.cloud/nublu'
+  baseUrl:'https://api.soft-solutions.org/nublu'
 }
