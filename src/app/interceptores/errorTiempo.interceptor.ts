@@ -2,54 +2,87 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from "@angular/c
 import { inject, Injectable } from "@angular/core";
 import { Observable, timeout, catchError, TimeoutError, throwError } from "rxjs";
 import { Auth2Service } from "../login/services/auth2.service";
-
-import Swal from 'sweetalert2';
 import { Router } from "@angular/router";
-
+import { SwalService } from "../dashboard/services/swal.service";
 
 @Injectable()
 export class errorTiempoInterceptor implements HttpInterceptor {
+  private router = inject(Router);
+  private authService = inject(Auth2Service);
+  private swalService = inject(SwalService);
 
-  private router = inject(Router)
-  private authService = inject(Auth2Service)
+  private readonly EXCLUDED_URLS = ['https://api.soft-solutions.org/nublu/Api/Archivos'];
 
-  private readonly EXCLUDED_URLS = ['https://api.nublu.cloud/nublu/Api/Archivos']; // URLs a excluir
- constructor(
- ) {}
-
- intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
-    // Verificar si es una petición de subida de archivos
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (this.isFileUpload(req)) {
-      // Si es subida de archivos, no aplicar el timeout
       return next.handle(req);
     }
 
+    const mostrarSwal = req.headers.has('X-Show-Loading-Swal');
 
-   return next.handle(req).pipe(
-     timeout(10000), // 10 segundos
-     catchError(error => {
-       if (error instanceof TimeoutError) {
-        Swal.fire('Sesión expirada', 'La operación tardó demasiado tiempo', 'warning');
-        this.authService.logout2();
-       }
-       return throwError(() => error);
-     })
-   );
- }
+    return new Observable<HttpEvent<any>>(observer => {
+      const makeRequest = () => {
+        if (mostrarSwal) {
+          this.swalService.mostrarCargando();
+        }
 
- private isFileUpload(request: HttpRequest<any>): boolean {
-  // Verificar por URL
-  const isExcludedUrl = this.EXCLUDED_URLS.some(url =>
-    request.url.includes(url)
-  );
+        next.handle(req).pipe(
+          timeout(30000),
+          catchError(error => {
+            if (error instanceof TimeoutError) {
+              this.swalService.cerrarCargando();
 
-  // Verificar si es una petición multipart/form-data (típico en subidas de archivos)
-  const isMultipartFormData = request.headers.get('Content-Type')?.includes('multipart/form-data');
+              return new Observable<HttpEvent<any>>(timeoutObserver => {
+                this.swalService.mostrarTimeoutDialog().then(retry => {
+                  if (retry) {
+                    if (mostrarSwal) {
+                      this.swalService.mostrarCargando();
+                    }
+                    makeRequest();
+                  } else {
+                    this.authService.logout2();
+                    timeoutObserver.complete();
+                  }
+                });
+              });
+            }
+            return throwError(() => error);
+          })
+        ).subscribe({
+          next: (event) => {
+            observer.next(event);
+          },
+          error: (err) => {
+            if (!(err instanceof TimeoutError)) {
+              this.swalService.cerrarCargando();
+              observer.error(err);
+            }
+          },
+          complete: () => {
+            if (mostrarSwal) {
+              this.swalService.cerrarCargando();
+            }
+            observer.complete();
+          }
+        });
+      };
 
-  // Verificar si hay un FormData en el body
-  const isFormData = request.body instanceof FormData;
+      makeRequest();
+    });
+  }
 
-  return isExcludedUrl || isMultipartFormData || isFormData;
-}
+  private isFileUpload(request: HttpRequest<any>): boolean {
+    // Verificar por URL
+    const isExcludedUrl = this.EXCLUDED_URLS.some(url =>
+      request.url.includes(url)
+    );
+
+    // Verificar si es una petición multipart/form-data
+    const isMultipartFormData = request.headers.get('Content-Type')?.includes('multipart/form-data');
+
+    // Verificar si hay un FormData en el body
+    const isFormData = request.body instanceof FormData;
+
+    return isExcludedUrl || isMultipartFormData || isFormData;
+  }
 }

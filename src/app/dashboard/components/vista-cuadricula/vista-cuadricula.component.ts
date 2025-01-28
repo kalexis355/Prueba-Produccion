@@ -26,7 +26,11 @@ import { Oficinas } from '../../../login/interfaces/oficina.interface';
 import { GestionCarpetasService } from '../../services/gestionCarpetas.service';
 import Swal from 'sweetalert2';
 import { RolesUsuario } from '../../../login/interfaces';
-import { catchError, of, timeout } from 'rxjs';
+import { catchError, of, Subject, takeUntil, tap, timeout } from 'rxjs';
+import { LoaderService } from '../../services/gestionLoader.service';
+import { Router } from '@angular/router';
+import { HttpRequest } from '@angular/common/http';
+import { SwalService } from '../../services/swal.service';
 
 @Component({
   selector: 'app-vista-cuadricula',
@@ -41,6 +45,9 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
   public procesosService = inject(GestionProcesosService);
   public oficinaService = inject(GestionOficinasService);
   public gestionCarpetaService = inject(GestionCarpetasService);
+  public loaderService = inject(LoaderService)
+  public router = inject(Router)
+  public swalService = inject(SwalService)
 
 
   private authService2 = inject(Auth2Service);
@@ -87,22 +94,22 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
   // }
   indiceElectronico: any = null;
   habilitarOpcionPegar: boolean = false;
-
+  private destroy$ = new Subject<void>();
   // checkboxStates: { [id: string]: boolean } = {};
 
-  ngOnDestroy(): void {
-    this.checkService.carpetasSeleccionadas.set([]);
-    this.checkService.checkboxStates.set({});
-  }
+
 
   async ngOnInit() {
-
+    if (!this.router.url.includes('principal/cuadricula')) {
+      return;
+    }
     await this.esperarPorRole();
 
     if (this.authService2.currentUSer2()) {
       this.rolesUsuario = this.authService2.currentUSer2()!.RolesUsuario;
     }
     this.cargarListadoDependencias();
+
     // Inicializar los estados de los checkboxes
     // this.carpetaEstado()
 
@@ -117,6 +124,13 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
 
     //   }
     // })
+  }
+
+  ngOnDestroy(): void {
+    this.checkService.carpetasSeleccionadas.set([]);
+    this.checkService.checkboxStates.set({});
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private esperarPorRole(): Promise<void> {
@@ -209,12 +223,19 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
     if (CodUsuario) {
       this.gestionCarpetaService
         .obtenerCarpetaRaiz(CodUsuario)
-        .subscribe((oficinas) => {
-          this.CarpetasRaiz = oficinas;
-          console.log(this.CarpetasRaiz.length);
+        .pipe(
+          takeUntil(this.destroy$)
+        )
+        .subscribe({
+          next: (oficinas) => {
+            this.CarpetasRaiz = oficinas;
+          },
+          error: (error) => {
+            this.swalService.mostrarError('Ocurrió un error al cargar las carpetas');
+          }
         });
     }
-  }
+}
 
   get carpetasActivas() {
     return this.CarpetasRaiz.filter((carpeta) => carpeta.Estado);

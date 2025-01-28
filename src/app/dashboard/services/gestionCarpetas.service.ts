@@ -33,12 +33,13 @@ export class GestionCarpetasService {
   }
 
   obtenerCarpetaRaiz(codUsuario:number):Observable<CarpetaRaiz[]>{
-    this.loaderService.mostrar();
+    // this.loaderService.mostrar();
     const token = localStorage.getItem('token')
     const url = `${this.baseUrl2}/Api/Carpetas?CarpetasRaizIdUser=${codUsuario}`;
 
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      'Authorization': `Bearer ${token}`,
+      'X-Show-Loading-Swal': 'true'
     });
 
     return this.http.get<CarpetaRaiz[]>(url,{headers})
@@ -46,7 +47,7 @@ export class GestionCarpetasService {
       tap((datos)=>console.log('datos servicio',datos.length)
       ),
       catchError(()=>of([])),
-      finalize(() => this.loaderService.ocultar())
+      // finalize(() => this.loaderService.ocultar())
     )
 
   }

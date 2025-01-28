@@ -20,7 +20,7 @@ export class DashboardLayoutComponent implements OnInit {
   private dialogo = inject(MatDialog)
   private router = inject(Router)
   public procesoUsuarioService = inject(ProcesosUsuarioService)
-
+  hayRol:boolean = false
 
 
     //Formas de poder obtener el usuario de manera actualizada
@@ -31,10 +31,26 @@ export class DashboardLayoutComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    if(this.user()!.RolesUsuario.length >1){
+    if(localStorage.getItem('role')){
+      this.hayRol = true;
+    }else{
+      this.hayRol = false;
+    }
+
+    if(this.user()!.RolesUsuario.length >1 && !this.hayRol){
       this.abrirDialogoRoles()
     }else{
-      this.procesoUsuarioService.setRol2(this.user()?.RolesUsuario[0].Rol!)
+      if(this.hayRol){
+       const rol = localStorage.getItem('role')
+       if(rol)
+       this.procesoUsuarioService.setRol2(Number(rol))
+      console.log('entro hay rol');
+
+      }else{
+        console.log('entro no hay rol');
+
+        this.procesoUsuarioService.setRol2(this.user()?.RolesUsuario[0].Rol!)
+      }
     }
   }
 
