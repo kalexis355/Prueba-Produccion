@@ -10,10 +10,10 @@ export class LoaderInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // Agregamos logs para debug
     console.log('URL interceptada:', req.url);
-    console.log('¿URL incluye el patrón?:', req.url.includes('api.soft-solutions.org/nublu/Api/Carpetas?CarpetasRaizIdUser='));
+    console.log('¿URL incluye el patrón?:', req.url.includes('api.soft-solutions.org/Api/Carpetas?CarpetasRaizIdUser='));
 
     // Probablemente necesitas incluir https:// en la verificación
-    if (req.url.includes('https://api.soft-solutions.org/nublu/Api/Carpetas?CarpetasRaizIdUser=')) {
+    if (req.url.includes('https://api.soft-solutions.org/Api/Carpetas?CarpetasRaizIdUser=')) {
       console.log('URL excluida del loader');
       return next.handle(req);
     }

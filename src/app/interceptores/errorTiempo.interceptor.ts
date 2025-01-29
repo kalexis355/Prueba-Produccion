@@ -11,7 +11,7 @@ export class errorTiempoInterceptor implements HttpInterceptor {
   private authService = inject(Auth2Service);
   private swalService = inject(SwalService);
 
-  private readonly EXCLUDED_URLS = ['https://api.soft-solutions.org/nublu/Api/Archivos'];
+  private readonly EXCLUDED_URLS = ['https://api.soft-solutions.org/Api/Archivos'];
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (this.isFileUpload(req)) {
