@@ -2,24 +2,30 @@
 
   <div>
 
-    <div class="row  d-flex justify-content-between">
-      <app-loader-personalizado></app-loader-personalizado>
+    <div class="row w-100 position-relative">
+      <!-- Loader centralizado -->
+      <app-loader-personalizado class="position-absolute"></app-loader-personalizado>
 
-      <div class="col-7 d-flex align-items-center mt-3 ms-3   ">
-        <a class="ruta me-2 mt-1 fs-5" [routerLink]="['/dashboard']">Mis archivos</a><img
-          src="assets/imgs/flechas-a-la-derecha.png" alt="" height="20">
-        <a href=""></a>
+      <!-- Navegación izquierda -->
+      <div class="col-6 d-flex align-items-center mt-3">
+        <a class="ruta me-2 mt-1 fs-5" [routerLink]="['/dashboard']">Mis archivos</a>
+        <img src="assets/imgs/flechas-a-la-derecha.png" alt="" height="20" width="20" class="me-2">
       </div>
 
+      <!-- Botones derecha -->
+      <div class="col-6 d-flex justify-content-end align-items-center mt-3">
+        <ng-container *ngIf="esSerieOSubserie || puedeCrearCarpetas">
+          <div class="d-flex gap-3 align-items-center me-3">
+            <app-btn-subir-archivo
+              [carpetaId]="id"
+              [mostrarBoton]="esSerieOSubserie">
+            </app-btn-subir-archivo>
 
-
-      <app-btn-subir-archivo
-      [carpetaId]="id"
-      [mostrarBoton]="esSerieOSubserie">
-      </app-btn-subir-archivo>
-
-      <div class="col-2 mt-3 " *ngIf="puedeCrearCarpetas">
-        <dashboard-btn-mas></dashboard-btn-mas>
+            <div *ngIf="puedeCrearCarpetas">
+              <dashboard-btn-mas></dashboard-btn-mas>
+            </div>
+          </div>
+        </ng-container>
       </div>
     </div>
     <!--  -->

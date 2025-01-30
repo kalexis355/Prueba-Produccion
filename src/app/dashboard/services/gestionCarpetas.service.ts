@@ -6,7 +6,19 @@ import { CarpetaRaiz, CopiarPegar, CortarPegar, CrearCarpeta, CrearCarpetaRespon
 import { CarpetaContenido, DocumentoContenido } from '../interfaces/contenidoCarpeta';
 import { LoaderService } from './gestionLoader.service';
 
-
+interface MixedItem {
+  Cod: number;
+  Nombre: string;
+  Estado: boolean;
+  // Propiedades específicas de carpetas
+  TipoCarpeta?: number;
+  CarpetaPadre?: number;
+  // Propiedades específicas de documentos
+  TipoArchivo?: number;
+  Carpeta?: number;
+  Ruta?: string;
+  [key: string]: any; // Para otras propiedades que puedan existir
+}
 @Injectable({providedIn: 'root'})
 export class GestionCarpetasService {
   pipe(arg0: any, arg1: any) {
@@ -119,35 +131,16 @@ export class GestionCarpetasService {
         const cleanResponse = response.trim();
 
         try {
-          // Primero intentamos verificar si es el formato de dos arrays
-          if (cleanResponse.includes('][')) {
-            const [carpetas, documentos] = cleanResponse
-              .split('][')
-              .map((part, index) => {
-                const jsonString = index === 0 ? part + "]" : "[" + part;
-                return JSON.parse(jsonString.trim());
-              });
+          const mixedArray = JSON.parse(cleanResponse) as MixedItem[];
 
-            return {
-              Carpetas: carpetas as CarpetaContenido[],
-              Documentos: documentos as DocumentoContenido[]
-            };
-          } else {
-            // Si es un solo array, determinamos si son carpetas o documentos
-            const singleArray = JSON.parse(cleanResponse);
+          // Ahora especificamos el tipo del parámetro item
+          const carpetas = mixedArray.filter((item: MixedItem) => 'TipoCarpeta' in item) as CarpetaContenido[];
+          const documentos = mixedArray.filter((item: MixedItem) => 'TipoArchivo' in item) as DocumentoContenido[];
 
-            if (singleArray.length > 0 && 'TipoCarpeta' in singleArray[0]) {
-              return {
-                Carpetas: singleArray as CarpetaContenido[],
-                Documentos: []
-              };
-            } else {
-              return {
-                Carpetas: [],
-                Documentos: singleArray as DocumentoContenido[]
-              };
-            }
-          }
+          return {
+            Carpetas: carpetas,
+            Documentos: documentos
+          };
         } catch (error: unknown) {
           console.error('Error al procesar la respuesta:', error);
           if (error instanceof Error) {

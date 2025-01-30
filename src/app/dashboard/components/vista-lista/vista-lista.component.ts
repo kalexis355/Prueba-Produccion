@@ -1,18 +1,22 @@
-import { Component, computed, effect, inject, Input, OnInit } from '@angular/core';
-import { Carpeta } from '../../interfaces/carpeta.interface';
+import { Component, computed, effect, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Carpeta, CarpetaRaiz } from '../../interfaces/carpeta.interface';
 import { DashboardService } from '../../services/dashboard.service';
 import { SortService } from '../../services/sort-service.service';
 import { AuthService } from '../../../login/services/auth.service';
 import { CheckBoxService } from '../../services/checkBox.service';
 import { GestionOficinasService } from '../../services/gestionOficinas.service';
 import { Oficinas } from '../../../login/interfaces/oficina.interface';
+import { GestionCarpetasService } from '../../services/gestionCarpetas.service';
+import { Auth2Service } from '../../../login/services/auth2.service';
+import { Subject, takeUntil } from 'rxjs';
+import { SwalService } from '../../services/swal.service';
 
 @Component({
   selector: 'app-vista-lista',
   templateUrl: './vista-lista.component.html',
   styleUrl: './vista-lista.component.css'
 })
-export class VistaListaComponent implements OnInit{
+export class VistaListaComponent implements OnInit,OnDestroy{
 
   //injeccion de los servicios
   public dashService = inject(DashboardService)
@@ -20,6 +24,9 @@ export class VistaListaComponent implements OnInit{
   public authService = inject(AuthService)
   public checkService = inject(CheckBoxService)
   public oficinaService = inject(GestionOficinasService)
+  public gestionCarpetaService = inject(GestionCarpetasService);
+  private authService2 = inject(Auth2Service);
+  public swalService = inject(SwalService)
 
 
   sortCriteria: string = 'asc';
@@ -27,7 +34,8 @@ export class VistaListaComponent implements OnInit{
   public carpetasSeleccionadas?:Carpeta[];
 
   user = this.authService.currentUSer2()
-  public CarpetasRaiz:Oficinas[]=[]
+  public CarpetasRaiz:CarpetaRaiz[]=[]
+  private destroy$ = new Subject<void>();
 
   constructor(){
 
@@ -50,17 +58,33 @@ export class VistaListaComponent implements OnInit{
     this.cargarListadoDependencias()
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+
   get carpetas():Carpeta[]{
     return this.dashService.getCarpetas();
   }
 
   cargarListadoDependencias(){
-    this.oficinaService.obtenerOficinas()
-    .subscribe(oficinas=>{
-      this.CarpetasRaiz = oficinas
-      console.log(this.CarpetasRaiz.length);
-
-    })
+     const CodUsuario = this.authService2.currentUSer2()?.Cod;
+       if (CodUsuario) {
+         this.gestionCarpetaService
+           .obtenerCarpetaRaiz(CodUsuario)
+           .pipe(
+             takeUntil(this.destroy$)
+           )
+           .subscribe({
+             next: (oficinas) => {
+               this.CarpetasRaiz = oficinas;
+             },
+             error: (error) => {
+               this.swalService.mostrarError('Ocurrió un error al cargar las carpetas');
+             }
+           });
+       }
   }
 
   get carpetasActivas() {

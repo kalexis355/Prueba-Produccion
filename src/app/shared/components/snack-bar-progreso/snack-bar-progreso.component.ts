@@ -4,6 +4,7 @@ import { MatSnackBarRef } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-snack-bar-progreso',
   template: `
+  <app-loader-personalizado></app-loader-personalizado>
   <div class="progress-message">
     {{message}}
   </div>

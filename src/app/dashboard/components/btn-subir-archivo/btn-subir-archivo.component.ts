@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { GestionArchivosService } from '../../services/gestionArchivos.service';
 import { Documento } from '../../interfaces/archivos.interface';
@@ -6,13 +6,17 @@ import { DialogoSubirArchivoComponent } from '../dialogo-subir-archivo/dialogo-s
 import { firstValueFrom } from 'rxjs';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarRef, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { SnackBarProgresoComponent } from '../../../shared/components/snack-bar-progreso/snack-bar-progreso.component';
-
+import { LoaderService } from '../../services/gestionLoader.service';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-btn-subir-archivo',
   templateUrl: './btn-subir-archivo.component.html',
   styleUrl: './btn-subir-archivo.component.css'
 })
 export class BtnSubirArchivoComponent {
+
+  public loaderService = inject(LoaderService)
+
   @Input() carpetaId!: number;
   @Input() mostrarBoton: boolean = true;
   private colaArchivos: { archivo: File, arregloBits: Uint8Array }[] = [];
@@ -122,7 +126,7 @@ export class BtnSubirArchivoComponent {
       });
     }
   }
-  
+
   private updateProgressMessage(message: string) {
     if (!this.snackBarRef) {
       this.showProgressSnackBar();
@@ -133,6 +137,21 @@ export class BtnSubirArchivoComponent {
   }
 
   private async crearArchivo(result: any, arregloBits: Uint8Array): Promise<void> {
+
+    const uploadAlert = Swal.mixin({
+      title: 'Subiendo archivo',
+      html: 'Iniciando subida...',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      allowEnterKey: false,
+      showConfirmButton: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
+    uploadAlert.fire();
+
     const archivo: Documento = {
       Nombre: result.nombre,
       Carpeta: this.carpetaId,
@@ -153,6 +172,9 @@ export class BtnSubirArchivoComponent {
             case 'progress':
               const progressMessage = `⬆️ Subiendo: ${event.progress}% (${this.formatBytes(event.loaded)} / ${this.formatBytes(event.total)})`;
               this.updateProgressMessage(progressMessage);
+              uploadAlert.update({
+                html: progressMessage
+              });
               break;
 
             case 'complete':
@@ -164,6 +186,13 @@ export class BtnSubirArchivoComponent {
                   this.snackBarRef = null;
                 }
               }, 3000);
+              Swal.fire({
+                icon: 'success',
+                title: '¡Completado!',
+                text: 'Archivo subido exitosamente',
+                timer: 2000,
+                // showConfirmButton: false
+              });
               resolve();
               break;
           }
@@ -176,6 +205,13 @@ export class BtnSubirArchivoComponent {
               this.snackBarRef = null;
             }
           }, 5000);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al subir el archivo muy pesado',
+            timer: 3000,
+            showConfirmButton: false
+          });
           console.error('Error en el callback:', error);
           reject(error);
         }
