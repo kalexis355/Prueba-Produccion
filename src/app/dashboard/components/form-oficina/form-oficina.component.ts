@@ -4,6 +4,7 @@ import { ValidatorsService } from '../../../login/services/validators.service';
 import { AuthService } from '../../../login/services/auth.service';
 import { GestionOficinasService } from '../../services/gestionOficinas.service';
 import Swal from 'sweetalert2'
+import imageCompression from 'browser-image-compression';
 import { ActualizarOficinas, CrearOficina, Oficinas } from '../../../login/interfaces/oficina.interface';
 
 
@@ -138,6 +139,7 @@ export class FormOficinaComponent implements OnInit,OnChanges {
 
     }else{
       this.estaCreando = true; // Desactiva el botón
+      console.log(body,'body de crear');
 
       this.oficinaService.crearOficina(body).subscribe({
         next: () => {
@@ -183,31 +185,74 @@ export class FormOficinaComponent implements OnInit,OnChanges {
     }
   }
 
-  onFileSelected(event: Event) {
+  // onFileSelected(event: Event) {
+  //   const input = event.target as HTMLInputElement;
+  //   if (input.files && input.files[0]) {
+  //     const file = input.files[0];
+  //     const reader = new FileReader();
+
+
+
+  //     reader.onload = () => {
+  //       // `result` es un ArrayBuffer que contiene los datos binarios del archivo
+  //       const arrayBuffer = reader.result as ArrayBuffer;
+
+  //       // Convierte ArrayBuffer a Uint8Array (arreglo de bytes)
+  //       const byteArray = new Uint8Array(arrayBuffer);
+
+  //       // Imprime el arreglo de bytes en la consola para verificar
+  //       this.iconoBytes = Array.from(byteArray); // Convertimos Uint8Array a number[]
+  //       console.log(this.iconoBytes, 'ArregloBits');
+
+  //       // Puedes enviar `byteArray` al backend o procesarlo como necesites
+  //     };
+
+  //     reader.readAsArrayBuffer(file);
+  //   }
+  // }
+  async onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
-      const reader = new FileReader();
 
-
-
-      reader.onload = () => {
-        // `result` es un ArrayBuffer que contiene los datos binarios del archivo
-        const arrayBuffer = reader.result as ArrayBuffer;
-
-        // Convierte ArrayBuffer a Uint8Array (arreglo de bytes)
-        const byteArray = new Uint8Array(arrayBuffer);
-
-        // Imprime el arreglo de bytes en la consola para verificar
-        this.iconoBytes = Array.from(byteArray); // Convertimos Uint8Array a number[]
-        console.log(this.iconoBytes, 'ArregloBits');
-
-        // Puedes enviar `byteArray` al backend o procesarlo como necesites
+      // Opciones de compresión
+      const options = {
+        maxSizeMB: 1, // Tamaño máximo después de comprimir (1MB)
+        maxWidthOrHeight: 800, // Máxima dimensión permitida
+        useWebWorker: true,
       };
 
-      reader.readAsArrayBuffer(file);
+      try {
+        // Comprimir la imagen
+        const compressedFile = await imageCompression(file, options);
+        console.log('Tamaño original:', file.size / 1024 / 1024, 'MB');
+        console.log('Tamaño comprimido:', compressedFile.size / 1024 / 1024, 'MB');
+
+        // Convertir a ArrayBuffer
+        const reader = new FileReader();
+        reader.onload = () => {
+          const arrayBuffer = reader.result as ArrayBuffer;
+          const byteArray = new Uint8Array(arrayBuffer);
+          this.iconoBytes = Array.from(byteArray);
+          console.log('Imagen comprimida convertida a bytes:', this.iconoBytes.length);
+        };
+
+        reader.readAsArrayBuffer(compressedFile);
+
+        // Opcional: Mostrar preview de la imagen
+        const previewReader = new FileReader();
+        previewReader.onload = () => {
+          this.iconoPrevisualizacion = previewReader.result as string;
+        };
+        previewReader.readAsDataURL(compressedFile);
+
+      } catch (error) {
+        console.error('Error al comprimir la imagen:', error);
+        Swal.fire('Error', 'No se pudo procesar la imagen', 'error');
+      }
     }
   }
+
 
 
   cancelar(){

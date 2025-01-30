@@ -40,6 +40,7 @@ export class GestionOficinasService {
     });
 
     const body = bodyCrear
+    console.log(body,'body a crear');
 
     return this.http.post<CrearOficinaResponse>(url,body,{headers})
   }

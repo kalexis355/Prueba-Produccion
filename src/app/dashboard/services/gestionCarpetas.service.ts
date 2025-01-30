@@ -116,38 +116,49 @@ export class GestionCarpetasService {
           throw new Error('Respuesta vacía del servidor');
         }
 
+        const cleanResponse = response.trim();
+
         try {
-          // Limpiamos y validamos la respuesta
-          const cleanResponse = response.trim();
-          if (!cleanResponse.includes('][')) {
-            throw new Error('Formato de respuesta inválido');
-          }
-
-          // Separar los arrays de texto
-          const [carpetas, documentos] = cleanResponse
-            .split('][')
-            .map((part, index) => {
-              const jsonString = index === 0 ? part + "]" : "[" + part;
-              try {
+          // Primero intentamos verificar si es el formato de dos arrays
+          if (cleanResponse.includes('][')) {
+            const [carpetas, documentos] = cleanResponse
+              .split('][')
+              .map((part, index) => {
+                const jsonString = index === 0 ? part + "]" : "[" + part;
                 return JSON.parse(jsonString.trim());
-              } catch {
-                throw new Error(`Error al parsear ${index === 0 ? 'carpetas' : 'documentos'}`);
-              }
-            });
+              });
 
-          return {
-            Carpetas: carpetas as CarpetaContenido[],
-            Documentos: documentos as DocumentoContenido[]
-          };
-        } catch (e) {
-          console.error('Error al procesar la respuesta:', e);
-          throw e; // Relanzamos el error para que lo maneje catchError
+            return {
+              Carpetas: carpetas as CarpetaContenido[],
+              Documentos: documentos as DocumentoContenido[]
+            };
+          } else {
+            // Si es un solo array, determinamos si son carpetas o documentos
+            const singleArray = JSON.parse(cleanResponse);
+
+            if (singleArray.length > 0 && 'TipoCarpeta' in singleArray[0]) {
+              return {
+                Carpetas: singleArray as CarpetaContenido[],
+                Documentos: []
+              };
+            } else {
+              return {
+                Carpetas: [],
+                Documentos: singleArray as DocumentoContenido[]
+              };
+            }
+          }
+        } catch (error: unknown) {
+          console.error('Error al procesar la respuesta:', error);
+          if (error instanceof Error) {
+            throw new Error(`Error al procesar el formato de la respuesta: ${error.message}`);
+          } else {
+            throw new Error('Error desconocido al procesar el formato de la respuesta');
+          }
         }
       }),
       catchError((error) => {
         console.error('Error al cargar contenido de la carpeta:', error);
-        // Podríamos mostrar un mensaje al usuario aquí si lo deseas
-        // this.messageService.showError('No se pudo cargar el contenido de la carpeta');
         return of({ Carpetas: [], Documentos: [] });
       }),
       finalize(() => {

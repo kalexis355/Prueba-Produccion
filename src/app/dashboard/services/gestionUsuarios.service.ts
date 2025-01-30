@@ -145,6 +145,7 @@ export class GestionUsuariosService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
+    console.log(body,'cuerpo a actualizar usuario');
 
     return this.http.put<string>(url,body,{headers,responseType: 'text' as 'json'})
     .pipe(

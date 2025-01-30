@@ -7,6 +7,7 @@ import {MatCardModule} from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LayoutPageComponent } from './layouts/layout-page/layout-page.component';
 import { provideHttpClient, withFetch } from '@angular/common/http';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
     loginRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
-  ],
+    SharedModule,
+],
   providers: [
     provideHttpClient(withFetch())],
 })
