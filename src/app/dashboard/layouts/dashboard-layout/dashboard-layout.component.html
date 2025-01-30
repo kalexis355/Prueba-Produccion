@@ -4,11 +4,14 @@
 
 <div *ngIf="!isLoading" class="fondo vh-100  w-100 d-flex flex-column">
   <div class="d-flex justify-content-between w-100 ">
-    <div class="col-3 d-flex align-items-center ">
+
+    <div class="col-3 d-flex align-items-center " [routerLink]="['/dashboard']" style="cursor: pointer;">
       <img class="py-2 px-2 " src="assets/imgs/icloud.png" alt="archivo" width="70" height="70">
       <div class="col d-flex  align-content-center">
-        <h4 class="m-0 pt-1">Cloud</h4>
-        <h4 class="m-0 pt-1 texto">File</h4>
+
+          <h4 class="m-0 pt-1">Cloud</h4>
+          <h4 class="m-0 pt-1 texto">File</h4>
+
       </div>
 
     </div>
