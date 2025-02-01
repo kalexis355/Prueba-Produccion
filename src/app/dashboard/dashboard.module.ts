@@ -46,6 +46,7 @@ import { CarpetasContenidoComponent } from './components/carpetas-contenido/carp
 import { ArchivosContenidoComponent } from './components/archivos-contenido/archivos-contenido.component';
 import { BtnSubirArchivoComponent } from './components/btn-subir-archivo/btn-subir-archivo.component';
 import { SharedModule } from '../shared/shared.module';
+import { DialogoDetallesArchivosComponent } from './components/dialogo-detalles-archivos/dialogo-detalles-archivos.component';
 
 @NgModule({
   declarations: [
@@ -85,6 +86,7 @@ import { SharedModule } from '../shared/shared.module';
     CarpetasContenidoComponent,
     ArchivosContenidoComponent,
     BtnSubirArchivoComponent,
+    DialogoDetallesArchivosComponent,
 
   ],
   imports: [

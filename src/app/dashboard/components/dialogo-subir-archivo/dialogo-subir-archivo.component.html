@@ -1,4 +1,4 @@
-<div>
+<!-- <div>
   <form [formGroup]="archivoForm"  (ngSubmit)="onSaveClick()"autocomplete="off">
     <mat-dialog-content class="col mb-0">
       <h4>Creación de Archivo</h4>
@@ -67,4 +67,78 @@
     <button class="btn btn-primary" [disabled]="archivoForm.invalid"  >Aceptar</button>
     </mat-dialog-actions>
   </form>
+</div> -->
+
+
+<div>
+  <form [formGroup]="archivoForm" (ngSubmit)="onSaveClick()" autocomplete="off">
+    <mat-dialog-content class="col mb-0">
+      <h4 class="text-center">Creación de Archivo</h4>
+
+      <div class="table-responsive mt-3">
+        <table class="table table-bordered">
+          <thead class="table-dark">
+            <tr>
+              <th>Nombre</th>
+              <th class="col-1 text-center">Formato</th>
+              <th >Tipo</th>
+              <th class="text-center">Firmar</th>
+              <th class="text-center">Detalles</th>
+              <th class="text-center">Eliminar</th>
+            </tr>
+          </thead>
+          <tbody formArrayName="archivos">
+            <tr *ngFor="let archivo of archivosProcessados; let i = index" [formGroupName]="i">
+              <td>
+                <input class="form-control" formControlName="nombre"  [value]='archivo.nombre' placeholder="Nombre del archivo">
+              </td>
+              <td class="text-center">
+                <input class="form-control text-center" [value]="archivo.formato" placeholder="formato" [attr.disabled]="true">
+              </td>
+              <td>
+                <select class="form-select" formControlName="tipoArchivo" (change)="onTipoArchivoChange($event, archivo)">
+                  <option *ngFor="let tipo of tipoArchivos" [value]="tipo.Cod" [disabled]="desactivarDocumento(tipo.Cod,archivo)">
+                    {{ tipo.Nombre }}
+                  </option>
+                </select>
+              </td>
+              <td class="text-center">
+                <mat-radio-group  aria-label="Select an option"
+                [disabled]="!archivo.esDocumento" [(ngModel)]="archivo.firmar"
+                [ngModelOptions]="{standalone: true}" name="firmar_{{ archivo.nombre }}"
+                (ngModelChange)="onFirmarChange($event,archivo)">
+                  <mat-radio-button value="1"><i class="fa-solid fa-check" style="color: #63E6BE;"></i></mat-radio-button>
+                  <mat-radio-button value="2"><i class="fa-solid fa-x" style="color: #c80942;"></i></mat-radio-button>
+                </mat-radio-group>
+
+                <div *ngIf="archivo.esDocumento && (!archivo.firmar || archivo.firmar === '0')"
+                class="text-danger small mt-1">
+                Selección requerida
+                </div>
+              </td>
+              <td class="text-center">
+                <button type="button" class="btn btn-info" (click)="abrirDetalles(archivo)" ><i class="fa-regular fa-eye"></i></button>
+              </td>
+              <td class="text-center">
+                <button type="button" (click)="eliminarArchivo(i)" class="btn btn-danger"><i class="fa-regular fa-rectangle-xmark"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </mat-dialog-content>
+
+
+      <mat-dialog-actions class="d-flex justify-content-between align-items-center">
+        <span>Total de archivos a Subir: {{archivosProcessados.length}}</span>
+        <div>
+          <button type="button" class="btn btn-danger me-3" (click)="cancelar()">Cancelar Subida</button>
+          <button class="btn btn-primary" [disabled]="archivoForm.invalid || tieneDocumentosSinSeleccionar()">Subir Archivos</button>
+        </div>
+      </mat-dialog-actions>
+
+
+  </form>
 </div>
+

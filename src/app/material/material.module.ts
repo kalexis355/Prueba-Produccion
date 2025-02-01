@@ -16,7 +16,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTreeModule } from '@angular/material/tree';
 import { CdkTreeModule } from '@angular/cdk/tree';
-
+import {MatRadioModule} from '@angular/material/radio';
 @NgModule({
   declarations: [],
   imports: [
@@ -39,6 +39,7 @@ import { CdkTreeModule } from '@angular/cdk/tree';
     MatSlideToggleModule,
     MatTreeModule,
     CdkTreeModule,
+    MatRadioModule
   ],
   exports:[
     MatCardModule,
@@ -61,6 +62,7 @@ import { CdkTreeModule } from '@angular/cdk/tree';
     MatSlideToggleModule,
     MatTreeModule,
     CdkTreeModule,
+    MatRadioModule
     ],
   providers:[]
 

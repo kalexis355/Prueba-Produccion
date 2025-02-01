@@ -16,3 +16,16 @@ export interface TipoArchivos {
   Nombre: string;
   Estado: boolean;
 }
+
+export interface ArchivoDatos {
+  nombre: string;
+  formato: string;
+  tamanio: string;
+  firmar:string
+  numeroHojas: number;
+  duracion: string;
+  esDocumento: boolean;
+  esImagen: boolean;
+  esComprimido: boolean;
+  tipoArchivo:number;
+}
