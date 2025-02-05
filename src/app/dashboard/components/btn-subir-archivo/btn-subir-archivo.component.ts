@@ -92,21 +92,11 @@ export class BtnSubirArchivoComponent {
 }
 
 private procesarArchivo(archivo: File): Promise<void> {
-  return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-          const arregloBits = new Uint8Array(reader.result as ArrayBuffer);
-          this.colaArchivos.push({ archivo, arregloBits });
-          resolve();
-      };
-
-      reader.onerror = () => {
-          reject(reader.error);
-      };
-
-      reader.readAsArrayBuffer(archivo);
-  });
+  return new Promise((resolve) => {
+    // Ya no necesitamos leer el archivo, solo lo guardamos
+    this.colaArchivos.push({ archivo, arregloBits: new Uint8Array() }); // arregloBits vacío por compatibilidad
+    resolve();
+});
 }
 
   // private async procesarSiguienteArchivo() {
@@ -273,7 +263,6 @@ private procesarArchivo(archivo: File): Promise<void> {
   private async crearArchivos(resultadosArchivos: ArchivoDatos[], archivoBits: { archivo: File, arregloBits: Uint8Array }[]): Promise<void> {
     console.log(resultadosArchivos, 'archivos procesados');
 
-    // Arrays para rastrear éxitos y fallos
     const archivosExitosos: string[] = [];
     const archivosFallidos: string[] = [];
 
@@ -294,73 +283,71 @@ private procesarArchivo(archivo: File): Promise<void> {
     try {
         for (let i = 0; i < resultadosArchivos.length; i++) {
             const result = resultadosArchivos[i];
-            const arregloBits = archivoBits[i].arregloBits;
-            const archivoNumerico = Array.from(arregloBits).map(byte => Number(byte));
+            const archivo = archivoBits[i].archivo; // Usamos el File directamente
 
-            const documento: Documento = {
-                Nombre: result.nombre,
-                Carpeta: Number(this.carpetaId),
-                FimarPor: result.firmar || '',
-                TipoArchivo: Number(result.tipoArchivo),
-                Formato: result.formato || '',
-                NumeroHojas: Number(result.numeroHojas) || 0,
-                Duracion: result.duracion || '00:00:00',
-                Tamaño: typeof result.tamanio === 'string' ? result.tamanio : '0KB',
-                Indice: i,
-                Archivo: archivoNumerico
-            };
+            // Crear FormData
+            const formData = new FormData();
+
+            // Añadir todos los campos del documento
+            formData.append('Nombre', result.nombre);
+            formData.append('Carpeta', this.carpetaId.toString());
+            formData.append('FimarPor', result.firmar || '');
+            formData.append('TipoArchivo', result.tipoArchivo.toString());
+            formData.append('Formato', result.formato || '');
+            formData.append('NumeroHojas', (result.numeroHojas || 0).toString());
+            formData.append('Duracion', result.duracion || '00:00:00');
+            formData.append('Tamaño', typeof result.tamanio === 'string' ? result.tamanio : '0KB');
+            formData.append('Indice', i.toString());
+            formData.append('Archivo', archivo);
 
             uploadAlert.update({
-                html: `Subiendo archivo ${i + 1} de ${resultadosArchivos.length}: ${documento.Nombre}`
+                html: `Subiendo archivo ${i + 1} de ${resultadosArchivos.length}: ${result.nombre}`
             });
 
             try {
                 await new Promise<void>((resolve, reject) => {
-                    this.gestionArchivosService.crearArchivo(documento).subscribe({
+                    this.gestionArchivosService.crearArchivo(formData).subscribe({
                         next: (event: any) => {
                             switch (event.status) {
                                 case 'progress':
-                                    const progressMessage = `⬆️ Subiendo ${documento.Nombre}: ${event.progress}% (${this.formatBytes(event.loaded)} / ${this.formatBytes(event.total)})`;
+                                    const progressMessage = `⬆️ Subiendo ${result.nombre}: ${event.progress}% (${this.formatBytes(event.loaded)} / ${this.formatBytes(event.total)})`;
                                     this.updateProgressMessage(progressMessage);
                                     uploadAlert.update({
                                         html: progressMessage,
                                         showConfirmButton: false,
                                         allowOutsideClick: false,
-
                                     });
                                     break;
 
                                 case 'complete':
-                                    this.updateProgressMessage(`✅ Archivo ${documento.Nombre} subido completamente`,);
-                                    archivosExitosos.push(documento.Nombre);
+                                    this.updateProgressMessage(`✅ Archivo ${result.nombre} subido completamente`);
+                                    archivosExitosos.push(result.nombre);
                                     uploadAlert.update({
-                                      html: `✅ Archivo ${documento.Nombre} subido completamente`,
-                                      showConfirmButton: false,  // Asegura que no se muestre el botón
-                                      allowOutsideClick: false,
-
-                                  });
+                                        html: `✅ Archivo ${result.nombre} subido completamente`,
+                                        showConfirmButton: false,
+                                        allowOutsideClick: false,
+                                    });
                                     resolve();
                                     break;
                             }
                         },
                         error: (error) => {
-                            console.error(`Error al subir el archivo ${documento.Nombre}:`, error);
-                            this.updateProgressMessage(`❌ Error al subir el archivo ${documento.Nombre}`);
-                            archivosFallidos.push(documento.Nombre);
+                            console.error(`Error al subir el archivo ${result.nombre}:`, error);
+                            this.updateProgressMessage(`❌ Error al subir el archivo ${result.nombre}`);
+                            archivosFallidos.push(result.nombre);
                             reject(error);
                         }
                     });
                 });
             } catch (error) {
-                // Capturamos el error pero continuamos con el siguiente archivo
-                console.error(`Error al procesar archivo ${documento.Nombre}:`, error);
-                if (!archivosFallidos.includes(documento.Nombre)) {
-                    archivosFallidos.push(documento.Nombre);
+                console.error(`Error al procesar archivo ${result.nombre}:`, error);
+                if (!archivosFallidos.includes(result.nombre)) {
+                    archivosFallidos.push(result.nombre);
                 }
             }
         }
 
-        // Preparar mensaje detallado para Swal
+        //  Preparar mensaje detallado para Swal
         let mensajeHtml = '';
 
         if (archivosExitosos.length > 0) {
@@ -387,7 +374,7 @@ private procesarArchivo(archivo: File): Promise<void> {
         });
 
     } catch (error) {
-        Swal.fire({
+             Swal.fire({
             icon: 'error',
             title: 'Error',
             text: 'Error general en el proceso de subida',

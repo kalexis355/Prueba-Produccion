@@ -54,7 +54,7 @@ export class GestionCarpetasService {
         const indiceActual = JSON.parse(carpeta.IndiceElectronico) as IndiceUnificado;
         indiceUnificado.IndiceElectronico.push(...indiceActual.IndiceElectronico);
       } catch (error) {
-        console.error(`Error al procesar carpeta ${carpeta.Cod}:`, error);
+        console.log(`Error al procesar carpeta ${carpeta.Cod}: No tiene indice electronico`, error);
       }
     });
 

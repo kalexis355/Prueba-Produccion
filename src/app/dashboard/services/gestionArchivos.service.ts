@@ -86,67 +86,113 @@ export class GestionArchivosService {
     //     })
     //   );
     // }
-    crearArchivo(documentoBody: Documento): Observable<any> {
+    // crearArchivo(documentoBody: Documento): Observable<any> {
+    //   return new Observable(observer => {
+    //     const token = localStorage.getItem('token');
+    //     const url = `${this.baseUrl2}/Api/Archivos`;
+
+    //     // Crear XMLHttpRequest
+    //     const xhr = new XMLHttpRequest();
+
+    //     // Configurar el evento de progreso
+    //     xhr.upload.onprogress = (event) => {
+    //       if (event.lengthComputable) {
+    //         const percentComplete = Math.round((event.loaded / event.total) * 100);
+    //         observer.next({
+    //           status: 'progress',
+    //           progress: percentComplete,
+    //           loaded: event.loaded,
+    //           total: event.total,
+    //           type: 'upload'
+    //         });
+    //       }
+    //     };
+
+    //     // Configurar el evento de completado
+    //     xhr.onload = () => {
+    //       if (xhr.status >= 200 && xhr.status < 300) {
+    //         this.notificarActualizacion();
+    //         observer.next({
+    //           status: 'complete',
+    //           response: JSON.parse(xhr.response)
+    //         });
+    //         observer.complete();
+    //       } else {
+    //         observer.error(`Error ${xhr.status}: ${xhr.statusText}`);
+    //       }
+    //     };
+
+    //     // Configurar el evento de error
+    //     xhr.onerror = () => {
+    //       observer.error('Error de red');
+    //     };
+
+    //     // Abrir la conexión
+    //     xhr.open('POST', url, true);
+
+    //     // Configurar headers
+    //     xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+    //     xhr.setRequestHeader('Content-Type', 'application/json');
+
+    //     // Enviar la solicitud
+    //     const data = JSON.stringify(documentoBody);
+    //     console.log('📦 Tamaño del archivo a subir:', data.length, 'bytes');
+    //     xhr.send(data);
+
+    //     // Retornar una función de limpieza
+    //     return () => {
+    //       if (xhr.readyState !== 4) {
+    //         xhr.abort();
+    //       }
+    //     };
+    //   });
+    // }
+
+    crearArchivo(formData: FormData): Observable<any> {
       return new Observable(observer => {
-        const token = localStorage.getItem('token');
-        const url = `${this.baseUrl2}/Api/Archivos`;
+          const token = localStorage.getItem('token');
+          const url = `${this.baseUrl2}/Api/Archivos`;
 
-        // Crear XMLHttpRequest
-        const xhr = new XMLHttpRequest();
+          const xhr = new XMLHttpRequest();
 
-        // Configurar el evento de progreso
-        xhr.upload.onprogress = (event) => {
-          if (event.lengthComputable) {
-            const percentComplete = Math.round((event.loaded / event.total) * 100);
-            observer.next({
-              status: 'progress',
-              progress: percentComplete,
-              loaded: event.loaded,
-              total: event.total,
-              type: 'upload'
-            });
-          }
-        };
+          xhr.upload.onprogress = (event) => {
+              if (event.lengthComputable) {
+                  const percentComplete = Math.round((event.loaded / event.total) * 100);
+                  observer.next({
+                      status: 'progress',
+                      progress: percentComplete,
+                      loaded: event.loaded,
+                      total: event.total,
+                      type: 'upload'
+                  });
+              }
+          };
 
-        // Configurar el evento de completado
-        xhr.onload = () => {
-          if (xhr.status >= 200 && xhr.status < 300) {
-            this.notificarActualizacion();
-            observer.next({
-              status: 'complete',
-              response: JSON.parse(xhr.response)
-            });
-            observer.complete();
-          } else {
-            observer.error(`Error ${xhr.status}: ${xhr.statusText}`);
-          }
-        };
+          xhr.onload = () => {
+              if (xhr.status >= 200 && xhr.status < 300) {
+                  observer.next({
+                      status: 'complete',
+                      response: xhr.response
+                  });
+                  observer.complete();
+              } else {
+                  observer.error(xhr.response);
+              }
+          };
 
-        // Configurar el evento de error
-        xhr.onerror = () => {
-          observer.error('Error de red');
-        };
+          xhr.onerror = () => {
+              observer.error('Error en la subida del archivo');
+          };
 
-        // Abrir la conexión
-        xhr.open('POST', url, true);
+          xhr.open('POST', url, true);
+          xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+          xhr.send(formData);
 
-        // Configurar headers
-        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-
-        // Enviar la solicitud
-        const data = JSON.stringify(documentoBody);
-        console.log('📦 Tamaño del archivo a subir:', data.length, 'bytes');
-        xhr.send(data);
-
-        // Retornar una función de limpieza
-        return () => {
-          if (xhr.readyState !== 4) {
-            xhr.abort();
-          }
-        };
+          return () => {
+              xhr.abort();
+          };
       });
-    }
+  }
 
   obtenerTipoArchivo():Observable<TipoArchivos[]>{
     const token = localStorage.getItem('token')
