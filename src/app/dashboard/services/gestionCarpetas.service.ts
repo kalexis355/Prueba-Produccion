@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environments2 } from '../../../environments/environments-dev';
 import { catchError, delay, finalize, map, Observable, of, Subject, tap } from 'rxjs';
-import { CarpetaRaiz, CopiarPegar, CortarPegar, CrearCarpeta, CrearCarpetaResponse, EstadoCarpeta, NivelVisualizacion, TipoCarpeta } from '../interfaces/carpeta.interface';
+import { CarpetaRaiz, CarpetasResponse, CopiarPegar, CortarPegar, CrearCarpeta, CrearCarpetaResponse, EstadoCarpeta, IndiceUnificado, NivelVisualizacion, TipoCarpeta } from '../interfaces/carpeta.interface';
 import { CarpetaContenido, DocumentoContenido } from '../interfaces/contenidoCarpeta';
 import { LoaderService } from './gestionLoader.service';
 
@@ -44,8 +44,43 @@ export class GestionCarpetasService {
     this.actualizarContenidoSource.next();
   }
 
-  obtenerCarpetaRaiz(codUsuario:number):Observable<CarpetaRaiz[]>{
-    // this.loaderService.mostrar();
+  unificarIndicesElectronicos(carpetas: CarpetaRaiz[]): IndiceUnificado {
+    const indiceUnificado: IndiceUnificado = {
+      IndiceElectronico: []
+    };
+
+    carpetas.forEach(carpeta => {
+      try {
+        const indiceActual = JSON.parse(carpeta.IndiceElectronico) as IndiceUnificado;
+        indiceUnificado.IndiceElectronico.push(...indiceActual.IndiceElectronico);
+      } catch (error) {
+        console.error(`Error al procesar carpeta ${carpeta.Cod}:`, error);
+      }
+    });
+
+    return indiceUnificado;
+  }
+
+  // obtenerCarpetaRaiz(codUsuario:number):Observable<CarpetaRaiz[]>{
+  //   // this.loaderService.mostrar();
+  //   const token = localStorage.getItem('token')
+  //   const url = `${this.baseUrl2}/Api/Carpetas?CarpetasRaizIdUser=${codUsuario}`;
+
+  //   const headers = new HttpHeaders({
+  //     'Authorization': `Bearer ${token}`,
+  //     'X-Show-Loading-Swal': 'true'
+  //   });
+
+  //   return this.http.get<CarpetaRaiz[]>(url,{headers})
+  //   .pipe(
+  //     tap((datos)=>console.log('datos servicio',datos.length)
+  //     ),
+  //     catchError(()=>of([])),
+  //     // finalize(() => this.loaderService.ocultar())
+  //   )
+
+  // }
+  obtenerCarpetaRaiz(codUsuario: number): Observable<CarpetasResponse> {
     const token = localStorage.getItem('token')
     const url = `${this.baseUrl2}/Api/Carpetas?CarpetasRaizIdUser=${codUsuario}`;
 
@@ -54,14 +89,14 @@ export class GestionCarpetasService {
       'X-Show-Loading-Swal': 'true'
     });
 
-    return this.http.get<CarpetaRaiz[]>(url,{headers})
-    .pipe(
-      tap((datos)=>console.log('datos servicio',datos.length)
-      ),
-      catchError(()=>of([])),
-      // finalize(() => this.loaderService.ocultar())
-    )
-
+    return this.http.get<CarpetaRaiz[]>(url, { headers }).pipe(
+      map(carpetas => ({
+        carpetasOriginales: carpetas,
+        indiceUnificado: this.unificarIndicesElectronicos(carpetas)
+      })),
+      tap(datos => console.log('datos servicio', datos)),
+      catchError(() => of({ carpetasOriginales: [], indiceUnificado: { IndiceElectronico: [] } }))
+    );
   }
 
 

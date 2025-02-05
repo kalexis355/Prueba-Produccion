@@ -19,8 +19,8 @@
     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
       @for (option of filteredOptions | async; track option) {
         <!-- <mat-option [value]="option">{{option}}</mat-option> -->
-
-        <mat-option [value]="option.nombre" [routerLink]="['/dashboard/carpeta',option.id]" (click)="imprimirRuta(option)" ><i class="fa fa-search icon"></i> {{option.nombre}}</mat-option>
+<!-- (click)="imprimirRuta(option)" -->
+        <mat-option [value]="option.Nombre" [routerLink]="['/dashboard/carpeta',option.Cod]"  ><i class="fa fa-search icon"></i> {{option.Nombre}}</mat-option>
       }
     </mat-autocomplete>
   <i class="fa fa-search icon"></i>

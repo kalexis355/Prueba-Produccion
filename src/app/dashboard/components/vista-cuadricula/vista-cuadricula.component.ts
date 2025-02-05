@@ -14,6 +14,7 @@ import {
   CopiarPegar,
   CortarPegar,
   IndiceElectronico,
+  IndiceUnificado,
 } from '../../interfaces/carpeta.interface';
 import { DashboardService } from '../../services/dashboard.service';
 import { PermisosService } from '../../services/permisos.service';
@@ -56,6 +57,7 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
   public user = computed(() => this.authService2.currentUSer2());
 
   public CarpetasRaiz: CarpetaRaiz[] = [];
+  indiceUnificado: IndiceUnificado = { IndiceElectronico: [] };
   rolesUsuario: RolesUsuario[]=[]
   esUsuarioOEncargado:boolean = false;
   hayCarpetaSeleccionada:boolean = false;
@@ -219,6 +221,22 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
   // }
 
   cargarListadoDependencias() {
+    // const CodUsuario = this.authService2.currentUSer2()?.Cod;
+    // if (CodUsuario) {
+    //   this.gestionCarpetaService
+    //     .obtenerCarpetaRaiz(CodUsuario)
+    //     .pipe(
+    //       takeUntil(this.destroy$)
+    //     )
+    //     .subscribe({
+    //       next: (oficinas) => {
+    //         this.CarpetasRaiz = oficinas;
+    //       },
+    //       error: (error) => {
+    //         this.swalService.mostrarError('Ocurrió un error al cargar las carpetas');
+    //       }
+    //     });
+    // }
     const CodUsuario = this.authService2.currentUSer2()?.Cod;
     if (CodUsuario) {
       this.gestionCarpetaService
@@ -227,8 +245,13 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
           takeUntil(this.destroy$)
         )
         .subscribe({
-          next: (oficinas) => {
-            this.CarpetasRaiz = oficinas;
+          next: ({ carpetasOriginales, indiceUnificado }) => {  // Desestructuramos la respuesta
+            this.CarpetasRaiz = carpetasOriginales;
+            // Puedes guardar el índice unificado en una nueva propiedad si lo necesitas
+            this.indiceUnificado = indiceUnificado;
+
+            console.log('Carpetas originales:', this.CarpetasRaiz);
+            console.log('Índice unificado:', this.indiceUnificado);
           },
           error: (error) => {
             this.swalService.mostrarError('Ocurrió un error al cargar las carpetas');

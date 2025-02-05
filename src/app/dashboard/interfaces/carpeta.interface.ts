@@ -103,6 +103,15 @@ export interface IndiceElectronico {
   Subcarpetas?:       IndiceElectronico[];
 }
 
+export interface IndiceUnificado {
+  IndiceElectronico: IndiceElectronico[];
+}
+
+export interface CarpetasResponse {
+  carpetasOriginales: CarpetaRaiz[];
+  indiceUnificado: IndiceUnificado;
+}
+
 
 export interface CortarPegar {
   CodCarpetaCortar:  number;

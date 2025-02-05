@@ -1,0 +1,5 @@
+.estilosColumnas{
+  white-space: nowrap;
+  overflow-x: auto;
+  max-width: 150px;
+}

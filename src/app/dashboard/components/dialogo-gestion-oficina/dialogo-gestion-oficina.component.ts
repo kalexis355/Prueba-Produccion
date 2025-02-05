@@ -14,6 +14,7 @@ export class DialogoGestionOficinaComponent  implements OnInit {
   public oficinaService = inject(GestionOficinasService)
 
   public oficinasCreadas:Oficinas[]=[]
+  public oficinasFiltradas: Oficinas[] = [];
 
 public oficinaSeleccionada!:Oficinas
 
@@ -24,6 +25,7 @@ public oficinaSeleccionada!:Oficinas
     this.cargarOficinas();
     this.oficinaService.oficinas$.subscribe(oficinas=>{
       this.oficinasCreadas = oficinas
+      this.oficinasFiltradas = oficinas;
     })
   }
 
@@ -32,6 +34,7 @@ public oficinaSeleccionada!:Oficinas
     this.oficinaService.obtenerOficinas()
     .subscribe(oficinas => {
       this.oficinasCreadas = oficinas
+      this.oficinasFiltradas = oficinas;
       console.log(this.oficinasCreadas);
 
     })
@@ -104,4 +107,15 @@ public oficinaSeleccionada!:Oficinas
       this.oficinaService.actualizarOficinas()
     })
   }
+
+  onBuscarOficina(termino: string) {
+    if (!termino) {
+      this.oficinasFiltradas = [...this.oficinasCreadas];
+      return;
+    }
+
+    this.oficinasFiltradas = this.oficinasCreadas.filter(oficina =>
+      oficina.Nombre.toLowerCase().includes(termino.toLowerCase())
+    );
+}
 }

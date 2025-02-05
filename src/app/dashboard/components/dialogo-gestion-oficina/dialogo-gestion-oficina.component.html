@@ -9,7 +9,7 @@
             Oficinas Creadas
           </h1>
 
-          <app-buscador-generico placeHolder="Buscar en Oficinas..."></app-buscador-generico>
+          <app-buscador-generico placeHolder="Buscar en Oficinas..." (emitirModeloPresionando)="onBuscarOficina($event)"></app-buscador-generico>
 
           <table class="table table-striped table-bordered">
             <thead class="table-info text-center">
@@ -20,7 +20,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let oficina of oficinasCreadas" class="text-center">
+              <tr *ngFor="let oficina of oficinasFiltradas" class="text-center">
                 <td>{{oficina.Nombre}}</td>
                 <td>{{ oficina.Estado ? 'Activa' : 'Inactiva' }}</td>
                 <td>

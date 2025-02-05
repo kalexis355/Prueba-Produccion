@@ -19,6 +19,8 @@ export class TodosUsuariosComponent implements OnInit {
 
 
   public usuarios: UsuarioConsultado[] = [];
+  public usuariosFiltrados: UsuarioConsultado[] = [];
+
   public roles:Roles[]=[]
 
 
@@ -34,6 +36,7 @@ export class TodosUsuariosComponent implements OnInit {
     this.cargarRoles()
     this.gestionUsuarios.usuarios$.subscribe(usuarios=>{
       this.usuarios=usuarios
+      this.usuariosFiltrados = usuarios
     })
   }
 
@@ -42,7 +45,7 @@ export class TodosUsuariosComponent implements OnInit {
       next: (usuarios: UsuarioConsultado[]) => {
 
         this.usuarios = usuarios;
-
+        this.usuariosFiltrados = usuarios;
       },
       error: (err) => {
         console.error('Error al obtener los usuarios:', err);
@@ -121,6 +124,18 @@ export class TodosUsuariosComponent implements OnInit {
     }
 
   )
+  }
+  onBuscarUsuario(termino:string){
+    if (!termino) {
+      // Si no hay término de búsqueda, mostrar todos los usuarios
+      this.usuariosFiltrados = [...this.usuarios];
+      return;
+    }
+
+    // Filtrar desde la lista original de usuarios
+    this.usuariosFiltrados = this.usuarios.filter(usuario =>
+      usuario.Nombres.toLowerCase().includes(termino.toLowerCase())
+    );
   }
 
 

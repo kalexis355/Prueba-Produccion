@@ -78,7 +78,7 @@ export class VistaListaComponent implements OnInit,OnDestroy{
            )
            .subscribe({
              next: (oficinas) => {
-               this.CarpetasRaiz = oficinas;
+              //  this.CarpetasRaiz = oficinas;
              },
              error: (error) => {
                this.swalService.mostrarError('Ocurrió un error al cargar las carpetas');

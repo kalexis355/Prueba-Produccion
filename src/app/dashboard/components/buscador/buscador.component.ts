@@ -2,9 +2,11 @@ import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, Vie
 import { FormControl } from '@angular/forms';
 import { Observable, Subject, debounceTime, map, startWith } from 'rxjs';
 import { DashboardService } from '../../services/dashboard.service';
-import { Archivo, Carpeta } from '../../interfaces/carpeta.interface';
+import { Archivo, Carpeta, IndiceElectronico, IndiceUnificado } from '../../interfaces/carpeta.interface';
 import { RutaService } from '../../services/ruta.service';
 import { CheckBoxService } from '../../services/checkBox.service';
+import { GestionCarpetasService } from '../../services/gestionCarpetas.service';
+import { Auth2Service } from '../../../login/services/auth2.service';
 
 @Component({
   selector: 'app-buscador',
@@ -55,6 +57,10 @@ export class BuscadorComponent implements OnInit {
   public dashService = inject(DashboardService);
   public rutaService = inject(RutaService)
   public checkService = inject(CheckBoxService)
+  public gestionCarpetaService = inject(GestionCarpetasService);
+  public authService2 = inject(Auth2Service); // Añadir esta inyección
+
+  indiceUnificado: IndiceUnificado = { IndiceElectronico: [] };
 
   // myControl = new FormControl('');
   // filteredOptions?: Observable<Carpeta[]>;
@@ -102,92 +108,101 @@ export class BuscadorComponent implements OnInit {
 
   myControl = new FormControl('');
   options: Carpeta[] = this.dashService.dataCarpetas();
-  filteredOptions?: Observable<Carpeta[]>;
+  filteredOptions?: Observable<IndiceElectronico[]>;
+
+  private mapaIndices: Map<string, IndiceElectronico> = new Map();
+
+  private inicializarMapaIndices(indices: IndiceElectronico[]): void {
+    indices.forEach(indice => {
+      this.mapaIndices.set(indice.Path, indice);
+      if (indice.Subcarpetas) {
+        this.inicializarMapaIndices(indice.Subcarpetas);
+      }
+    });
+  }
 
   ngOnInit() {
-    this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value || '')),
-    );
-  }
+    const CodUsuario = this.authService2.currentUSer2()?.Cod;
+    if (CodUsuario) {
+      this.gestionCarpetaService.obtenerCarpetaRaiz(CodUsuario)
+        .subscribe({
+          next: ({ indiceUnificado }) => {
+            this.indiceUnificado = indiceUnificado;
+            this.inicializarMapaIndices(this.indiceUnificado.IndiceElectronico);
 
-  private _filter(value: string): Carpeta[] {
-    const filterValue = value.toLowerCase();
-
-    // return this.options.filter(option => option.nombre.toLowerCase().includes(filterValue));
-    return this.filterCarpetas(this.dashService.dataCarpetas() || [], filterValue);
-  }
-
-  private filterCarpetas(items: Carpeta[], filterValue: string): Carpeta[] {
-    let filtrado: Carpeta[] = [];
-
-    for (const item of items) {
-      if (item.tipo === 'carpeta') {
-        let includeItem = item.nombre.toLowerCase().includes(filterValue);
-
-        // Filtrar hijos si existen
-        if (item.hijos) {
-          const filteredChildren = this.filterCarpetas(item.hijos as Carpeta[], filterValue);
-          if (filteredChildren.length > 0) {
-            includeItem = true; // Incluir carpeta padre si tiene hijos coincidentes
-            filtrado.push(...filteredChildren);
+            // Inicializar filteredOptions después de tener los datos
+            this.filteredOptions = this.myControl.valueChanges.pipe(
+              startWith(''),
+              map(value => this._filter(value || '')),
+            );
+          },
+          error: (error) => {
+            console.error('Error al obtener el índice unificado:', error);
           }
-        }
+        });
+    }
+  }
 
-        if (includeItem) {
-          filtrado.push(item);
+  private _filter(value: string): IndiceElectronico[] {
+    const filterValue = value.toLowerCase();
+    return this.filterIndices(this.indiceUnificado.IndiceElectronico, filterValue);
+  }
+
+  private filterIndices(indices: IndiceElectronico[], filterValue: string): IndiceElectronico[] {
+    let filtrado: IndiceElectronico[] = [];
+
+    for (const indice of indices) {
+      let includeItem = indice.Nombre.toLowerCase().includes(filterValue);
+
+      // Filtrar subcarpetas si existen
+      if (indice.Subcarpetas) {
+        const filteredChildren = this.filterIndices(indice.Subcarpetas, filterValue);
+        if (filteredChildren.length > 0) {
+          includeItem = true; // Incluir carpeta padre si tiene subcarpetas coincidentes
+          filtrado.push(...filteredChildren);
         }
+      }
+
+      if (includeItem) {
+        filtrado.push(indice);
       }
     }
 
     return filtrado;
   }
 
+  // public imprimirRuta(indice: IndiceElectronico): void {
+  //   // Reiniciar estados
+  //   this.rutaService.guardarRuta.set([]);
+  //   this.checkService.carpetasSeleccionadas.set([]);
+  //   this.checkService.checkboxStates.set({});
+  //   this.checkService.archivosSeleccionados.set([]);
+  //   this.checkService.archivosTotal.set([]);
 
-  private mapaCarpetas: Map<string, Carpeta> = new Map();
+  //   // Construir la ruta usando el Path
+  //   const paths = indice.Path.split('.');
+  //   let currentPath = '';
 
-  constructor() {
-    const carpetas = this.dashService.dataCarpetas();
-    carpetas.forEach(carpeta => this.agregarCarpetaAlMapa(carpeta));
-  }
+  //   paths.forEach(cod => {
+  //     currentPath = currentPath ? `${currentPath}.${cod}` : cod;
+  //     const carpetaActual = this.mapaIndices.get(currentPath);
+  //     if (carpetaActual) {
+  //       this.rutaService.guardarRutaPArcial(this.convertirAFormatoCarpeta(carpetaActual));
+  //     }
+  //   });
 
-  // Función recursiva para agregar todas las carpetas al mapa
-  private agregarCarpetaAlMapa(carpeta: Carpeta): void {
-    this.mapaCarpetas.set(carpeta.id!, carpeta);
+  //   console.log(this.rutaService.guardarRuta().reverse());
+  //   this.myControl.reset();
+  // }
 
-    if (carpeta.hijos) {
-      carpeta.hijos.forEach(hijo => {
-        if (hijo.tipo === 'carpeta') {
-          this.agregarCarpetaAlMapa(hijo as Carpeta);
-        }
-      });
-    }
-  }
-
-  public imprimirRuta(option: Carpeta): void {
-
-    this.rutaService.guardarRuta.set([])
-    this.checkService.carpetasSeleccionadas.set([])
-    this.checkService.checkboxStates.set({})
-    this.checkService.archivosSeleccionados.set([])
-    this.checkService.archivosTotal.set([])
-
-    this.rutaService.guardarRutaPArcial(option)
-
-    while (option.padreId) {
-      const padre = this.mapaCarpetas.get(option.padreId);
-
-      if (!padre) {
-        console.error('Carpeta padre no encontrada');
-        return;
-      }
-      this.rutaService.guardarRutaPArcial(padre)
-
-
-      option = padre;
-    }
-
-    console.log(this.rutaService.guardarRuta().reverse());
-    this.myControl.reset();
-  }
+  // // Función auxiliar para convertir IndiceElectronico a Carpeta
+  // private convertirAFormatoCarpeta(indice: IndiceElectronico): Carpeta {
+  //   return {
+  //     id: indice.Cod.toString(),
+  //     nombre: indice.Nombre,
+  //     tipo: 'carpeta',
+  //     padreId: indice.Path.split('.').slice(0, -1).join('.') || undefined,
+  //     // Agrega aquí otros campos necesarios de tu interfaz Carpeta
+  //   };
+  // }
 }
