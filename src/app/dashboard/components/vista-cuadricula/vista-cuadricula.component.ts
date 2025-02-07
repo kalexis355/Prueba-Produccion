@@ -327,7 +327,6 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
               localStorage.removeItem('serieDestino');
               localStorage.removeItem('CodCarpetaAPegar');
               localStorage.removeItem('CodCarpetACopiar');
-              // this.habilitarOpcionPegar = false;
             },
             error: (err) => {
               // Manejo de errores
