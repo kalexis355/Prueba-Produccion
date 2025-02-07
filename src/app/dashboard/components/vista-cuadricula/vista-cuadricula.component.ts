@@ -280,7 +280,6 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
   async pegarCarpetaCortadaOCopiada(carpeta: CarpetaRaiz) {
 
 
-
     const codCarpetaDestino = carpeta.Cod;
     console.log(carpeta.Cod, 'codigo de la carpeta destino');
 
@@ -311,36 +310,36 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
         cancelButtonText: 'Cancelar',
       });
 
-      // if (result.isConfirmed) {
-      //   this.gestionCarpetaService
-      //     .cortarPegarCarpeta(bodyCarpetaCortada)
-      //     .subscribe({
-      //       next: (data) => {
-      //         // Si la respuesta indica éxito, mostrar un mensaje
-      //         Swal.fire(
-      //           'Éxito',
-      //           'La operación se completó correctamente.',
-      //           'success'
-      //         );
-      //         this.gestionCarpetaService.notificarActualizacion();
-      //         localStorage.removeItem('serieOrigen');
-      //         localStorage.removeItem('CodCarpetACortar');
-      //         localStorage.removeItem('serieDestino');
-      //         localStorage.removeItem('CodCarpetaAPegar');
-      //         localStorage.removeItem('CodCarpetACopiar');
-      //         this.habilitarOpcionPegar = false;
-      //       },
-      //       error: (err) => {
-      //         // Manejo de errores
-      //         console.error('Error al cortar/pegar carpeta:', err);
-      //         Swal.fire(
-      //           'Error',
-      //           err.error?.message || 'Ocurrió un error inesperado.',
-      //           'error'
-      //         );
-      //       },
-      //     });
-      // }
+      if (result.isConfirmed) {
+        this.gestionCarpetaService
+          .cortarPegarCarpeta(bodyCarpetaCortada)
+          .subscribe({
+            next: (data) => {
+              // Si la respuesta indica éxito, mostrar un mensaje
+              Swal.fire(
+                'Éxito',
+                'La operación se completó correctamente.',
+                'success'
+              );
+              this.gestionCarpetaService.notificarActualizacion();
+              localStorage.removeItem('serieOrigen');
+              localStorage.removeItem('CodCarpetACortar');
+              localStorage.removeItem('serieDestino');
+              localStorage.removeItem('CodCarpetaAPegar');
+              localStorage.removeItem('CodCarpetACopiar');
+              // this.habilitarOpcionPegar = false;
+            },
+            error: (err) => {
+              // Manejo de errores
+              console.error('Error al cortar/pegar carpeta:', err);
+              Swal.fire(
+                'Error',
+                err.error?.message || 'Ocurrió un error inesperado.',
+                'error'
+              );
+            },
+          });
+      }
     }
 
     if (codCarpetaCopiada !== null) {
@@ -349,6 +348,8 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
         CodCarpetaDestino: codCarpetaDestino,
         SerieRaizDestino: serieRaizDestino,
       };
+      console.log('body a copiar',bodyCopiarPegar);
+
       const result = await Swal.fire({
         title: '¿Estás seguro?',
         text: '¿Deseas copiar y pegar esta carpeta?',
@@ -359,43 +360,43 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
         confirmButtonText: 'Sí, continuar',
         cancelButtonText: 'Cancelar',
       });
-      // if (result.isConfirmed) {
-      //   try {
-      //     this.gestionCarpetaService
-      //       .copiarPegarCarpeta(bodyCopiarPegar)
-      //       .subscribe({
-      //         next: (data) => {
-      //           Swal.fire(
-      //             'Éxito',
-      //             'La copia se completó correctamente.',
-      //             'success'
-      //           );
-      //           this.gestionCarpetaService.notificarActualizacion();
-      //           localStorage.removeItem('serieOrigen');
-      //           localStorage.removeItem('CodCarpetACortar');
-      //           localStorage.removeItem('serieDestino');
-      //           localStorage.removeItem('CodCarpetaAPegar');
-      //           localStorage.removeItem('CodCarpetACopiar');
-      //           this.habilitarOpcionPegar = false;
-      //         },
-      //         error: (err) => {
-      //           // Manejo de errores
-      //           console.error('Error al copiar/pegar carpeta:', err);
-      //           Swal.fire(
-      //             'Error',
-      //             err.error?.message || 'Ocurrió un error inesperado.',
-      //             'error'
-      //           );
-      //         },
-      //       });
-      //   } catch (error) {
-      //     await Swal.fire(
-      //       'Error',
-      //       'No se pudo completar la operación.',
-      //       'error'
-      //     );
-      //   }
-      // }
+      if (result.isConfirmed) {
+        try {
+          this.gestionCarpetaService
+            .copiarPegarCarpeta(bodyCopiarPegar)
+            .subscribe({
+              next: (data) => {
+                Swal.fire(
+                  'Éxito',
+                  'La copia se completó correctamente.',
+                  'success'
+                );
+                this.gestionCarpetaService.notificarActualizacion();
+                localStorage.removeItem('serieOrigen');
+                localStorage.removeItem('CodCarpetACortar');
+                localStorage.removeItem('serieDestino');
+                localStorage.removeItem('CodCarpetaAPegar');
+                localStorage.removeItem('CodCarpetACopiar');
+                this.habilitarOpcionPegar = false;
+              },
+              error: (err) => {
+                // Manejo de errores
+                console.error('Error al copiar/pegar carpeta:', err);
+                Swal.fire(
+                  'Error',
+                  err.error?.message || 'Ocurrió un error inesperado.',
+                  'error'
+                );
+              },
+            });
+        } catch (error) {
+          await Swal.fire(
+            'Error',
+            'No se pudo completar la operación.',
+            'error'
+          );
+        }
+      }
     }
   }
 
@@ -408,27 +409,48 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
     this.menuPosY = event.clientY; // Posición del clic (Y)
     this.carpetaSeleccionada = carpeta; // Guarda la carpeta seleccionada
 
+    this.habilitarOpcion(carpeta);
+    // const codACortar = localStorage.getItem('CodCarpetACortar');
+    // const codAPegar = localStorage.getItem('CodCarpetACopiar');
+
+    // const codOficina= carpeta.CodOficina;
+    // const role = localStorage.getItem('role')
+
+    // if(role){
+    //   this.esUsuarioOEncargado = +role === 3 && this.rolesUsuario.some(
+    //     (rol)=> rol.Rol === 3 && rol.Oficina === codOficina
+    //   );
+    // }
+
+
+    // this.habilitarOpcionPegar = (codACortar !== null || codAPegar !== null) && this.esUsuarioOEncargado;
+
+    // console.log(this.habilitarOpcionPegar, 'esta disponible');
+
+    // const hayCarpetaAOperar = localStorage.getItem('elementoAOperar')
+
+    // this.hayCarpetaSeleccionada = hayCarpetaAOperar !== null;
+  }
+
+  habilitarOpcion(carpeta:any){
     const codACortar = localStorage.getItem('CodCarpetACortar');
-    const codAPegar = localStorage.getItem('CodCarpetACopiar');
+    const codACopiar = localStorage.getItem('CodCarpetACopiar');
 
     const codOficina= carpeta.CodOficina;
     const role = localStorage.getItem('role')
-
-    if(role){
+    if(role) {
       this.esUsuarioOEncargado = +role === 3 && this.rolesUsuario.some(
-        (rol)=> rol.Rol === 3 && rol.Oficina === codOficina
+        (rol) => rol.Rol === 3 && rol.Oficina === codOficina
       );
+
+      this.habilitarOpcionPegar = (role === '2' || this.esUsuarioOEncargado) &&
+        (codACortar !== null || codACopiar !== null);
     }
-
-
-    this.habilitarOpcionPegar = (codACortar !== null || codAPegar !== null) && this.esUsuarioOEncargado;
-
     console.log(this.habilitarOpcionPegar, 'esta disponible');
 
-    const hayCarpetaAOperar = localStorage.getItem('elementoAOperar')
-
-    this.hayCarpetaSeleccionada = hayCarpetaAOperar !== null;
   }
+
+
 
 
 

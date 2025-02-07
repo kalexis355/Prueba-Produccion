@@ -240,39 +240,38 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
   cortarCarpeta(carpeta: CarpetaContenido){
     this.ocultarMenuContextual(); // Oculta el menú
 
-    // localStorage.removeItem('CodCarpetACopiar')
+    localStorage.removeItem('CodCarpetACopiar')
 
     // this.carpetaParaCortar = carpeta.Cod
     // this.habilitarOpcionCortar= true;
     // // this.hayCarpetaSeleccionada = true;
-    //   const serieOrigen = localStorage.getItem('serie')
-    //   if(serieOrigen)
-    //     localStorage.setItem('serieOrigen', serieOrigen)
-    //     const codCarpetACortar = carpeta.Cod
-    //   localStorage.setItem('CodCarpetACortar', String(codCarpetACortar) )
+      const serieOrigen = localStorage.getItem('serie')
+      if(serieOrigen)
+        localStorage.setItem('serieOrigen', serieOrigen)
+      localStorage.setItem('CodCarpetACortar', String(carpeta.Cod) )
     //   localStorage.setItem('elementoAOperar',String(1))
 
   }
 
   copiarCarpeta(carpeta:CarpetaContenido){
+    this.ocultarMenuContextual();
     localStorage.removeItem('serieOrigen')
     localStorage.removeItem('CodCarpetACortar')
-    this.ocultarMenuContextual();
-    // this.hayCarpetaSeleccionada = true
-    // this.carpetaParaCopiar = carpeta.Cod
-    // this.habilitarOpcionCortar= false
-    // this.habilitarOpcionCopiar = true;
+    // // this.hayCarpetaSeleccionada = true
+    // // this.carpetaParaCopiar = carpeta.Cod
+    // // this.habilitarOpcionCortar= false
+    // // this.habilitarOpcionCopiar = true;
 
-    localStorage.setItem('CodCarpetACopiar',String(this.carpetaParaCopiar))
-    localStorage.setItem('elementoAOperar',String(1))
+    localStorage.setItem('CodCarpetACopiar',String(carpeta.Cod))
+    // localStorage.setItem('elementoAOperar',String(1))
   }
 
   async  pegarCarpeta(carpeta:CarpetaContenido){
     const codACortar = localStorage.getItem('CodCarpetACortar')
     const serieOrigen = localStorage.getItem('serieOrigen')
     const codACopiar = localStorage.getItem('CodCarpetACopiar')
-
     const serieDestino = localStorage.getItem('serie')
+
     if(codACortar && serieOrigen){
       if(serieDestino)
         localStorage.setItem('serieDestino', serieDestino)
@@ -368,7 +367,7 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
               localStorage.removeItem('serieDestino')
               localStorage.removeItem('CodCarpetaAPegar')
               localStorage.removeItem('CodCarpetACopiar')
-              this.habilitarOpcionCopiar = false;
+              // this.habilitarOpcionCopiar = false;
             },
             error: (err) => {
               // Manejo de errores
