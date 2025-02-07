@@ -155,8 +155,10 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
     // this.puedeElimarCarpetas(carpeta);
     // this.permisoCortarPegar();
     // this.permisoAdminOpciones(carpeta);
-    this.usuarioEsAdminsitrador()
+    // this.usuarioEsDelegado(carpeta);
+    this.usuarioEsAdminsitrador();
     this.usuarioEsEncargado();
+    this.usuarioEsDelegadoOpciones(carpeta);
     // const hayCarpetaAOperar = localStorage.getItem('elementoAOperar');
     // this.hayCarpetaSeleccionada = hayCarpetaAOperar !== null;
     this.hayCarpetaSeleccionada = true
@@ -447,8 +449,9 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
         this.carpetaHija = navigation?.extras.state?.['carpetaHija'];
         // this.esSerieSubserie();
         // this.carpetaTieneDelegado();
-        this.usuarioPuedeSubirArchivos()
-        this.usuarioPuedeCrearCarpetas()
+        this.usuarioPuedeSubirArchivos();
+        this.usuarioPuedeCrearCarpetas();
+        this.usuarioEsDelegado();
         // console.log('Carpeta Padre:', this.carpetaPadre);
         // console.log('Carpeta Hija:', this.carpetaHija);
 
@@ -483,7 +486,6 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
     // if(this.esEncargado){
     //   this.habilitarOpcionEliminar = false;
     // }
-
 
   }
 
@@ -660,9 +662,9 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
   usuarioPuedeCrearCarpetas(){
     // console.log('No es serie o subserie 2',this.NoEsSerieOSubserie);
     // console.log('es subserie', this.esSubserie);
-//se puede crear carpetas en cualquier tipo en una serie o subserie o expediente o generica
-//lo unico es que no se puede crear una subserie dentro de una generica o expediente
-//solo se puede crear dentro de una serie o una subserie
+    //se puede crear carpetas en cualquier tipo en una serie o subserie o expediente o generica
+    //lo unico es que no se puede crear una subserie dentro de una generica o expediente
+    //solo se puede crear dentro de una serie o una subserie
     this.rolesUsuario = this.auth2Service.getRolesUsuario();
     const rolAdmin = localStorage.getItem('role');
     const idOficina = localStorage.getItem('idOficina')
@@ -719,6 +721,33 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
       this.habilitarOpcionPegar = encargado
       this.habilitarOpcionCopiar = encargado
     }
+  }
+
+  usuarioEsDelegado(){
+    const carpeta = this.carpetaPadre || this.carpetaHija;
+    const usuarioLogueado = this.auth2Service.currentUSer2()?.Cod;
+    if(carpeta){
+      const carpetaDelegado =  carpeta.Delegado;
+
+      if(usuarioLogueado === carpetaDelegado){
+        console.log('soy delegado');
+        this.puedeCrearCarpetas = true;
+        this.puedeSubirArchivos = true;
+      }
+    }
+  }
+
+  usuarioEsDelegadoOpciones(carpeta:CarpetaContenido){
+    const usuarioLogueado = this.auth2Service.currentUSer2()?.Cod;
+    const carpetaDelegado =  carpeta.Delegado;
+
+    if(usuarioLogueado === carpetaDelegado){
+      this.habilitarOpcionEliminar = true
+      this.habilitarOpcionCortar = true
+      this.habilitarOpcionPegar = true
+      this.habilitarOpcionCopiar = true
+    }
+
   }
 
 }
