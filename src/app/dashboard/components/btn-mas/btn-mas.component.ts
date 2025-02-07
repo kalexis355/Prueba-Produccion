@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit, signal } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnInit, signal, SimpleChanges } from '@angular/core';
 import { DialogoComponent } from '../dialogo/dialogo.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DashboardService } from '../../services/dashboard.service';
@@ -17,10 +17,13 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './btn-mas.component.html',
   styleUrl: './btn-mas.component.css'
 })
-export class BtnMasComponent implements OnInit {
+export class BtnMasComponent implements OnInit,OnChanges  {
 
   @Input()
   public idPadre?:number
+
+  @Input()
+  public noEsSerieOSubserie:boolean = false;
 
   //injeccion de servicios o librerias
   public dashService = inject(DashboardService)
@@ -37,8 +40,18 @@ export class BtnMasComponent implements OnInit {
   constructor(public dialog: MatDialog) { }
 
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['noEsSerieOSubserie']) {
+      // Manejar el cambio aquí
+      // console.log(' serie o subserie hijo', changes['noEsSerieOSubserie'].currentValue);
+    }
+  }
+
+
 
   ngOnInit(): void {
+    // console.log('no es serie Ni subserie componente hijo',this.noEsSerieOSubserie);
+
     this.roles=this.authService2.getRolesUsuario()
 
     // console.log(this.roles,'roles Extraidos');
@@ -55,61 +68,15 @@ export class BtnMasComponent implements OnInit {
   }
 
 
-  //metodo para abrir el dialogo
-  // openDialog(): void {
-  //   //se crea una constante con la propiedad del constructur llamando al componente que tiene la estructura del dialogo
-  //   const dialogRef = this.dialog.open(DialogoComponent);
-
-  //   //se usa la propiedad creada anteriormente para cerrar el dialogo pero antes del cierre
-  //   //se suscribe para poder obtener los datos de ese dialogo
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     //se verifica si el resultado es vacio o undefined
-  //     if (result !== undefined && result !== '') {
-  //       // se crean las propiedades que se desean agregar
-  //       const fecha = new Date()
-  //       const nombreCarpeta = result;
-  //       // se llama al metodo para agregar una nueva carpeta con todos sus atributos
-  //       if(this.idPadre){
-  //         const carpetaPadre = this.dashService.getCarpetaId(this.idPadre)
-  //         const carpetahijo:Carpeta = {
-  //           id:uuidv4(),
-  //           PadreId2:this.idPadre,
-  //           nombre:nombreCarpeta,
-  //           fechaCreacion:fecha,
-  //           creador:this.authService2.currentUSer2()!.Nombres,
-  //           tipo:'carpeta',
-  //           hijos:[],
-  //           permisos:['read', 'write', 'delete', 'share', 'rename', 'manage_permissions', 'upload', 'download', 'view_audit_logs', 'lock']
-  //         }
-  //         carpetaPadre?.hijos?.push(carpetahijo)
-  //         console.log('holas');
-
-  //       }else{
-  //         console.log('hola');
-
-  //         this.dashService.addCarpeta({
-  //           id:uuidv4(),
-  //           nombre:nombreCarpeta,
-  //           fechaCreacion:fecha,
-  //           creador:this.authService2.currentUSer2()!.Nombres,
-  //           tipo:'carpeta',hijos:[],
-  //           permisos:['read', 'write', 'delete', 'share', 'rename', 'manage_permissions',
-  //              'upload', 'download', 'view_audit_logs', 'lock']
-  //             });
-  //       }
-
-  //     }else{
-
-  //     }
-
-  //   });
-  // }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(DialogoComponent,{
       width:'450px',
       height:'550px',
       disableClose: true,
+      data:{
+        esSerieOSubserie: this.noEsSerieOSubserie
+      }
     });
     dialogRef.afterClosed().subscribe(result => {
     this.route.paramMap.subscribe(params => {

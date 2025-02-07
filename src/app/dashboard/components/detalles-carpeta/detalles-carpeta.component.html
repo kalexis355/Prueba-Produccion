@@ -17,7 +17,7 @@
     <div class="mt-3 ms-2">
       <p class="fs-5 mb-1">Usuarios Delegados</p>
       <!-- <p *ngIf="carpetaSeleccionada.Delegado>0">{{obtenerNombreDelegado()}}</p> -->
-      <p *ngIf="carpetaSeleccionada.Delegado>0">Nombre delegado</p>
+      <p *ngIf="carpetaSeleccionada.Delegado>0">{{carpetaSeleccionada.Delegado}}</p>
       <p class="m-0 me-1" *ngIf="carpetaSeleccionada.Delegado===0">
         No hay usuarios delegados asignados con permisos para ver o editar esta carpeta</p>
     </div>
@@ -33,7 +33,7 @@
 
       <p class="subtitulo mb-0">Estado</p>
       <!-- <p class="mt-0 subtitulo2">{{obtenerNombreEstadoCarpeta()}}</p> -->
-      <p class="mt-0 subtitulo2">Nombre estado Carpeta</p>
+      <p class="mt-0 subtitulo2">{{carpetaSeleccionada.EstadoCarpeta}}</p>
 
 
       <p class="subtitulo mb-0">Descripción</p>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CarpetaContenido } from '../../interfaces/contenidoCarpeta';
 
 @Component({
@@ -6,7 +6,7 @@ import { CarpetaContenido } from '../../interfaces/contenidoCarpeta';
   templateUrl: './menu-contextual.component.html',
   styleUrl: './menu-contextual.component.css'
 })
-export class MenuContextualComponent {
+export class MenuContextualComponent implements OnChanges {
   @Input() visible: boolean = false;
   @Input() posX: number = 0;
   @Input() posY: number = 0;
@@ -19,11 +19,20 @@ export class MenuContextualComponent {
   @Input() submenuPosition: 'left' | 'right' = 'right';
 
   @Output() cerrarMenu = new EventEmitter<void>();
-  @Output() verDetalles = new EventEmitter<void>();
+  @Output() verDetalles = new EventEmitter<CarpetaContenido>();
   @Output() cortar = new EventEmitter<CarpetaContenido>();
   @Output() copiar = new EventEmitter<CarpetaContenido>();
   @Output() pegar = new EventEmitter<CarpetaContenido>();
   @Output() eliminar = new EventEmitter<CarpetaContenido>();
+
+  constructor(){}
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['permisoEliminar']) {
+      const valor = changes['permisoEliminar'].currentValue;
+      console.log('puede eliminar:', valor);
+    }
+  }
 
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event) {

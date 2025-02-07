@@ -1,5 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GestionCarpetasService } from '../../services/gestionCarpetas.service';
 import { EstadoCarpeta, TipoCarpeta, NivelVisualizacion } from '../../interfaces/carpeta.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -46,7 +46,11 @@ export class DialogoComponent implements OnInit {
   //se injectala propiedad del dialogo pasando como referencia el mismo
   constructor(
     private fb: FormBuilder,
-    public dialogRef: MatDialogRef<DialogoComponent>) { }
+    public dialogRef: MatDialogRef<DialogoComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    console.log(this.data.esSerieOSubserie,'es serie o subserie'); // Aquí puedes usar el valor
+  }
 
 
   ngOnInit(): void {

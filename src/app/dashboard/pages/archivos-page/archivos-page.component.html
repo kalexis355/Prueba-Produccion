@@ -14,16 +14,18 @@
 
       <!-- Botones derecha -->
       <div class="col-6 d-flex justify-content-end align-items-center mt-3">
-        <ng-container *ngIf="esSerieOSubserie || puedeCrearCarpetas">
+        <ng-container >
           <div class="d-flex gap-3 align-items-center me-3">
-            <app-btn-subir-archivo
+
+            <app-btn-subir-archivo *ngIf="puedeSubirArchivos"
               [carpetaId]="id"
-              [mostrarBoton]="esSerieOSubserie">
+              [mostrarBoton]="NoEsSerieOSubserie">
             </app-btn-subir-archivo>
 
             <div *ngIf="puedeCrearCarpetas">
-              <dashboard-btn-mas></dashboard-btn-mas>
+              <dashboard-btn-mas [noEsSerieOSubserie]="NoEsSerieOSubserie"></dashboard-btn-mas>
             </div>
+
           </div>
         </ng-container>
       </div>
@@ -57,22 +59,22 @@
       [posX]="menuPosX"
       [posY]="menuPosY"
       [carpetaSeleccionada]="carpetaSeleccionada"
-      [permisoCortar]="!habilitarOpcionCortar"
-      [permisoCopiar]="!habilitarOpcionCopiar"
-      [permisoPegar]="!habilitarParaPegar"
-      [permisoEliminar]="!habilitarOpcionEliminar"
+      [permisoEliminar]="habilitarOpcionEliminar"
+      [permisoCortar]="habilitarOpcionCortar"
+      [permisoPegar]="habilitarOpcionPegar"
+      [permisoCopiar]="habilitarOpcionCopiar"
       [hayCarpetaSeleccionada]="hayCarpetaSeleccionada"
       [submenuPosition]="submenuPosition"
       (cerrarMenu)="ocultarMenuContextual()"
-      (verDetalles)="verDetalles($event)"
       (cortar)="cortarCarpeta($event)"
       (copiar)="copiarCarpeta($event)"
       (pegar)="pegarCarpeta($event)"
       (eliminar)="eliminarCarpeta($event)"
+      (verDetalles)="verDetalles($event)"
       (cancelar)="eliminarAccion()">
     </app-menu-contextual>
 
-
+<!--  (verDetalles)="verDetalles(carpetaSeleccionada)" -->
     <app-detalles-carpeta
     [carpetaSeleccionada]="carpetaSeleccionada">
     </app-detalles-carpeta>

@@ -165,20 +165,3 @@
   }
 
 
-  .carpeta-cortar {
-    border: 2px dashed #1a73e8 !important; /* Color azul de Google Drive */
-    border-radius: 8px;
-    padding: 4px;
-    background-color: rgba(26, 115, 232, 0.04) !important; /* Fondo azul muy suave */
-  }
-
-  /* Si quieres agregar una animación para hacerlo más visible */
-  @keyframes borderPulse {
-    0% { border-color: #1a73e8; }
-    50% { border-color: #4285f4; }
-    100% { border-color: #1a73e8; }
-  }
-
-  .carpeta-cortar {
-    animation: borderPulse 2s infinite;
-  }

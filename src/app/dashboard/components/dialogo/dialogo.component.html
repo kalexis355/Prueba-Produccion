@@ -37,7 +37,7 @@
        aria-label="Selección de Tipo">
         <option *ngFor="let tipo of tiposCarpetas ; let i = index"
          [value]="tipo.Cod"
-        [disabled]="i === 0">
+        [disabled]="i === 0|| (i === 1 && data.esSerieOSubserie)">
         {{ tipo.Nombre }}
         </option>
       </select>
