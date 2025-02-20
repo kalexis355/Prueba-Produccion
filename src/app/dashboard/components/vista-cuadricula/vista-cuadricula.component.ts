@@ -10,7 +10,9 @@ import {
 } from '@angular/core';
 import {
   Carpeta,
+  CarpetaEstructura,
   CarpetaRaiz,
+  CarpetasPadre,
   CopiarPegar,
   CortarPegar,
   IndiceElectronico,
@@ -32,6 +34,7 @@ import { LoaderService } from '../../services/gestionLoader.service';
 import { Router } from '@angular/router';
 import { HttpRequest } from '@angular/common/http';
 import { SwalService } from '../../services/swal.service';
+import { IndexDbService } from '../../services/indexdb.service';
 
 @Component({
   selector: 'app-vista-cuadricula',
@@ -49,7 +52,7 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
   public loaderService = inject(LoaderService)
   public router = inject(Router)
   public swalService = inject(SwalService)
-
+  public indexdbService = inject(IndexDbService)
 
   private authService2 = inject(Auth2Service);
   public procesoUsuarioSerice = inject(ProcesosUsuarioService);
@@ -67,6 +70,8 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
   menuVisible: boolean = false; // Bandera para mostrar/ocultar el menú
   menuPosX: number = 0; // Posición X del menú
   menuPosY: number = 0; // Posición Y del menú
+  private primeraVezIniciado = false;
+  carpetasPadre: CarpetasPadre[]=[]
   carpetaSeleccionada: CarpetaRaiz = {
     Cod: 0,
     CodSerie: 0,
@@ -110,7 +115,7 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
     if (this.authService2.currentUSer2()) {
       this.rolesUsuario = this.authService2.currentUSer2()!.RolesUsuario;
     }
-    this.cargarListadoDependencias();
+    // this.cargarListadoDependencias();
 
     // Inicializar los estados de los checkboxes
     // this.carpetaEstado()
@@ -126,7 +131,26 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
 
     //   }
     // })
+
+      // Solo llamamos a obtenerCarpetas la primera vez
+      this.gestionCarpetaService.inicializarServicio();
+      this.obtenerCarpetasPadres()
   }
+  respuesta: any;
+  error: string = '';
+
+
+  async obtenerCarpetasPadres() {
+    try {
+      const carpetasPadre = await this.indexdbService.obtenerCarpetasPadre();
+      console.log('Carpetas padre:', carpetasPadre);
+      // Aquí puedes asignar las carpetas a una variable del componente
+      this.carpetasPadre = carpetasPadre;
+    } catch (error) {
+      console.error('Error al obtener carpetas padre:', error);
+    }
+  }
+
 
   ngOnDestroy(): void {
     this.checkService.carpetasSeleccionadas.set([]);

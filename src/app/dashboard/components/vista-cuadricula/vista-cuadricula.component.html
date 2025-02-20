@@ -38,7 +38,7 @@
 
   <div class="row g-5">
 
-    <div class="col-md-2 " *ngFor="let carpeta of CarpetasRaiz" >
+    <div class="col-md-2 " *ngFor="let carpeta of carpetasPadre" >
 
       <!-- <app-arrastrar-soltar > -->
         <div class="btun d-flex flex-column justify-content-between align-items-end "
@@ -51,11 +51,10 @@
           >
 
          <button class="btn btun flex-grow-1 "
-         (click)="guardarCodigo(carpeta)"
         [routerLink]="['/dashboard/carpeta',carpeta.Cod]"
         [state]="{ carpeta: carpeta }">
 
-           <img class="" [src]="'data:image/png;base64,' + carpeta.Icono" alt="carpeta" width="100" height="100">
+           <img class="" src="assets/imgs/carpeta-vacia.png" alt="carpeta" width="100" height="100">
            <h4 class="mt-2 mb-0 texto" [title]="carpeta.Nombre">{{carpeta.Nombre }}</h4>
            {{carpeta.Cod}}
            <!-- <span class="texto2">{{carpeta.fechaCreacion | date:'dd/MM/yyyy'}}</span> -->
@@ -133,3 +132,5 @@
     </div>
   </div>
 
+
+  <!-- (click)="guardarCodigo(carpeta)" -->

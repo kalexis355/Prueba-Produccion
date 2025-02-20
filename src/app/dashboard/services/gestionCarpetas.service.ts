@@ -1,11 +1,51 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import {
+  HttpBackend,
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpParams,
+  HttpResponse,
+} from '@angular/common/http';
+import { inject, Injectable, OnDestroy, signal } from '@angular/core';
 import { environments2 } from '../../../environments/environments-dev';
-import { catchError, delay, finalize, map, Observable, of, Subject, tap } from 'rxjs';
-import { CarpetaRaiz, CarpetasResponse, CopiarPegar, CortarPegar, CrearCarpeta, CrearCarpetaResponse, EstadoCarpeta, IndiceUnificado, NivelVisualizacion, TipoCarpeta } from '../interfaces/carpeta.interface';
-import { CarpetaContenido, DocumentoContenido } from '../interfaces/contenidoCarpeta';
+import {
+  catchError,
+  delay,
+  finalize,
+  firstValueFrom,
+  from,
+  interval,
+  map,
+  Observable,
+  of,
+  retry,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+  throwError,
+} from 'rxjs';
+import {
+  CarpetaEstructura,
+  CarpetaRaiz,
+  CarpetasResponse,
+  CopiarPegar,
+  CortarPegar,
+  CrearCarpeta,
+  CrearCarpetaResponse,
+  EstadoCarpeta,
+  IndiceUnificado,
+  NivelVisualizacion,
+  TipoCarpeta,
+} from '../interfaces/carpeta.interface';
+import {
+  CarpetaContenido,
+  DocumentoContenido,
+} from '../interfaces/contenidoCarpeta';
 import { LoaderService } from './gestionLoader.service';
-
+import { IndexDbService } from './indexdb.service';
+import * as pako from 'pako';
+import { openDB } from 'idb';
 interface MixedItem {
   Cod: number;
   Nombre: string;
@@ -19,26 +59,29 @@ interface MixedItem {
   Ruta?: string;
   [key: string]: any; // Para otras propiedades que puedan existir
 }
-@Injectable({providedIn: 'root'})
-export class GestionCarpetasService {
-  pipe(arg0: any, arg1: any) {
-    throw new Error('Method not implemented.');
-  }
-
+@Injectable({ providedIn: 'root' })
+export class GestionCarpetasService implements OnDestroy {
   private http = inject(HttpClient);
-  private loaderService = inject(LoaderService)
-  private readonly baseUrl2: string = environments2.baseUrl
+  private loaderService = inject(LoaderService);
+  private indexService = inject(IndexDbService);
+  private readonly baseUrl2: string = environments2.baseUrl;
 
-
-  public tiposDeCarpeta = signal<TipoCarpeta[]>([])
-  public estadosCarpeta = signal<EstadoCarpeta[]>([])
+  public tiposDeCarpeta = signal<TipoCarpeta[]>([]);
+  public estadosCarpeta = signal<EstadoCarpeta[]>([]);
 
   private actualizarContenidoSource = new Subject<void>();
 
   // Observable que otros componentes pueden suscribirse
   actualizarContenido$ = this.actualizarContenidoSource.asObservable();
+  private dbName = 'FilyDB';
+  private storeName = 'estructuraDocumental';
 
-  constructor() { }
+  private updateInterval$ = interval(5000);
+  private destroy$ = new Subject<void>();
+  private actualizacionIniciada = false; // Nuevo flag para controlar el estado
+  private primeraVezIniciado = false;
+
+  constructor() {}
 
   notificarActualizacion() {
     this.actualizarContenidoSource.next();
@@ -46,114 +89,241 @@ export class GestionCarpetasService {
 
   unificarIndicesElectronicos(carpetas: CarpetaRaiz[]): IndiceUnificado {
     const indiceUnificado: IndiceUnificado = {
-      IndiceElectronico: []
+      IndiceElectronico: [],
     };
 
-    carpetas.forEach(carpeta => {
+    carpetas.forEach((carpeta) => {
       try {
-        const indiceActual = JSON.parse(carpeta.IndiceElectronico) as IndiceUnificado;
-        indiceUnificado.IndiceElectronico.push(...indiceActual.IndiceElectronico);
+        const indiceActual = JSON.parse(
+          carpeta.IndiceElectronico
+        ) as IndiceUnificado;
+        indiceUnificado.IndiceElectronico.push(
+          ...indiceActual.IndiceElectronico
+        );
       } catch (error) {
-        console.log(`Error al procesar carpeta ${carpeta.Cod}: No tiene indice electronico`, error);
+        console.log(
+          `Error al procesar carpeta ${carpeta.Cod}: No tiene indice electronico`,
+          error
+        );
       }
     });
 
     return indiceUnificado;
   }
 
-  // obtenerCarpetaRaiz(codUsuario:number):Observable<CarpetaRaiz[]>{
-  //   // this.loaderService.mostrar();
-  //   const token = localStorage.getItem('token')
-  //   const url = `${this.baseUrl2}/Api/Carpetas?CarpetasRaizIdUser=${codUsuario}`;
-
-  //   const headers = new HttpHeaders({
-  //     'Authorization': `Bearer ${token}`,
-  //     'X-Show-Loading-Swal': 'true'
-  //   });
-
-  //   return this.http.get<CarpetaRaiz[]>(url,{headers})
-  //   .pipe(
-  //     tap((datos)=>console.log('datos servicio',datos.length)
-  //     ),
-  //     catchError(()=>of([])),
-  //     // finalize(() => this.loaderService.ocultar())
-  //   )
-
-  // }
   obtenerCarpetaRaiz(codUsuario: number): Observable<CarpetasResponse> {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token');
     const url = `${this.baseUrl2}/Api/Carpetas?CarpetasRaizIdUser=${codUsuario}`;
 
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'X-Show-Loading-Swal': 'true'
+      Authorization: `Bearer ${token}`,
+      'X-Show-Loading-Swal': 'true',
     });
 
     return this.http.get<CarpetaRaiz[]>(url, { headers }).pipe(
-      map(carpetas => ({
+      map((carpetas) => ({
         carpetasOriginales: carpetas,
-        indiceUnificado: this.unificarIndicesElectronicos(carpetas)
+        indiceUnificado: this.unificarIndicesElectronicos(carpetas),
       })),
-      tap(datos => console.log('datos servicio', datos)),
-      catchError(() => of({ carpetasOriginales: [], indiceUnificado: { IndiceElectronico: [] } }))
+      tap((datos) => console.log('datos servicio', datos)),
+      catchError(() =>
+        of({
+          carpetasOriginales: [],
+          indiceUnificado: { IndiceElectronico: [] },
+        })
+      )
     );
   }
 
+  // ObtenerYMostrarGzip(): Observable<CarpetaEstructura> {
+  //   const token = localStorage.getItem('token');
+  //   const url = `${this.baseUrl2}/Api/Carpetas?EstructuraDocumental=true`;
 
+  //   const headers = new HttpHeaders({
+  //     'Authorization': `Bearer ${token}`
+  //   });
 
-  ObtenerTipoCarpetas():Observable<TipoCarpeta[]>{
-    const token = localStorage.getItem('token')
+  //   return this.http.get(url, { headers, responseType: 'arraybuffer' }).pipe(
+  //     map((response: ArrayBuffer) => {
+  //       // Convierte el ArrayBuffer a string
+  //       console.log(response,'hola respuesta');
+
+  //       const textDecoder = new TextDecoder('utf-8');
+  //       const jsonString = textDecoder.decode(response);
+
+  //       // Parsea directamente a JSON según tu interfaz
+  //       const jsonData: CarpetaEstructura = JSON.parse(jsonString);
+  //       console.log('Datos JSON:', jsonData);
+
+  //         // Guardar en IndexedDB
+  //     this.indexService.guardarCarpetas(jsonData.estructura_documental)
+  //     .then(() => console.log('Carpetas guardadas en IndexedDB'))
+  //     .catch(err => console.error('Error guardando carpetas', err));
+
+  //       return jsonData;
+  //     }),
+  //     catchError((error) => {
+  //       console.error('Error obteniendo:', error);
+  //       return throwError(error);
+  //     })
+  //   );
+  // }
+
+  inicializarServicio() {
+    if (this.primeraVezIniciado) {
+      return; // Si ya se inicializó, no hacemos nada
+    }
+
+    // Primera carga y configuración
+    this.ObtenerYMostrarGzip().subscribe({
+      next: (data: CarpetaEstructura) => {
+        this.iniciarActualizacionPeriodica();
+        this.primeraVezIniciado = true;
+      },
+      error: (error) => {
+        console.error('Error en carga inicial:', error);
+      }
+    });
+  }
+
+  iniciarActualizacionPeriodica() {
+    if (this.actualizacionIniciada) {
+      console.log('La actualización ya está en curso');
+      return;
+    }
+
+    this.actualizacionIniciada = true;
+    console.log('Iniciando actualización periódica');
+
+    this.updateInterval$
+      .pipe(
+        takeUntil(this.destroy$),
+        switchMap(() => this.ObtenerYMostrarGzip())
+      )
+      .subscribe({
+        next: (data) => {
+          // console.log('Actualización exitosa');
+        },
+        error: (error) => {
+          console.error('Error en actualización:', error);
+        },
+      });
+  }
+
+  ObtenerYMostrarGzip(): Observable<CarpetaEstructura> {
+    const token = localStorage.getItem('token');
+    const url = `${this.baseUrl2}/Api/Carpetas?EstructuraDocumental=true`;
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Accept-Encoding': 'gzip, deflate',
+      Accept: 'application/json',
+    });
+
+    return this.http
+      .get<CarpetaEstructura>(url, {
+        headers,
+        responseType: 'json',
+        observe: 'response',
+      })
+      .pipe(
+        map((response) => {
+          if (!response.body) {
+            throw new Error('Respuesta vacía del servidor');
+          }
+
+          try {
+            const jsonData = response.body;
+
+            // Usar el nuevo método selectivo de guardarCarpetas
+            this.indexService
+              .guardarCarpetas(jsonData.estructura_documental)
+              .then(() => console.log('Carpetas actualizadas selectivamente'))
+              .catch((err) =>
+                console.error('Error actualizando carpetas:', err)
+              );
+
+            return jsonData;
+          } catch (error) {
+            console.error('Error al procesar los datos:', error);
+            throw error;
+          }
+        }),
+        catchError((error) => {
+          console.error('Error en la petición:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  detenerActualizacion() {
+    if (this.actualizacionIniciada) {
+      this.destroy$.next();
+      this.destroy$.complete();
+      this.actualizacionIniciada = false;
+      console.log('Actualización periódica detenida');
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.detenerActualizacion();
+  }
+
+  ObtenerTipoCarpetas(): Observable<TipoCarpeta[]> {
+    const token = localStorage.getItem('token');
     const url = `${this.baseUrl2}/Api/DatosEstaticos?ListaTiposCarpetas=true`;
 
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
 
-    return this.http.get<TipoCarpeta[]>(url,{headers})
-    .pipe(
-      tap((tiposCarpeta:TipoCarpeta[])=>{
-        this.tiposDeCarpeta.set(tiposCarpeta)
+    return this.http.get<TipoCarpeta[]>(url, { headers }).pipe(
+      tap((tiposCarpeta: TipoCarpeta[]) => {
+        this.tiposDeCarpeta.set(tiposCarpeta);
       }),
-      catchError(()=> of([]))
-    )
+      catchError(() => of([]))
+    );
   }
 
-  crearCarpetas(carpetaBody:CrearCarpeta):Observable<CrearCarpetaResponse>{
-    const token = localStorage.getItem('token')
+  crearCarpetas(carpetaBody: CrearCarpeta): Observable<CrearCarpetaResponse> {
+    const token = localStorage.getItem('token');
     const url = `${this.baseUrl2}/Api/Carpetas`;
 
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
 
-    return this.http.post<CrearCarpetaResponse>(url,carpetaBody,{headers})
-
+    return this.http.post<CrearCarpetaResponse>(url, carpetaBody, { headers });
   }
 
-  ObtenerEstadosCarpeta():Observable<EstadoCarpeta[]>{
-    const token = localStorage.getItem('token')
+  ObtenerEstadosCarpeta(): Observable<EstadoCarpeta[]> {
+    const token = localStorage.getItem('token');
     const url = `${this.baseUrl2}/Api/DatosEstaticos?ListaEstadosCarpetas=true`;
 
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
 
-    return this.http.get<EstadoCarpeta[]>(url,{headers})
-    .pipe(
-      tap((estadosCarpetas:EstadoCarpeta[])=>{
-        this.estadosCarpeta.set(estadosCarpetas)
+    return this.http.get<EstadoCarpeta[]>(url, { headers }).pipe(
+      tap((estadosCarpetas: EstadoCarpeta[]) => {
+        this.estadosCarpeta.set(estadosCarpetas);
       }),
-      catchError(()=>of([]))
-    )
+      catchError(() => of([]))
+    );
   }
 
-  CargarContenidoCarpeta(id: number): Observable<{ Carpetas: CarpetaContenido[], Documentos: DocumentoContenido[] }> {
+  CargarContenidoCarpeta(
+    id: number
+  ): Observable<{
+    Carpetas: CarpetaContenido[];
+    Documentos: DocumentoContenido[];
+  }> {
     this.loaderService.mostrar();
     const token = localStorage.getItem('token');
     const url = `${this.baseUrl2}/Api/Carpetas?ContenidoCarpetaId=${id}`;
 
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
 
     return this.http.get(url, { headers, responseType: 'text' }).pipe(
@@ -169,19 +339,27 @@ export class GestionCarpetasService {
           const mixedArray = JSON.parse(cleanResponse) as MixedItem[];
 
           // Ahora especificamos el tipo del parámetro item
-          const carpetas = mixedArray.filter((item: MixedItem) => 'TipoCarpeta' in item) as CarpetaContenido[];
-          const documentos = mixedArray.filter((item: MixedItem) => 'TipoArchivo' in item) as DocumentoContenido[];
+          const carpetas = mixedArray.filter(
+            (item: MixedItem) => 'TipoCarpeta' in item
+          ) as CarpetaContenido[];
+          const documentos = mixedArray.filter(
+            (item: MixedItem) => 'TipoArchivo' in item
+          ) as DocumentoContenido[];
 
           return {
             Carpetas: carpetas,
-            Documentos: documentos
+            Documentos: documentos,
           };
         } catch (error: unknown) {
           console.error('Error al procesar la respuesta:', error);
           if (error instanceof Error) {
-            throw new Error(`Error al procesar el formato de la respuesta: ${error.message}`);
+            throw new Error(
+              `Error al procesar el formato de la respuesta: ${error.message}`
+            );
           } else {
-            throw new Error('Error desconocido al procesar el formato de la respuesta');
+            throw new Error(
+              'Error desconocido al procesar el formato de la respuesta'
+            );
           }
         }
       }),
@@ -195,70 +373,60 @@ export class GestionCarpetasService {
     );
   }
 
-  obtenerNivelVisualizacion():Observable<NivelVisualizacion[]>{
+  obtenerNivelVisualizacion(): Observable<NivelVisualizacion[]> {
     const token = localStorage.getItem('token');
     const url = `${this.baseUrl2}/Api/DatosEstaticos?ListaNivelesVisualizacionCarpetas=True`;
 
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
 
-    return this.http.get<NivelVisualizacion[]>(url,{headers})
+    return this.http.get<NivelVisualizacion[]>(url, { headers });
   }
 
-  eliminarCarpeta(cod:number):Observable<any>{
+  eliminarCarpeta(cod: number): Observable<any> {
     const token = localStorage.getItem('token');
     const url = `${this.baseUrl2}/Api/Carpetas/${cod}`;
-    console.log(cod,'codigo a eliminar');
+    console.log(cod, 'codigo a eliminar');
 
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
 
-    return this.http.delete<any>(url,{headers})
-
+    return this.http.delete<any>(url, { headers });
   }
 
-  cortarPegarCarpeta(bodyPegarCortar:CortarPegar):Observable<any>{
+  cortarPegarCarpeta(bodyPegarCortar: CortarPegar): Observable<any> {
     const token = localStorage.getItem('token');
     const url = `${this.baseUrl2}/Api/Carpetas/Cortar-Carpeta`;
 
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
 
-    return this.http.post<any>(url,bodyPegarCortar,{headers})
-    .pipe(
-      tap((data)=>console.log(data,'data al corta y pegar')
-      ),
+    return this.http.post<any>(url, bodyPegarCortar, { headers }).pipe(
+      tap((data) => console.log(data, 'data al corta y pegar')),
       catchError((error) => {
         console.error('Error al cortar:', error);
-        return of({ });
+        return of({});
       })
-    )
-
+    );
   }
 
-  copiarPegarCarpeta(bodyCopiarPegar:CopiarPegar):Observable<any>{
+  copiarPegarCarpeta(bodyCopiarPegar: CopiarPegar): Observable<any> {
     const token = localStorage.getItem('token');
     const url = `${this.baseUrl2}/Api/Carpetas/Copiar-Carpeta`;
 
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
 
-    return this.http.post<any>(url,bodyCopiarPegar,{headers})
-    .pipe(
-      tap((data)=>console.log(data,'data al copiar y pegar')
-      ),
+    return this.http.post<any>(url, bodyCopiarPegar, { headers }).pipe(
+      tap((data) => console.log(data, 'data al copiar y pegar')),
       catchError((error) => {
         console.error('Error al cortar:', error);
-        return of({ });
+        return of({});
       })
-    )
+    );
   }
-
-
-
-
 }

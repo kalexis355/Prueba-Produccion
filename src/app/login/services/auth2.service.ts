@@ -4,13 +4,14 @@ import { LoginResponse2, AuthStatus } from '../interfaces';
 import { environments2 } from '../../../environments/environments-dev';
 import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2'
+import { IndexDbService } from '../../dashboard/services/indexdb.service';
 
 @Injectable({providedIn: 'root'})
 export class Auth2Service {
 
   //injecciones
   private http = inject(HttpClient);
-
+  private indexdbService = inject(IndexDbService)
  //Señales
   private _currentUSer2 = signal<LoginResponse2 | null>(null)
   //para saber el estado de autenticacion del usuario por defecto es de tipo checking
@@ -124,19 +125,23 @@ export class Auth2Service {
   }
 
 // metodo logout para cerrar sesion del usuario
-logout2(){
-  localStorage.clear()
-  //se borra el token del usuario del localStorage
-  localStorage.removeItem('token')
-  //se modifican las señales
-  console.log(this.currentUSer2(),1);
+async logout2(){
 
-  this._currentUSer2.set(null);
-  console.log(this.currentUSer2(),2);
+  try {
+    console.log('Iniciando proceso de logout');
+    await this.indexdbService.limpiarBaseDeDatos();
+    console.log('IndexedDB limpiado');
 
-  this._authStatus.set(AuthStatus.notAuthenticated);
+    localStorage.clear();
+    localStorage.removeItem('token');
 
-  console.log('Usuario después de logout:', this.currentUSer2());
+    this._currentUSer2.set(null);
+    this._authStatus.set(AuthStatus.notAuthenticated);
+
+    console.log('Logout completado');
+  } catch (error) {
+    console.error('Error en logout:', error);
+  }
 }
 
 getRolesUsuario() {

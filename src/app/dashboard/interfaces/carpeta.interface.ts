@@ -126,3 +126,32 @@ export interface CopiarPegar {
   SerieRaizDestino:  number;
 }
 
+export interface CarpetaEstructura {
+  estructura_documental: {
+    Cod: number;
+    CodSerie: number;
+    CodSubSerie: number;
+    Estado: boolean;
+    Nombre: string;
+    CarpetaPadre: number;
+    FechaCreacion: string;
+    Delegado: number;
+    TipoCarpeta: number;
+    NivelVisualizacion: number;
+    SerieRaiz: number;
+  }[];
+}
+
+export interface CarpetasPadre{
+  Cod: number;
+    CodSerie: number;
+    CodSubSerie: number;
+    Estado: boolean;
+    Nombre: string;
+    CarpetaPadre: number;
+    FechaCreacion: string;
+    Delegado: number;
+    TipoCarpeta: number;
+    NivelVisualizacion: number;
+    SerieRaiz: number;
+}

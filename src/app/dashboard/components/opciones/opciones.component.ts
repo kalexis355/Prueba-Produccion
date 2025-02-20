@@ -58,16 +58,21 @@ export class OpcionesComponent {
 
   rolAdminSa():boolean{
     const rol = localStorage.getItem('role')
-    // 1 es Sa y 2 es Administrador 
+    // 1 es Sa y 2 es Administrador
     return rol ==='1' || rol==='2'
   }
 
 
   //metodo para cerrar sesion
-  onLogout(){
-    this.authService2.logout2()
+  async onLogout() {
+    try {
+      console.log('Iniciando onLogout');
+      await this.authService2.logout2();
+      console.log('Logout completado en componente');
+    } catch (error) {
+      console.error('Error en onLogout:', error);
+    }
   }
-
   //metodo para cambiar el estado de la propiedad de despliegue
   setActive() {
     this.isActive = !this.isActive;
