@@ -155,3 +155,54 @@ export interface CarpetasPadre{
     NivelVisualizacion: number;
     SerieRaiz: number;
 }
+
+
+export interface CarpetaBase {
+  Cod: number;
+  CodSerie: number;
+  CodSubSerie: number;
+  Estado: boolean;
+  EstadoCarpeta: number;
+  NombreEstadoCarpeta: string;
+  Nombre: string;
+  Descripcion: string;
+  Copia: boolean;
+  CarpetaPadre: number;
+  NombreCarpetaPadre: string;
+  FechaCreacion: string;
+  IndiceElectronico: string;
+  Delegado: number;
+  TipoCarpeta: number;
+  NombreTipoCarpeta: string;
+  NivelVisualizacion: number;
+  NombreNivelVisualizacion: string;
+  SerieRaiz: number;
+  TipoNodo: string;
+}
+
+export interface ArchivoGenericoExpediente {
+  Cod: number;
+  Nombre: string;
+  Carpeta: number;
+  NombreCarpeta: string;
+  Copia: boolean;
+  Firmado: boolean;
+  FimarPor: string;
+  Ruta: string;
+  TipoArchivo: number;
+  NombreTipoArchivo: string;
+  Formato: string;
+  NumeroHojas: number;
+  Duracion: string;
+  Tamaño: string;
+  Estado: boolean;
+  Indice: number;
+  TipoNodo: 'archivo';
+}
+
+// Interfaz para la respuesta procesada
+export interface ContenidoCarpetaProcesado {
+  carpetaPrincipal: CarpetaBase;
+  subcarpetas: CarpetaBase[];
+  archivos: ArchivoGenericoExpediente[];
+}

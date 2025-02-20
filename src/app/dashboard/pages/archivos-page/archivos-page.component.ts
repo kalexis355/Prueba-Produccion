@@ -1,6 +1,6 @@
 import {Component,computed,effect,HostListener,inject,OnDestroy,OnInit,signal} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {Carpeta,Archivo,EstadoCarpeta,CarpetaRaiz,CortarPegar,CopiarPegar} from '../../interfaces/carpeta.interface';
+import {Carpeta,Archivo,EstadoCarpeta,CarpetaRaiz,CortarPegar,CopiarPegar, CarpetasPadre, ArchivoGenericoExpediente, CarpetaBase} from '../../interfaces/carpeta.interface';
 import { DashboardService } from '../../services/dashboard.service';
 import { v4 as uuidv4 } from 'uuid';
 import { ToastService } from '../../services/toast.service';
@@ -12,7 +12,7 @@ import { Auth2Service } from '../../../login/services/auth2.service';
 import { RolesUsuario, UserResponse } from '../../../login/interfaces';
 import { GestionCarpetasService } from '../../services/gestionCarpetas.service';
 import {CarpetaContenido,DocumentoContenido,} from '../../interfaces/contenidoCarpeta';
-import { Subscription } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import { GestionUsuariosService } from '../../services/gestionUsuarios.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogoSubirArchivoComponent } from '../../components/dialogo-subir-archivo/dialogo-subir-archivo.component';
@@ -22,6 +22,7 @@ import { GestionArchivosService } from '../../services/gestionArchivos.service';
 import { VisualizadorArchivosComponent } from '../../components/visualizador-archivos/visualizador-archivos.component';
 import Swal from 'sweetalert2';
 import { MenuContextualService } from '../../services/gestionMenuContextual.service';
+import { IndexDbService } from '../../services/indexdb.service';
 
 @Component({
   selector: 'app-archivos-page',
@@ -52,6 +53,7 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
   public gestionUsuariosService = inject(GestionUsuariosService);
   public gestionArchivosService = inject(GestionArchivosService);
   public gestionMenuService = inject(MenuContextualService)
+  public indexdbService = inject(IndexDbService)
 
   private carpetaActualId: number | null = null;
   private subscriptions: Subscription = new Subscription();
@@ -86,8 +88,11 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
   // ruta = signal(this.dashService.guardarRuta())
   rolActivo?: string | null;
 
-  carpetaContenido: CarpetaContenido[] = [];
-  DocumentoContenido: DocumentoContenido[] = [];
+  // carpetaContenido: CarpetaContenido[] = [];
+  // DocumentoContenido: DocumentoContenido[] = [];
+
+  carpetaContenido: CarpetasPadre[] | CarpetaBase[]=[];
+  DocumentoContenido: ArchivoGenericoExpediente[] = []
 
   usuarios: UserResponse[] = [];
   estadosCarpeta: EstadoCarpeta[] = [];
@@ -409,7 +414,7 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
     this.ocultarMenuContextual(); // Oculta el menú si haces clic fuera
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.obtenerUSuarios();
 
     this.obtenerEstadoCarpeta();
@@ -422,7 +427,7 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.gestionCarpetaService.actualizarContenido$.subscribe(() => {
         if (this.carpetaActualId !== null) {
-          this.cargarContenido(this.carpetaActualId);
+          // this.cargarContenido(this.carpetaActualId);
         }
       })
     );
@@ -431,7 +436,7 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.gestionArchivosService.actualizarContenido$.subscribe(() => {
         if (this.carpetaActualId !== null) {
-          this.cargarContenido(this.carpetaActualId); // Actualizar contenido
+          // this.cargarContenido(this.carpetaActualId); // Actualizar contenido
           Swal.fire('Éxito', 'Archivo Creado', 'success');
         }
       })
@@ -457,7 +462,10 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
         if (id !== null && id !== this.carpetaActualId) {
           this.id = id;
           this.carpetaActualId = id;
-          this.cargarContenido(id);
+          // this.cargarContenido(id);
+          // this.cargarContenido(id);
+          // this.cargarContenidoCarpeta(id);
+          this.cargarContenidoUnificado(id)
         } else if (id === null) {
           console.warn('El ID de la carpeta no está presente en la URL');
         }
@@ -574,73 +582,47 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
     localStorage.removeItem('idOficina')
   }
 
-  cargarContenido(id: number) {
-    this.gestionCarpetaService.CargarContenidoCarpeta(id).subscribe({
-      next: (respuesta) => {
-        // Asigna los valores de la respuesta a las propiedades
-        this.carpetaContenido = respuesta.Carpetas || [];
-        this.DocumentoContenido = respuesta.Documentos || [];
-      },
-      error: (error) => {
-        console.error('Error al cargar contenido:', error);
-      },
-    });
+
+  private async cargarContenidoUnificado(codigoCarpeta: number) {
+    try {
+      // Primero intentamos cargar desde IndexDB
+      const carpetasIndexDB = await this.indexdbService.obtenerCarpetasHijas(codigoCarpeta);
+
+      // Usamos tu método validarCarpeta existente
+      try {
+        await this.indexdbService.validarCarpeta(codigoCarpeta);
+        // Si llegamos aquí, significa que es una carpeta tipo 3 o 4 válida
+        this.gestionCarpetaService.obtenerContenidoCarpeta(codigoCarpeta)
+          .pipe(take(1))
+          .subscribe({
+            next: (resultado) => {
+              this.carpetaContenido = resultado.subcarpetas;
+              this.DocumentoContenido = resultado.archivos;
+            },
+            error: (error) => {
+              console.error('Error al cargar contenido detallado:', error);
+              this.carpetaContenido = carpetasIndexDB;
+              this.DocumentoContenido = [];
+            }
+          });
+      } catch (error) {
+        // Si no es tipo 3 o 4, o no cumple las validaciones, solo mostramos el contenido de IndexDB
+        this.carpetaContenido = carpetasIndexDB;
+        this.DocumentoContenido = [];
+      }
+    } catch (error) {
+      console.error('Error en la carga unificada:', error);
+      this.carpetaContenido = [];
+      this.DocumentoContenido = [];
+    }
   }
 
-  // permisoCrearCarpetasyarchivos() {
-  //   this.rolesUsuario = this.auth2Service.getRolesUsuario();
-  //   const rolAdmin = localStorage.getItem('role');
-  //   // const idRuta = Number(this.route.snapshot.paramMap.get('id'));
-  //   const idOficina = localStorage.getItem('idOficina')
-
-
-  //   // Resetear permisos
-  //   this.puedeCrearCarpetas = false;
-  //   this.puedeSubirArchivos = false;
-
-  //   // console.log(rolAdmin, 'rol');
-
-  //   // Si el rol es Administrador (rol 2)
-  //   if (rolAdmin === '2') {
-  //     this.puedeCrearCarpetas = true;
-  //     this.puedeSubirArchivos = true;
-  //     // console.log('Acceso completo como Administrador');
-  //     return;
-  //   }
-
-  //   // Si el rol es Encargado (rol 3)
-  //   if (rolAdmin === '3' && idOficina) {
-  //     this.esEncargado = this.rolesUsuario.some(
-  //       (rol) => rol.Rol === 3 && rol.Oficina === +idOficina
-  //     );
-
-  //     // console.log(this.rolesUsuario,'roleeeeees');
-
-
-  //     this.puedeCrearCarpetas = this.esEncargado;
-  //     this.puedeSubirArchivos = this.esEncargado;
 
 
 
-  //     // console.log(
-  //     //   this.esEncargado
-  //     //     ? `Acceso a la oficina ${idOficina} como Encargado`
-  //     //     : `Sin acceso a la oficina ${idOficina} como Encargado`
-  //     // );
-  //   }
 
-  //   // Si el rol es Subidor de Archivos (rol 5)
-  //   const esSubidor = this.rolesUsuario.some(
-  //     (rol: any) => rol.Rol === 5 && rol.Oficina === idOficina
-  //   );
 
-  //   if (esSubidor) {
-  //     this.puedeSubirArchivos = true;
-  //     console.log(
-  //       `Acceso concedido solo para subir archivos en la oficina ${idOficina}`
-  //     );
-  //   }
-  // }
+
 
 
   usuarioPuedeSubirArchivos(){
@@ -648,7 +630,7 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
 //solo se puede subir archivos en expedientes y genericas
     const carpeta = this.carpetaPadre || this.carpetaHija;
     if (carpeta) {
-      console.log(carpeta.TipoCarpeta,'tipo carpeta a evaluar');
+      // console.log(carpeta.TipoCarpeta,'tipo carpeta a evaluar');
 
       this.NoEsSerieOSubserie =carpeta.TipoCarpeta !== 1 && carpeta.TipoCarpeta !== 2;
       this.esSubserie = carpeta.TipoCarpeta ===2

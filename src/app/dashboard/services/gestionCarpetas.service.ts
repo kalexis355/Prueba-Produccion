@@ -26,9 +26,12 @@ import {
   throwError,
 } from 'rxjs';
 import {
+  ArchivoGenericoExpediente,
+  CarpetaBase,
   CarpetaEstructura,
   CarpetaRaiz,
   CarpetasResponse,
+  ContenidoCarpetaProcesado,
   CopiarPegar,
   CortarPegar,
   CrearCarpeta,
@@ -64,6 +67,7 @@ export class GestionCarpetasService implements OnDestroy {
   private http = inject(HttpClient);
   private loaderService = inject(LoaderService);
   private indexService = inject(IndexDbService);
+
   private readonly baseUrl2: string = environments2.baseUrl;
 
   public tiposDeCarpeta = signal<TipoCarpeta[]>([]);
@@ -135,39 +139,7 @@ export class GestionCarpetasService implements OnDestroy {
     );
   }
 
-  // ObtenerYMostrarGzip(): Observable<CarpetaEstructura> {
-  //   const token = localStorage.getItem('token');
-  //   const url = `${this.baseUrl2}/Api/Carpetas?EstructuraDocumental=true`;
 
-  //   const headers = new HttpHeaders({
-  //     'Authorization': `Bearer ${token}`
-  //   });
-
-  //   return this.http.get(url, { headers, responseType: 'arraybuffer' }).pipe(
-  //     map((response: ArrayBuffer) => {
-  //       // Convierte el ArrayBuffer a string
-  //       console.log(response,'hola respuesta');
-
-  //       const textDecoder = new TextDecoder('utf-8');
-  //       const jsonString = textDecoder.decode(response);
-
-  //       // Parsea directamente a JSON según tu interfaz
-  //       const jsonData: CarpetaEstructura = JSON.parse(jsonString);
-  //       console.log('Datos JSON:', jsonData);
-
-  //         // Guardar en IndexedDB
-  //     this.indexService.guardarCarpetas(jsonData.estructura_documental)
-  //     .then(() => console.log('Carpetas guardadas en IndexedDB'))
-  //     .catch(err => console.error('Error guardando carpetas', err));
-
-  //       return jsonData;
-  //     }),
-  //     catchError((error) => {
-  //       console.error('Error obteniendo:', error);
-  //       return throwError(error);
-  //     })
-  //   );
-  // }
 
   inicializarServicio() {
     if (this.primeraVezIniciado) {
@@ -429,4 +401,57 @@ export class GestionCarpetasService implements OnDestroy {
       })
     );
   }
+
+
+
+  obtenerContenidoCarpeta(codigoCarpeta: number): Observable<ContenidoCarpetaProcesado> {
+    return from(this.indexService.validarCarpeta(codigoCarpeta)).pipe(
+      switchMap(() => {
+        const token = localStorage.getItem('token');
+        const url = `${this.baseUrl2}/Api/Carpetas?ContenidoCarpetaId=${codigoCarpeta}`;
+
+        const headers = new HttpHeaders({
+          Authorization: `Bearer ${token}`,
+          'Accept-Encoding': 'gzip, deflate',
+          Accept: 'application/json',
+        });
+
+        return this.http.get<CarpetaBase & { contenido: (CarpetaBase | ArchivoGenericoExpediente)[] }>(url, {
+          headers,
+          responseType: 'json',
+          observe: 'response',
+        }).pipe(
+          map((response) => {
+            if (!response.body) {
+              throw new Error('Respuesta vacía del servidor');
+            }
+
+            const { contenido, ...carpetaPrincipal } = response.body;
+
+            const subcarpetas = contenido.filter(
+              (item): item is CarpetaBase => item.TipoNodo === 'carpeta'
+            );
+
+            const archivos = contenido.filter(
+              (item): item is ArchivoGenericoExpediente => item.TipoNodo === 'archivo'
+            );
+
+            return {
+              carpetaPrincipal,
+              subcarpetas,
+              archivos
+            };
+          })
+        );
+      }),
+      catchError((error) => {
+        console.error('Error:', error);
+        return throwError(() => new Error(`Error al obtener contenido de la carpeta: ${error.message}`));
+      })
+    );
+  }
+
+
 }
+
+

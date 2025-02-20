@@ -143,7 +143,7 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
   async obtenerCarpetasPadres() {
     try {
       const carpetasPadre = await this.indexdbService.obtenerCarpetasPadre();
-      console.log('Carpetas padre:', carpetasPadre);
+      // console.log('Carpetas padre:', carpetasPadre);
       // Aquí puedes asignar las carpetas a una variable del componente
       this.carpetasPadre = carpetasPadre;
     } catch (error) {

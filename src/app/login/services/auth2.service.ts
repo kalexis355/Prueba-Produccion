@@ -128,9 +128,9 @@ export class Auth2Service {
 async logout2(){
 
   try {
-    console.log('Iniciando proceso de logout');
-    await this.indexdbService.limpiarBaseDeDatos();
-    console.log('IndexedDB limpiado');
+    // console.log('Iniciando proceso de logout');
+    // await this.indexdbService.limpiarBaseDeDatos();
+    // console.log('IndexedDB limpiado');
 
     localStorage.clear();
     localStorage.removeItem('token');

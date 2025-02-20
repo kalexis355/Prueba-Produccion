@@ -2,6 +2,7 @@ import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { CarpetaContenido } from '../../interfaces/contenidoCarpeta';
 import { RolesUsuario } from '../../../login/interfaces';
 import { Auth2Service } from '../../../login/services/auth2.service';
+import { CarpetasPadre } from '../../interfaces/carpeta.interface';
 
 @Component({
   selector: 'app-carpetas-contenido',
@@ -9,7 +10,7 @@ import { Auth2Service } from '../../../login/services/auth2.service';
   styleUrl: './carpetas-contenido.component.css'
 })
 export class CarpetasContenidoComponent {
-  @Input() carpetas: CarpetaContenido[] = [];
+  @Input() carpetas: CarpetasPadre[] = [];
   @Input() rolesUsuario: RolesUsuario[]=[]
   // @Input() hayCarpetaSeleccionada: boolean = false;
   // @Input() carpetaParaCortar: number | null = null;
@@ -21,13 +22,13 @@ export class CarpetasContenidoComponent {
   public auth2Service = inject(Auth2Service);
 
 
-  onContextMenu(event: MouseEvent, carpeta: CarpetaContenido) {
-    this.contextMenu.emit({ event, carpeta });
+  onContextMenu(event: MouseEvent, carpeta: CarpetasPadre) {
+    // this.contextMenu.emit({ event, carpeta });
   }
 
   // Todo visualizacion de carpetas
 
-  esVisibleUltimoNivel(carpeta:CarpetaContenido):boolean{
+  esVisibleUltimoNivel(carpeta:CarpetasPadre):boolean{
 
     const role = localStorage.getItem('role')
     const idOficina = localStorage.getItem('idOficina')
@@ -49,7 +50,7 @@ export class CarpetasContenidoComponent {
     return false;
   }
 
-  esVisible(carpeta:CarpetaContenido):boolean{
+  esVisible(carpeta:CarpetasPadre):boolean{
     const idOficina = localStorage.getItem('idOficina')
     const role = localStorage.getItem('role')
      // Si la carpeta tiene nivel de visualización 2

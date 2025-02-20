@@ -112,16 +112,47 @@ async obtenerCarpetasPadre() {
   return carpetas.filter(carpeta => carpeta.CarpetaPadre === 0);
 }
 
+async obtenerCarpetasHijas(codigoPadre:number) {
+  const db = await this.dbPromise;
+  const carpetas = await db.getAll('carpetas');
+  // console.log('carpetas hijas de la carpeta padre', codigoPadre,'son estas',carpetas);
+
+  return carpetas.filter(carpeta => carpeta.CarpetaPadre === codigoPadre);
+}
+
+async validarCarpeta(codigoCarpeta: number): Promise<void> {
+  const db = await this.dbPromise;
+  const carpeta = await db.get('carpetas', codigoCarpeta);
+
+  if (!carpeta) {
+    throw new Error('Carpeta no encontrada');
+  }
+
+  if (carpeta.TipoCarpeta !== 3 && carpeta.TipoCarpeta !== 4) {
+    throw new Error('La carpeta debe ser de tipo Expediente Electrónico o Carpeta Genérica');
+  }
+
+  const carpetaPadre = await db.get('carpetas', carpeta.CarpetaPadre);
+
+  if (!carpetaPadre) {
+    throw new Error('Carpeta padre no encontrada');
+  }
+
+  if (carpetaPadre.TipoCarpeta !== 1 && carpetaPadre.TipoCarpeta !== 2) {
+    throw new Error('La carpeta padre debe ser una Serie o Subserie');
+  }
+}
+
 
   async limpiarBaseDeDatos() {
     try {
-      console.log('Iniciando limpieza de IndexedDB');
+      // console.log('Iniciando limpieza de IndexedDB');
       const db = await this.dbPromise;
       const tx = db.transaction('carpetas', 'readwrite');
       const store = tx.objectStore('carpetas');
       await store.clear();
       await tx.done;
-      console.log('IndexedDB limpiado correctamente');
+      // console.log('IndexedDB limpiado correctamente');
     } catch (error) {
       console.error('Error al limpiar IndexedDB:', error);
     }
