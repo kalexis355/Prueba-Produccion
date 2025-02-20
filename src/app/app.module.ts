@@ -12,7 +12,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { AuthInterceptor } from './interceptores/auth.interceptor';
 import { LoaderInterceptor } from './interceptores/loader.interceptor';
 import { SharedModule } from './shared/shared.module';
-import { errorTiempoInterceptor } from './interceptores/errorTiempo.interceptor';
+// import { errorTiempoInterceptor } from './interceptores/errorTiempo.interceptor';
 
 @NgModule({
   declarations: [
