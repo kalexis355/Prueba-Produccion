@@ -33,7 +33,7 @@ import { catchError, of, Subject, takeUntil, tap, timeout } from 'rxjs';
 import { LoaderService } from '../../services/gestionLoader.service';
 import { Router } from '@angular/router';
 import { HttpRequest } from '@angular/common/http';
-import { SwalService } from '../../services/swal.service';
+// import { SwalService } from '../../services/swal.service';
 import { IndexDbService } from '../../services/indexdb.service';
 
 @Component({
@@ -51,7 +51,7 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
   public gestionCarpetaService = inject(GestionCarpetasService);
   public loaderService = inject(LoaderService)
   public router = inject(Router)
-  public swalService = inject(SwalService)
+  // public swalService = inject(SwalService)
   public indexdbService = inject(IndexDbService)
 
   private authService2 = inject(Auth2Service);
@@ -244,45 +244,45 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
 
   // }
 
-  cargarListadoDependencias() {
-    // const CodUsuario = this.authService2.currentUSer2()?.Cod;
-    // if (CodUsuario) {
-    //   this.gestionCarpetaService
-    //     .obtenerCarpetaRaiz(CodUsuario)
-    //     .pipe(
-    //       takeUntil(this.destroy$)
-    //     )
-    //     .subscribe({
-    //       next: (oficinas) => {
-    //         this.CarpetasRaiz = oficinas;
-    //       },
-    //       error: (error) => {
-    //         this.swalService.mostrarError('Ocurrió un error al cargar las carpetas');
-    //       }
-    //     });
-    // }
-    const CodUsuario = this.authService2.currentUSer2()?.Cod;
-    if (CodUsuario) {
-      this.gestionCarpetaService
-        .obtenerCarpetaRaiz(CodUsuario)
-        .pipe(
-          takeUntil(this.destroy$)
-        )
-        .subscribe({
-          next: ({ carpetasOriginales, indiceUnificado }) => {  // Desestructuramos la respuesta
-            this.CarpetasRaiz = carpetasOriginales;
-            // Puedes guardar el índice unificado en una nueva propiedad si lo necesitas
-            this.indiceUnificado = indiceUnificado;
+//   cargarListadoDependencias() {
+//     // const CodUsuario = this.authService2.currentUSer2()?.Cod;
+//     // if (CodUsuario) {
+//     //   this.gestionCarpetaService
+//     //     .obtenerCarpetaRaiz(CodUsuario)
+//     //     .pipe(
+//     //       takeUntil(this.destroy$)
+//     //     )
+//     //     .subscribe({
+//     //       next: (oficinas) => {
+//     //         this.CarpetasRaiz = oficinas;
+//     //       },
+//     //       error: (error) => {
+//     //         this.swalService.mostrarError('Ocurrió un error al cargar las carpetas');
+//     //       }
+//     //     });
+//     // }
+//     const CodUsuario = this.authService2.currentUSer2()?.Cod;
+//     if (CodUsuario) {
+//       this.gestionCarpetaService
+//         .obtenerCarpetaRaiz(CodUsuario)
+//         .pipe(
+//           takeUntil(this.destroy$)
+//         )
+//         .subscribe({
+//           next: ({ carpetasOriginales, indiceUnificado }) => {  // Desestructuramos la respuesta
+//             this.CarpetasRaiz = carpetasOriginales;
+//             // Puedes guardar el índice unificado en una nueva propiedad si lo necesitas
+//             this.indiceUnificado = indiceUnificado;
 
-            console.log('Carpetas originales:', this.CarpetasRaiz);
-            console.log('Índice unificado:', this.indiceUnificado);
-          },
-          error: (error) => {
-            this.swalService.mostrarError('Ocurrió un error al cargar las carpetas');
-          }
-        });
-    }
-}
+//             console.log('Carpetas originales:', this.CarpetasRaiz);
+//             console.log('Índice unificado:', this.indiceUnificado);
+//           },
+//           error: (error) => {
+//             this.swalService.mostrarError('Ocurrió un error al cargar las carpetas');
+//           }
+//         });
+//     }
+// }
 
   get carpetasActivas() {
     return this.CarpetasRaiz.filter((carpeta) => carpeta.Estado);
