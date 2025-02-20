@@ -20,6 +20,7 @@ import {
   of,
   retry,
   Subject,
+  Subscription,
   switchMap,
   takeUntil,
   tap,
@@ -84,6 +85,7 @@ export class GestionCarpetasService implements OnDestroy {
   private destroy$ = new Subject<void>();
   private actualizacionIniciada = false; // Nuevo flag para controlar el estado
   private primeraVezIniciado = false;
+  private subscription: Subscription | null = null;
 
   constructor() {}
 
@@ -142,6 +144,9 @@ export class GestionCarpetasService implements OnDestroy {
 
 
   inicializarServicio() {
+
+    this.detenerActualizacion();
+
     if (this.primeraVezIniciado) {
       return; // Si ya se inicializó, no hacemos nada
     }
@@ -154,31 +159,60 @@ export class GestionCarpetasService implements OnDestroy {
       },
       error: (error) => {
         console.error('Error en carga inicial:', error);
+        this.detenerActualizacion();
       }
     });
   }
 
+  // iniciarActualizacionPeriodica() {
+  //   if (this.actualizacionIniciada) {
+  //     console.log('La actualización ya está en curso');
+  //     return;
+  //   }
+
+  //   this.actualizacionIniciada = true;
+  //   console.log('Iniciando actualización periódica');
+
+  //   this.updateInterval$
+  //     .pipe(
+  //       takeUntil(this.destroy$),
+  //       switchMap(() => this.ObtenerYMostrarGzip())
+  //     )
+  //     .subscribe({
+  //       next: (data) => {
+  //         // console.log('Actualización exitosa');
+  //       },
+  //       error: (error) => {
+  //         console.error('Error en actualización:', error);
+  //       },
+  //     });
+  // }
+
   iniciarActualizacionPeriodica() {
-    if (this.actualizacionIniciada) {
-      console.log('La actualización ya está en curso');
+    if (this.actualizacionIniciada ) {
       return;
     }
 
+    this.destroy$ = new Subject<void>();
     this.actualizacionIniciada = true;
-    console.log('Iniciando actualización periódica');
 
-    this.updateInterval$
+    this.subscription = this.updateInterval$
       .pipe(
         takeUntil(this.destroy$),
-        switchMap(() => this.ObtenerYMostrarGzip())
+        switchMap(() => {
+          return this.ObtenerYMostrarGzip();
+        })
       )
       .subscribe({
         next: (data) => {
-          // console.log('Actualización exitosa');
+          // Actualización exitosa
         },
         error: (error) => {
           console.error('Error en actualización:', error);
-        },
+          if (error instanceof HttpErrorResponse && error.status === 401) {
+            this.detenerActualizacion();
+          }
+        }
       });
   }
 
@@ -229,10 +263,16 @@ export class GestionCarpetasService implements OnDestroy {
   }
 
   detenerActualizacion() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+      this.subscription = null;
+    }
+
     if (this.actualizacionIniciada) {
       this.destroy$.next();
       this.destroy$.complete();
       this.actualizacionIniciada = false;
+      this.primeraVezIniciado = false;
       console.log('Actualización periódica detenida');
     }
   }
@@ -449,6 +489,12 @@ export class GestionCarpetasService implements OnDestroy {
         return throwError(() => new Error(`Error al obtener contenido de la carpeta: ${error.message}`));
       })
     );
+  }
+
+  stopInterval() {
+
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 

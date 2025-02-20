@@ -5,6 +5,7 @@ import { environments2 } from '../../../environments/environments-dev';
 import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2'
 import { IndexDbService } from '../../dashboard/services/indexdb.service';
+import { GestionCarpetasService } from '../../dashboard/services/gestionCarpetas.service';
 
 @Injectable({providedIn: 'root'})
 export class Auth2Service {
@@ -12,6 +13,7 @@ export class Auth2Service {
   //injecciones
   private http = inject(HttpClient);
   private indexdbService = inject(IndexDbService)
+  private gestionCarpetasService = inject(GestionCarpetasService)
  //Señales
   private _currentUSer2 = signal<LoginResponse2 | null>(null)
   //para saber el estado de autenticacion del usuario por defecto es de tipo checking
@@ -131,7 +133,7 @@ async logout2(){
     // console.log('Iniciando proceso de logout');
     // await this.indexdbService.limpiarBaseDeDatos();
     // console.log('IndexedDB limpiado');
-
+    this.gestionCarpetasService.detenerActualizacion();
     localStorage.clear();
     localStorage.removeItem('token');
 

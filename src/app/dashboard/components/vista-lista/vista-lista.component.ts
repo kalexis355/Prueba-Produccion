@@ -9,7 +9,6 @@ import { Oficinas } from '../../../login/interfaces/oficina.interface';
 import { GestionCarpetasService } from '../../services/gestionCarpetas.service';
 import { Auth2Service } from '../../../login/services/auth2.service';
 import { Subject, takeUntil } from 'rxjs';
-// import { SwalService } from '../../services/swal.service';
 
 @Component({
   selector: 'app-vista-lista',
@@ -26,7 +25,6 @@ export class VistaListaComponent implements OnInit,OnDestroy{
   public oficinaService = inject(GestionOficinasService)
   public gestionCarpetaService = inject(GestionCarpetasService);
   private authService2 = inject(Auth2Service);
-  // public swalService = inject(SwalService)
 
 
   sortCriteria: string = 'asc';
@@ -68,24 +66,7 @@ export class VistaListaComponent implements OnInit,OnDestroy{
     return this.dashService.getCarpetas();
   }
 
-  // cargarListadoDependencias(){
-  //    const CodUsuario = this.authService2.currentUSer2()?.Cod;
-  //      if (CodUsuario) {
-  //        this.gestionCarpetaService
-  //          .obtenerCarpetaRaiz(CodUsuario)
-  //          .pipe(
-  //            takeUntil(this.destroy$)
-  //          )
-  //          .subscribe({
-  //            next: (oficinas) => {
-  //             //  this.CarpetasRaiz = oficinas;
-  //            },
-  //            error: (error) => {
-  //              this.swalService.mostrarError('Ocurrió un error al cargar las carpetas');
-  //            }
-  //          });
-  //      }
-  // }
+
 
   get carpetasActivas() {
     return this.CarpetasRaiz.filter(carpeta => carpeta.Estado);
