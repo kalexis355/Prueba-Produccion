@@ -33,7 +33,7 @@ import { errorTiempoInterceptor } from './interceptores/errorTiempo.interceptor'
     { provide: LocationStrategy, useClass: HashLocationStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: errorTiempoInterceptor, multi: true }
+    // { provide: HTTP_INTERCEPTORS, useClass: errorTiempoInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })
