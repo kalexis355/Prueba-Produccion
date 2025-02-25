@@ -88,11 +88,11 @@ export class DialogoSubirArchivoComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.obtenerTipoArchivos();
     this.inicializarFormularioArchivo();
     this.ObtenerUsuarios();
-    this.obtenerTipoArchivos();
 
-    this.procesarDatos();
+    // this.procesarDatos();
 
 
   }
@@ -104,10 +104,10 @@ export class DialogoSubirArchivoComponent implements OnInit {
 
   }
 
-  private crearGrupoFormularioArchivo() {
+  private crearGrupoFormularioArchivo(nombreInicial?: string, tipoArchivoInicial?: number) {
     return this.fb.group({
-      nombre: [this.nombre,Validators.required],
-      tipoArchivo: ['', Validators.required],
+      nombre: [nombreInicial || this.nombre, Validators.required],
+      tipoArchivo: [tipoArchivoInicial ? tipoArchivoInicial.toString() : '', Validators.required],
 
     });
   }
@@ -269,7 +269,9 @@ export class DialogoSubirArchivoComponent implements OnInit {
           esImagen: false,
           esComprimido: false,
           firmar: this.firmar,
-          tipoArchivo:0
+          tipoArchivo: 0,
+          esVideo: false,
+          esAudio: false
         };
 
         this.nombre = datos.nombre
@@ -283,11 +285,49 @@ export class DialogoSubirArchivoComponent implements OnInit {
 
 
         if (this.formatosVideo.includes(datos.formato)) {
+          datos.esVideo=true;
           datos.duracion = await this.obtenerDuracionVideo(archivo);
         }
 
         if (this.formatosAudio.includes(datos.formato)) {
+          datos.esAudio = true;
           datos.duracion = await this.obtenerDuracionAudio(archivo);
+        }
+
+        if (datos.esImagen) {
+          // Buscar el código correspondiente a "Imagen" en tipoArchivos
+          console.log('es una imagen');
+          console.log('tipos de archivos',this.tipoArchivos);
+
+          const tipoImagen = this.tipoArchivos.find(tipo =>
+            tipo.Nombre.toLowerCase() === 'imagen' ||
+            tipo.Nombre.toLowerCase().includes('imagen')
+          );
+
+          console.log('tipoImagen',tipoImagen);
+
+
+          if (tipoImagen) {
+            datos.tipoArchivo = tipoImagen.Cod;
+          }
+        }else if(datos.esVideo){
+          const tipoVideo = this.tipoArchivos.find(tipo =>
+            tipo.Nombre.toLowerCase() === 'video' ||
+            tipo.Nombre.toLowerCase().includes('video')
+          );
+
+          if(tipoVideo){
+            datos.tipoArchivo = tipoVideo.Cod
+          }
+        } else if(datos.esAudio){
+          const tipoAudio = this.tipoArchivos.find(tipo =>
+            tipo.Nombre.toLowerCase() === 'audio' ||
+            tipo.Nombre.toLowerCase().includes('audio')
+          );
+
+          if(tipoAudio){
+            datos.tipoArchivo = tipoAudio.Cod
+          }
         }
 
         datos.numeroHojas = await this.contarHojasArchivo(archivo);
@@ -301,11 +341,12 @@ export class DialogoSubirArchivoComponent implements OnInit {
 
         this.archivosProcessados.push(datos);
 
-        const grupoArchivo = this.crearGrupoFormularioArchivo();
-        grupoArchivo.patchValue({
-          nombre: datos.nombre,
-          tipoArchivo: ''
-        });
+        // const grupoArchivo = this.crearGrupoFormularioArchivo(datos.nombre, datos.tipoArchivo);
+        // grupoArchivo.patchValue({
+        //   nombre: datos.nombre,
+        //   tipoArchivo: datos.tipoArchivo.toString()
+        // });
+        const grupoArchivo = this.crearGrupoFormularioArchivo(datos.nombre, datos.tipoArchivo);
         this.archivosFormArray.push(grupoArchivo);
       }
        // Cerrar el loader y mostrar mensaje de éxito
@@ -354,6 +395,8 @@ export class DialogoSubirArchivoComponent implements OnInit {
     .subscribe({
       next:(tipoArchivosObtenidos) =>{
         this.tipoArchivos = tipoArchivosObtenidos;
+        console.log(this.tipoArchivos);
+        this.procesarDatos();
       },
       error:(error)=>{
         console.error('Error al obtener los usuarios:', error);

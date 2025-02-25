@@ -16,14 +16,14 @@ export class CarpetasContenidoComponent {
   // @Input() carpetaParaCortar: number | null = null;
   // @Input() carpetaParaCopiar: number | null = null;
 
-  @Output() contextMenu = new EventEmitter<{event: MouseEvent, carpeta: CarpetaContenido}>();
+  @Output() contextMenu = new EventEmitter<{event: MouseEvent, cod:number}>();
 
   //Inyeccion de servicios
   public auth2Service = inject(Auth2Service);
 
 
-  onContextMenu(event: MouseEvent, carpeta: CarpetasPadre) {
-    // this.contextMenu.emit({ event, carpeta });
+  onContextMenu(event: MouseEvent, cod:number) {
+    this.contextMenu.emit({ event, cod });
   }
 
   // Todo visualizacion de carpetas

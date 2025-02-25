@@ -10,6 +10,7 @@ export class LoaderInterceptor implements HttpInterceptor {
   private readonly EXCLUDED_URLS = [
     'https://api.soft-solutions.org/Api/Carpetas?CarpetasRaizIdUser=',
     'https://api.soft-solutions.org/Api/Carpetas?EstructuraDocumental=true',
+    'https://api.soft-solutions.org/Api/Carpetas?byId=',
     // Agrega aquí más URLs que quieras excluir
   ];
 

@@ -23,21 +23,15 @@
           <i class="fa-regular fa-trash-can"></i> Eliminar
         </li>
         <!--   -->
-        <li (click)="onCortar()"
-        [class.disabled]="true"
-        [attr.disabled]="!permisoCortar ? true : null">
+        <li>
           <i class="fa-solid fa-scissors"></i> Cortar
         </li>
         <!--   -->
-        <li (click)="onPegar()"
-        [class.disabled]="true"
-        [attr.disabled]="!permisoPegar ? true : null">
+        <li>
           <i class="fa-solid fa-paste"></i> Pegar
         </li>
         <!--    -->
-        <li (click)="onCopiar()"
-        [class.disabled]="true"
-        [attr.disabled]="!permisoCopiar ? true : null">
+        <li >
           <i class="fa-solid fa-copy"></i> Copiar
         </li>
       </ul>

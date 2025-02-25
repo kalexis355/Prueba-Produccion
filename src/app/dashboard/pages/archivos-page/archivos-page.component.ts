@@ -1,6 +1,6 @@
 import {Component,computed,effect,HostListener,inject,OnDestroy,OnInit,signal} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {Carpeta,Archivo,EstadoCarpeta,CarpetaRaiz,CortarPegar,CopiarPegar, CarpetasPadre, ArchivoGenericoExpediente, CarpetaBase} from '../../interfaces/carpeta.interface';
+import {Carpeta,Archivo,EstadoCarpeta,CarpetaRaiz,CortarPegar,CopiarPegar, CarpetasPadre, ArchivoGenericoExpediente, CarpetaBase, DetalleCarpeta} from '../../interfaces/carpeta.interface';
 import { DashboardService } from '../../services/dashboard.service';
 import { v4 as uuidv4 } from 'uuid';
 import { ToastService } from '../../services/toast.service';
@@ -23,6 +23,7 @@ import { VisualizadorArchivosComponent } from '../../components/visualizador-arc
 import Swal from 'sweetalert2';
 import { MenuContextualService } from '../../services/gestionMenuContextual.service';
 import { IndexDbService } from '../../services/indexdb.service';
+// import { NavegacionCarpetasService } from '../../../../../copias/navegacionEntreCarpetas.service';
 
 @Component({
   selector: 'app-archivos-page',
@@ -54,6 +55,7 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
   public gestionArchivosService = inject(GestionArchivosService);
   public gestionMenuService = inject(MenuContextualService)
   public indexdbService = inject(IndexDbService)
+  // public navegacionService = inject(NavegacionCarpetasService)
 
   private carpetaActualId: number | null = null;
   private subscriptions: Subscription = new Subscription();
@@ -65,12 +67,13 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
   menuVisible: boolean = false; // Bandera para mostrar/ocultar el menú
   menuPosX: number = 0; // Posición X del menú
   menuPosY: number = 0; // Posición Y del menú
-  carpetaSeleccionada: CarpetaContenido = {
+  carpetaSeleccionada: DetalleCarpeta = {
     Cod: 0,
     CodSerie: 0,
     CodSubSerie: 0,
     Estado: false,
     EstadoCarpeta: 0,
+    NombreEstadoCarpeta: '',
     Nombre: '',
     Descripcion: '',
     Copia: false,
@@ -81,6 +84,9 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
     TipoCarpeta: 0,
     NombreTipoCarpeta: '',
     NivelVisualizacion: 0,
+    NombreNivelVisualizacion: '',
+    SerieRaiz: 0,
+    NombreCarpetaPadre: ''
   }; // Carpeta seleccionada al hacer clic derecho
 
   puedeCrearCarpetas = false; // Bandera para habilitar/deshabilitar creación de carpetas
@@ -143,7 +149,7 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
   }
 
 
-  mostrarMenuContextual(event: MouseEvent, carpeta: CarpetaContenido): void {
+  mostrarMenuContextual(event: MouseEvent, cod:number): void {
     event.preventDefault();
 
     // Calcular posición usando el servicio
@@ -154,7 +160,11 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
     this.menuPosY = posY;
     this.submenuPosition = submenuPosition;
     this.menuVisible = true;
-    this.carpetaSeleccionada = carpeta;
+
+    this.gestionCarpetaService.detallesCarpeta(cod)
+    .subscribe((detalles)=>this.carpetaSeleccionada = detalles)
+
+    // this.carpetaSeleccionada = carpeta;
 
     // Lógica de permisos
     // this.puedeElimarCarpetas(carpeta);
@@ -163,7 +173,7 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
     // this.usuarioEsDelegado(carpeta);
     this.usuarioEsAdminsitrador();
     this.usuarioEsEncargado();
-    this.usuarioEsDelegadoOpciones(carpeta);
+    // this.usuarioEsDelegadoOpciones(carpeta);
     // const hayCarpetaAOperar = localStorage.getItem('elementoAOperar');
     // this.hayCarpetaSeleccionada = hayCarpetaAOperar !== null;
     this.hayCarpetaSeleccionada = true
@@ -172,7 +182,7 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
       visible: true,
       posX,
       posY,
-      carpetaSeleccionada: carpeta,
+      carpetaSeleccionada: this.carpetaSeleccionada,
       submenuPosition,
       // permisos: {
       //   // cortar: !this.habilitarOpcionCortar,
@@ -414,7 +424,7 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
     this.ocultarMenuContextual(); // Oculta el menú si haces clic fuera
   }
 
-  async ngOnInit() {
+   ngOnInit() {
     this.obtenerUSuarios();
 
     this.obtenerEstadoCarpeta();
@@ -444,7 +454,7 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
 
     // Suscribirse a los cambios en la ruta
     this.subscriptions.add(
-      this.route.paramMap.subscribe((params) => {
+      this.route.paramMap.subscribe(async (params) => {
         const id = params.get('id') ? +params.get('id')! : null;
 
         const navigation = this.router.getCurrentNavigation();
@@ -465,7 +475,8 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
           // this.cargarContenido(id);
           // this.cargarContenido(id);
           // this.cargarContenidoCarpeta(id);
-          this.cargarContenidoUnificado(id)
+          // this.cargarContenidoUnificado(id)
+          await this.cargarContenidoUnificado(id);
         } else if (id === null) {
           console.warn('El ID de la carpeta no está presente en la URL');
         }
@@ -617,7 +628,42 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
     }
   }
 
+  // private async cargarContenidoUnificado(codigoCarpeta: number) {
+  //   try {
+  //     await this.navegacionService.navigateToFolder(codigoCarpeta);
+  //     const { currentFolder, hierarchy } = this.navegacionService.getCurrentFolderContent();
 
+  //     if (currentFolder) {
+  //       const contenidoActual = hierarchy[codigoCarpeta] || { carpetas: [], archivos: [] };
+  //       this.carpetaContenido = contenidoActual.carpetas;
+  //       this.DocumentoContenido = contenidoActual.archivos;
+  //     }
+  //   } catch (error) {
+  //     console.error('Error en la carga unificada:', error);
+  //     this.carpetaContenido = [];
+  //     this.DocumentoContenido = [];
+  //   }
+  // }
+  // // Método para navegar a una carpeta
+  // async navegarACarpeta(codigoCarpeta: number) {
+  //   await this.cargarContenidoUnificado(codigoCarpeta);
+  // }
+
+  // // Método para volver a la carpeta anterior
+  // async volverACarpetaAnterior() {
+  //   if (this.navegacionService.canNavigateBack()) {
+  //     await this.navegacionService.navigateBack();
+  //     const parentId = this.navegacionService.getParentFolder();
+  //     if (parentId) {
+  //       await this.cargarContenidoUnificado(parentId);
+  //     }
+  //   }
+  // }
+
+  // // Método para obtener la ruta actual (útil para breadcrumbs)
+  // getRutaActual(): number[] {
+  //   return this.navegacionService.getCurrentPath();
+  // }
 
 
 

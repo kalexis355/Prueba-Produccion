@@ -15,6 +15,7 @@ import {
   CarpetasPadre,
   CopiarPegar,
   CortarPegar,
+  DetalleCarpeta,
   IndiceElectronico,
   IndiceUnificado,
 } from '../../interfaces/carpeta.interface';
@@ -70,23 +71,26 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
   menuPosY: number = 0; // Posición Y del menú
   private primeraVezIniciado = false;
   carpetasPadre: CarpetasPadre[]=[]
-  carpetaSeleccionada: CarpetaRaiz = {
+  carpetaSeleccionada: DetalleCarpeta = {
     Cod: 0,
     CodSerie: 0,
     CodSubSerie: 0,
     Estado: false,
     EstadoCarpeta: 0,
+    NombreEstadoCarpeta: '',
     Nombre: '',
     Descripcion: '',
     Copia: false,
     CarpetaPadre: 0,
-    FechaCreacion: new Date(),
+    FechaCreacion: '',
     IndiceElectronico: '',
     Delegado: 0,
     TipoCarpeta: 0,
     NombreTipoCarpeta: '',
-    Icono: '',
-    CodOficina: 0,
+    NivelVisualizacion: 0,
+    NombreNivelVisualizacion: '',
+    SerieRaiz: 0,
+    NombreCarpetaPadre: ''
   };
 
   // indiceElectronico:IndiceElectronico={
@@ -382,16 +386,21 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
     }
   }
 
-  mostrarMenuContextual(event: MouseEvent, carpeta: any): void {
+  mostrarMenuContextual(event: MouseEvent, cod:number): void {
     console.log('hola');
 
     event.preventDefault(); // Evita el menú contextual predeterminado
     this.menuVisible = true; // Muestra el menú
     this.menuPosX = event.clientX; // Posición del clic (X)
     this.menuPosY = event.clientY; // Posición del clic (Y)
-    this.carpetaSeleccionada = carpeta; // Guarda la carpeta seleccionada
 
-    this.habilitarOpcion(carpeta);
+    this.gestionCarpetaService.detallesCarpeta(cod)
+    .subscribe((detalles)=> this.carpetaSeleccionada = detalles)
+
+
+    // this.carpetaSeleccionada = carpeta; // Guarda la carpeta seleccionada
+
+    // this.habilitarOpcion(carpeta);
     // const codACortar = localStorage.getItem('CodCarpetACortar');
     // const codAPegar = localStorage.getItem('CodCarpetACopiar');
 

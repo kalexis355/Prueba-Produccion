@@ -12,7 +12,14 @@ export class ArchivosContenidoComponent {
   @Input() archivos: DocumentoContenido[] = [];
   @Output() archivoClick = new EventEmitter<DocumentoContenido>();
 
+  @Output() contextMenu = new EventEmitter<{event: MouseEvent, cod:number}>();
+
+
   constructor(public dialog: MatDialog){}
+
+  onContextMenu(event: MouseEvent, cod:number) {
+    this.contextMenu.emit({ event, cod });
+  }
 
   obtenerImagenPrevisualizacion(formato: string): string {
     switch (formato) {

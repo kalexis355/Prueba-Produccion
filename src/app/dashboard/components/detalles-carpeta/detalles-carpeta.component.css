@@ -8,7 +8,7 @@
 }
 
 .detalles-carpeta {
-  max-height: 50%;   /* Ajusta este valor según el tamaño deseado */
+  max-height: 40%;   /* Ajusta este valor según el tamaño deseado */
   overflow-y: auto;
 }
 

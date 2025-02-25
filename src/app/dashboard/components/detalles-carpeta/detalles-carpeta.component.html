@@ -28,12 +28,14 @@
       <p class="subtitulo mb-0">Tipo</p>
       <p class="mt-0 subtitulo2">{{carpetaSeleccionada.NombreTipoCarpeta}}</p>
 
+      <p class="subtitulo mb-0">Carpeta padre</p>
+      <p class="mt-0 subtitulo2">{{carpetaSeleccionada.NombreCarpetaPadre}}{{carpetaSeleccionada.CarpetaPadre}}</p>
+
       <p *ngIf="carpetaSeleccionada.TipoCarpeta===2" class="subtitulo mb-0">Codigo Subserie</p>
       <p *ngIf="carpetaSeleccionada.TipoCarpeta===2" class="mt-0 subtitulo2">{{carpetaSeleccionada.CodSubSerie}}</p>
 
       <p class="subtitulo mb-0">Estado</p>
-      <!-- <p class="mt-0 subtitulo2">{{obtenerNombreEstadoCarpeta()}}</p> -->
-      <p class="mt-0 subtitulo2">{{carpetaSeleccionada.EstadoCarpeta}}</p>
+      <p class="mt-0 subtitulo2">{{carpetaSeleccionada.NombreEstadoCarpeta}}</p>
 
 
       <p class="subtitulo mb-0">Descripción</p>
@@ -43,7 +45,7 @@
       <p class="mt-0 subtitulo2">{{ carpetaSeleccionada.Copia ? 'Si es una copia' : 'No es una copia' }}</p>
 
       <p class="subtitulo mb-0">Visualización</p>
-      <p class="mt-0 subtitulo2">{{ carpetaSeleccionada.NivelVisualizacion }}</p>
+      <p class="mt-0 subtitulo2">{{ carpetaSeleccionada.NombreNivelVisualizacion }}</p>
 
 
       <p class="subtitulo mb-0">Fecha de Creación</p>

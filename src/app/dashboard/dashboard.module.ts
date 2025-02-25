@@ -47,6 +47,8 @@ import { ArchivosContenidoComponent } from './components/archivos-contenido/arch
 import { BtnSubirArchivoComponent } from './components/btn-subir-archivo/btn-subir-archivo.component';
 import { SharedModule } from '../shared/shared.module';
 import { DialogoDetallesArchivosComponent } from './components/dialogo-detalles-archivos/dialogo-detalles-archivos.component';
+import { MenuContextualArchivosComponent } from './components/menu-contextual-archivos/menu-contextual-archivos.component';
+import { DetallesArchivosComponent } from './components/detalles-archivos/detalles-archivos.component';
 
 @NgModule({
   declarations: [
@@ -87,6 +89,8 @@ import { DialogoDetallesArchivosComponent } from './components/dialogo-detalles-
     ArchivosContenidoComponent,
     BtnSubirArchivoComponent,
     DialogoDetallesArchivosComponent,
+    MenuContextualArchivosComponent,
+    DetallesArchivosComponent,
 
   ],
   imports: [

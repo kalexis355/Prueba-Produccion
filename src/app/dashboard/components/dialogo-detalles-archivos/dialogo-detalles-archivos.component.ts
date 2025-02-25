@@ -20,7 +20,9 @@ export class DialogoDetallesArchivosComponent implements OnInit {
     esImagen: false,
     esComprimido: false,
     firmar: '0',
-    tipoArchivo: 0
+    tipoArchivo: 0,
+    esVideo: false,
+    esAudio: false
   }
 
   constructor(

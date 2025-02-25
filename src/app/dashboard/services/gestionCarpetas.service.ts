@@ -37,7 +37,9 @@ import {
   CortarPegar,
   CrearCarpeta,
   CrearCarpetaResponse,
+  DetalleCarpeta,
   EstadoCarpeta,
+  FolderNavigationState,
   IndiceUnificado,
   NivelVisualizacion,
   TipoCarpeta,
@@ -86,6 +88,9 @@ export class GestionCarpetasService implements OnDestroy {
   private actualizacionIniciada = false; // Nuevo flag para controlar el estado
   private primeraVezIniciado = false;
   private subscription: Subscription | null = null;
+
+
+
 
   constructor() {}
 
@@ -324,66 +329,66 @@ export class GestionCarpetasService implements OnDestroy {
     );
   }
 
-  CargarContenidoCarpeta(
-    id: number
-  ): Observable<{
-    Carpetas: CarpetaContenido[];
-    Documentos: DocumentoContenido[];
-  }> {
-    this.loaderService.mostrar();
-    const token = localStorage.getItem('token');
-    const url = `${this.baseUrl2}/Api/Carpetas?ContenidoCarpetaId=${id}`;
+  // CargarContenidoCarpeta(
+  //   id: number
+  // ): Observable<{
+  //   Carpetas: CarpetaContenido[];
+  //   Documentos: DocumentoContenido[];
+  // }> {
+  //   this.loaderService.mostrar();
+  //   const token = localStorage.getItem('token');
+  //   const url = `${this.baseUrl2}/Api/Carpetas?ContenidoCarpetaId=${id}`;
 
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
+  //   const headers = new HttpHeaders({
+  //     Authorization: `Bearer ${token}`,
+  //   });
 
-    return this.http.get(url, { headers, responseType: 'text' }).pipe(
-      delay(500),
-      map((response: string) => {
-        if (!response?.trim()) {
-          throw new Error('Respuesta vacía del servidor');
-        }
+  //   return this.http.get(url, { headers, responseType: 'text' }).pipe(
+  //     delay(500),
+  //     map((response: string) => {
+  //       if (!response?.trim()) {
+  //         throw new Error('Respuesta vacía del servidor');
+  //       }
 
-        const cleanResponse = response.trim();
+  //       const cleanResponse = response.trim();
 
-        try {
-          const mixedArray = JSON.parse(cleanResponse) as MixedItem[];
+  //       try {
+  //         const mixedArray = JSON.parse(cleanResponse) as MixedItem[];
 
-          // Ahora especificamos el tipo del parámetro item
-          const carpetas = mixedArray.filter(
-            (item: MixedItem) => 'TipoCarpeta' in item
-          ) as CarpetaContenido[];
-          const documentos = mixedArray.filter(
-            (item: MixedItem) => 'TipoArchivo' in item
-          ) as DocumentoContenido[];
+  //         // Ahora especificamos el tipo del parámetro item
+  //         const carpetas = mixedArray.filter(
+  //           (item: MixedItem) => 'TipoCarpeta' in item
+  //         ) as CarpetaContenido[];
+  //         const documentos = mixedArray.filter(
+  //           (item: MixedItem) => 'TipoArchivo' in item
+  //         ) as DocumentoContenido[];
 
-          return {
-            Carpetas: carpetas,
-            Documentos: documentos,
-          };
-        } catch (error: unknown) {
-          console.error('Error al procesar la respuesta:', error);
-          if (error instanceof Error) {
-            throw new Error(
-              `Error al procesar el formato de la respuesta: ${error.message}`
-            );
-          } else {
-            throw new Error(
-              'Error desconocido al procesar el formato de la respuesta'
-            );
-          }
-        }
-      }),
-      catchError((error) => {
-        console.error('Error al cargar contenido de la carpeta:', error);
-        return of({ Carpetas: [], Documentos: [] });
-      }),
-      finalize(() => {
-        this.loaderService.ocultar();
-      })
-    );
-  }
+  //         return {
+  //           Carpetas: carpetas,
+  //           Documentos: documentos,
+  //         };
+  //       } catch (error: unknown) {
+  //         console.error('Error al procesar la respuesta:', error);
+  //         if (error instanceof Error) {
+  //           throw new Error(
+  //             `Error al procesar el formato de la respuesta: ${error.message}`
+  //           );
+  //         } else {
+  //           throw new Error(
+  //             'Error desconocido al procesar el formato de la respuesta'
+  //           );
+  //         }
+  //       }
+  //     }),
+  //     catchError((error) => {
+  //       console.error('Error al cargar contenido de la carpeta:', error);
+  //       return of({ Carpetas: [], Documentos: [] });
+  //     }),
+  //     finalize(() => {
+  //       this.loaderService.ocultar();
+  //     })
+  //   );
+  // }
 
   obtenerNivelVisualizacion(): Observable<NivelVisualizacion[]> {
     const token = localStorage.getItem('token');
@@ -495,6 +500,19 @@ export class GestionCarpetasService implements OnDestroy {
 
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+
+  detallesCarpeta(cod:number):Observable<DetalleCarpeta>{
+    const token = localStorage.getItem('token');
+    const url = `${this.baseUrl2}/Api/Carpetas?byId=${cod}`;
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<DetalleCarpeta>(url,{headers})
+
   }
 
 

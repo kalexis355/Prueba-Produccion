@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CarpetaContenido } from '../../interfaces/contenidoCarpeta';
+import { DetalleCarpeta } from '../../interfaces/carpeta.interface';
 
 @Component({
   selector: 'app-detalles-carpeta',
@@ -8,7 +9,7 @@ import { CarpetaContenido } from '../../interfaces/contenidoCarpeta';
 })
 export class DetallesCarpetaComponent implements OnInit {
 
-  @Input() carpetaSeleccionada!: CarpetaContenido;
+  @Input() carpetaSeleccionada!: DetalleCarpeta;
 
   ngOnInit(): void {
     console.log(this.carpetaSeleccionada,'carpetaSeleccionada');

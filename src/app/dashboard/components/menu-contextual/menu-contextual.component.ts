@@ -26,7 +26,7 @@ export class MenuContextualComponent implements OnChanges {
   @Output() eliminar = new EventEmitter<CarpetaContenido>();
 
   constructor(){}
-  
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['permisoEliminar']) {
       const valor = changes['permisoEliminar'].currentValue;

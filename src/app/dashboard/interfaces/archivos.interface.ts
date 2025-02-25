@@ -26,6 +26,28 @@ export interface ArchivoDatos {
   duracion: string;
   esDocumento: boolean;
   esImagen: boolean;
+  esVideo:boolean;
+  esAudio:boolean;
   esComprimido: boolean;
   tipoArchivo:number;
+}
+
+export interface DetalleArchivo {
+  Cod: number;
+  Nombre: string;
+  Carpeta: number;
+  NombreCarpeta: string;
+  Copia: boolean;
+  Firmado: boolean;
+  FimarPor: string;
+  Ruta: string;
+  TipoArchivo: number;
+  NombreTipoArchivo: string;
+  Formato: string;
+  NumeroHojas: number;
+  Duracion: string;
+  Tamaño: string;
+  Estado: boolean;
+  Indice: number;
+  TipoNodo: string;
 }
