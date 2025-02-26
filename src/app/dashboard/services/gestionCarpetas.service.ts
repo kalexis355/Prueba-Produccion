@@ -224,6 +224,7 @@ export class GestionCarpetasService implements OnDestroy {
   ObtenerYMostrarGzip(): Observable<CarpetaEstructura> {
     const token = localStorage.getItem('token');
     const url = `${this.baseUrl2}/Api/Carpetas?EstructuraDocumental=true`;
+    // console.log('consumiendo el primer endpoint');
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -454,6 +455,7 @@ export class GestionCarpetasService implements OnDestroy {
       switchMap(() => {
         const token = localStorage.getItem('token');
         const url = `${this.baseUrl2}/Api/Carpetas?ContenidoCarpetaId=${codigoCarpeta}`;
+        console.log('consumiendo el segundo endpoint');
 
         const headers = new HttpHeaders({
           Authorization: `Bearer ${token}`,

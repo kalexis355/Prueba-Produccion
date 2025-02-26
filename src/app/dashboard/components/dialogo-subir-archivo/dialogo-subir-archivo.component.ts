@@ -328,6 +328,14 @@ export class DialogoSubirArchivoComponent implements OnInit {
           if(tipoAudio){
             datos.tipoArchivo = tipoAudio.Cod
           }
+        }else if(datos.esDocumento){
+          const tipoDoc = this.tipoArchivos.find(tipo =>
+            tipo.Nombre.toLowerCase() === 'documento electronico' ||
+            tipo.Nombre.toLowerCase().includes('documento electronico')
+          );
+          if(tipoDoc){
+            datos.tipoArchivo = tipoDoc.Cod
+          }
         }
 
         datos.numeroHojas = await this.contarHojasArchivo(archivo);

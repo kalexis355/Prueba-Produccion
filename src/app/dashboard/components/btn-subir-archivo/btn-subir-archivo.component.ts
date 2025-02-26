@@ -177,7 +177,7 @@ private procesarArchivo(archivo: File): Promise<void> {
     }
   }
 
- 
+
   private async crearArchivos(resultadosArchivos: ArchivoDatos[], archivoBits: { archivo: File, arregloBits: Uint8Array }[]): Promise<void> {
     console.log(resultadosArchivos, 'archivos procesados');
 
@@ -216,7 +216,7 @@ private procesarArchivo(archivo: File): Promise<void> {
             formData.append('Duracion', result.duracion || '00:00:00');
             formData.append('Tamaño', typeof result.tamanio === 'string' ? result.tamanio : '0KB');
             formData.append('Indice', i.toString());
-            formData.append('Archivo', archivo);
+            formData.append('ArchivoFile', archivo);
 
             uploadAlert.update({
                 html: `Subiendo archivo ${i + 1} de ${resultadosArchivos.length}: ${result.nombre}`
