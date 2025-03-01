@@ -169,29 +169,6 @@ export class GestionCarpetasService implements OnDestroy {
     });
   }
 
-  // iniciarActualizacionPeriodica() {
-  //   if (this.actualizacionIniciada) {
-  //     console.log('La actualización ya está en curso');
-  //     return;
-  //   }
-
-  //   this.actualizacionIniciada = true;
-  //   console.log('Iniciando actualización periódica');
-
-  //   this.updateInterval$
-  //     .pipe(
-  //       takeUntil(this.destroy$),
-  //       switchMap(() => this.ObtenerYMostrarGzip())
-  //     )
-  //     .subscribe({
-  //       next: (data) => {
-  //         // console.log('Actualización exitosa');
-  //       },
-  //       error: (error) => {
-  //         console.error('Error en actualización:', error);
-  //       },
-  //     });
-  // }
 
   iniciarActualizacionPeriodica() {
     if (this.actualizacionIniciada ) {
@@ -311,7 +288,14 @@ export class GestionCarpetasService implements OnDestroy {
       Authorization: `Bearer ${token}`,
     });
 
-    return this.http.post<CrearCarpetaResponse>(url, carpetaBody, { headers });
+    return this.http.post<CrearCarpetaResponse>(url, carpetaBody, { headers }).pipe(
+      switchMap((response) => {
+        // Después de crear la carpeta, forzamos una actualización
+        return this.ObtenerYMostrarGzip().pipe(
+          map(() => response)  // Devolvemos la respuesta original
+        );
+      })
+    );
   }
 
   ObtenerEstadosCarpeta(): Observable<EstadoCarpeta[]> {
@@ -330,66 +314,6 @@ export class GestionCarpetasService implements OnDestroy {
     );
   }
 
-  // CargarContenidoCarpeta(
-  //   id: number
-  // ): Observable<{
-  //   Carpetas: CarpetaContenido[];
-  //   Documentos: DocumentoContenido[];
-  // }> {
-  //   this.loaderService.mostrar();
-  //   const token = localStorage.getItem('token');
-  //   const url = `${this.baseUrl2}/Api/Carpetas?ContenidoCarpetaId=${id}`;
-
-  //   const headers = new HttpHeaders({
-  //     Authorization: `Bearer ${token}`,
-  //   });
-
-  //   return this.http.get(url, { headers, responseType: 'text' }).pipe(
-  //     delay(500),
-  //     map((response: string) => {
-  //       if (!response?.trim()) {
-  //         throw new Error('Respuesta vacía del servidor');
-  //       }
-
-  //       const cleanResponse = response.trim();
-
-  //       try {
-  //         const mixedArray = JSON.parse(cleanResponse) as MixedItem[];
-
-  //         // Ahora especificamos el tipo del parámetro item
-  //         const carpetas = mixedArray.filter(
-  //           (item: MixedItem) => 'TipoCarpeta' in item
-  //         ) as CarpetaContenido[];
-  //         const documentos = mixedArray.filter(
-  //           (item: MixedItem) => 'TipoArchivo' in item
-  //         ) as DocumentoContenido[];
-
-  //         return {
-  //           Carpetas: carpetas,
-  //           Documentos: documentos,
-  //         };
-  //       } catch (error: unknown) {
-  //         console.error('Error al procesar la respuesta:', error);
-  //         if (error instanceof Error) {
-  //           throw new Error(
-  //             `Error al procesar el formato de la respuesta: ${error.message}`
-  //           );
-  //         } else {
-  //           throw new Error(
-  //             'Error desconocido al procesar el formato de la respuesta'
-  //           );
-  //         }
-  //       }
-  //     }),
-  //     catchError((error) => {
-  //       console.error('Error al cargar contenido de la carpeta:', error);
-  //       return of({ Carpetas: [], Documentos: [] });
-  //     }),
-  //     finalize(() => {
-  //       this.loaderService.ocultar();
-  //     })
-  //   );
-  // }
 
   obtenerNivelVisualizacion(): Observable<NivelVisualizacion[]> {
     const token = localStorage.getItem('token');
@@ -448,56 +372,146 @@ export class GestionCarpetasService implements OnDestroy {
     );
   }
 
+  private cacheCarpetas = new Map<number, CarpetaBase & { contenido: (CarpetaBase | ArchivoGenericoExpediente)[] }>();
 
+// Método modificado para buscar subcarpetas dentro de la caché existente
+obtenerContenidoCarpeta(codigoCarpeta: number): Observable<ContenidoCarpetaProcesado> {
+  console.log(`[INICIO] Intentando obtener carpeta: ${codigoCarpeta}`);
 
-  obtenerContenidoCarpeta(codigoCarpeta: number): Observable<ContenidoCarpetaProcesado> {
-    return from(this.indexService.validarCarpeta(codigoCarpeta)).pipe(
-      switchMap(() => {
-        const token = localStorage.getItem('token');
-        const url = `${this.baseUrl2}/Api/Carpetas?ContenidoCarpetaId=${codigoCarpeta}`;
-        console.log('consumiendo el segundo endpoint');
-
-        const headers = new HttpHeaders({
-          Authorization: `Bearer ${token}`,
-          'Accept-Encoding': 'gzip, deflate',
-          Accept: 'application/json',
-        });
-
-        return this.http.get<CarpetaBase & { contenido: (CarpetaBase | ArchivoGenericoExpediente)[] }>(url, {
-          headers,
-          responseType: 'json',
-          observe: 'response',
-        }).pipe(
-          map((response) => {
-            if (!response.body) {
-              throw new Error('Respuesta vacía del servidor');
-            }
-
-            const { contenido, ...carpetaPrincipal } = response.body;
-
-            const subcarpetas = contenido.filter(
-              (item): item is CarpetaBase => item.TipoNodo === 'carpeta'
-            );
-
-            const archivos = contenido.filter(
-              (item): item is ArchivoGenericoExpediente => item.TipoNodo === 'archivo'
-            );
-
-            return {
-              carpetaPrincipal,
-              subcarpetas,
-              archivos
-            };
-          })
-        );
-      }),
-      catchError((error) => {
-        console.error('Error:', error);
-        return throwError(() => new Error(`Error al obtener contenido de la carpeta: ${error.message}`));
-      })
-    );
+  // Verificamos si tenemos la carpeta directamente en caché
+  if (this.cacheCarpetas.has(codigoCarpeta)) {
+    console.log(`[CACHÉ] Usando datos de caché para carpeta ${codigoCarpeta}`);
+    const datosCached = this.cacheCarpetas.get(codigoCarpeta)!;
+    return of(this.procesarDatos(datosCached, codigoCarpeta));
   }
 
+  // Verificamos si la carpeta es una subcarpeta dentro de alguna carpeta en caché
+  for (const [codPadre, datosPadre] of this.cacheCarpetas.entries()) {
+    console.log(`[BÚSQUEDA] Buscando carpeta ${codigoCarpeta} dentro de ${codPadre}`);
+
+    // Verificamos si la carpeta solicitada es una subcarpeta en el contenido
+    const carpetaEncontra = datosPadre.contenido.find(
+      item => item.TipoNodo === 'carpeta' && item.Cod === codigoCarpeta
+    ) as CarpetaBase | undefined;
+
+    if (carpetaEncontra) {
+      console.log(`[ENCONTRADA] Carpeta ${codigoCarpeta} encontrada dentro de ${codPadre}`);
+
+      // Buscamos su contenido (subcarpetas y archivos)
+      const subcarpetas = datosPadre.contenido.filter(
+        item => item.TipoNodo === 'carpeta' && (item as CarpetaBase).CarpetaPadre === codigoCarpeta
+      ) as CarpetaBase[];
+
+      const archivos = datosPadre.contenido.filter(
+        item => item.TipoNodo === 'archivo' && (item as ArchivoGenericoExpediente).Carpeta === codigoCarpeta
+      ) as ArchivoGenericoExpediente[];
+
+      console.log(`[RESUMEN] Carpeta ${codigoCarpeta}: ${subcarpetas.length} subcarpetas, ${archivos.length} archivos`);
+
+      // Construimos un objeto con la estructura esperada para esta carpeta
+      const datosCarpeta = {
+        ...carpetaEncontra,
+        contenido: [...subcarpetas, ...archivos]
+      };
+
+      // Guardamos en caché para futuras consultas
+      this.cacheCarpetas.set(codigoCarpeta, datosCarpeta);
+
+      return of({
+        carpetaPrincipal: carpetaEncontra,
+        subcarpetas,
+        archivos
+      });
+    }
+  }
+
+  // Si no está en caché o no es una subcarpeta de alguna en caché, hacemos la llamada al API
+  console.log(`[API] Intentando obtener carpeta ${codigoCarpeta} desde API`);
+
+  return from(this.indexService.validarCarpeta(codigoCarpeta).catch(error => {
+    console.log(`[ERROR VALIDACIÓN] Error al validar carpeta ${codigoCarpeta}:`, error);
+    throw error;
+  })).pipe(
+    switchMap(() => {
+      console.log(`[API VALIDADA] Carpeta ${codigoCarpeta} validada, haciendo petición HTTP`);
+      const token = localStorage.getItem('token');
+      const url = `${this.baseUrl2}/Api/Carpetas?ContenidoCarpetaId=${codigoCarpeta}`;
+
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+        'Accept-Encoding': 'gzip, deflate',
+        Accept: 'application/json',
+      });
+
+      return this.http.get<CarpetaBase & { contenido: (CarpetaBase | ArchivoGenericoExpediente)[] }>(url, {
+        headers,
+        responseType: 'json',
+        observe: 'response',
+      }).pipe(
+        map((response) => {
+          if (!response.body) {
+            console.log(`[ERROR API] Respuesta vacía del servidor para carpeta ${codigoCarpeta}`);
+            throw new Error('Respuesta vacía del servidor');
+          }
+
+          console.log(`[API ÉXITO] Datos recibidos del API para carpeta ${codigoCarpeta}`);
+
+          // Guardamos en caché
+          this.cacheCarpetas.set(codigoCarpeta, response.body);
+
+          return this.procesarDatos(response.body, codigoCarpeta);
+        })
+      );
+    }),
+    catchError((error) => {
+      console.log(`[ERROR MANEJO] Error capturado para carpeta ${codigoCarpeta}:`, error);
+      return throwError(() => new Error(`Error al obtener la carpeta ${codigoCarpeta}: ${error.message}`));
+    })
+  );
+}
+
+private procesarDatos(datos: CarpetaBase & { contenido: (CarpetaBase | ArchivoGenericoExpediente)[] }, codigoCarpetaActual: number): ContenidoCarpetaProcesado {
+  console.log(`[PROCESANDO] Procesando datos para carpeta ${codigoCarpetaActual}`);
+
+  const { contenido, ...carpetaPrincipal } = datos;
+
+  // Filtramos subcarpetas que pertenecen directamente a esta carpeta
+  const subcarpetas = contenido.filter(
+    (item): item is CarpetaBase =>
+      item.TipoNodo === 'carpeta' &&
+      (item as CarpetaBase).CarpetaPadre === codigoCarpetaActual
+  );
+
+  console.log(`[SUBCARPETAS] Encontradas ${subcarpetas.length} subcarpetas para carpeta ${codigoCarpetaActual}`);
+  subcarpetas.forEach(subcarpeta => {
+    console.log(`- Subcarpeta: ${subcarpeta.Nombre} (ID: ${subcarpeta.Cod})`);
+  });
+
+  // Filtramos archivos que pertenecen EXCLUSIVAMENTE a esta carpeta
+  const archivos = contenido.filter(
+    (item): item is ArchivoGenericoExpediente => {
+      if (item.TipoNodo !== 'archivo') return false;
+
+      const archivo = item as ArchivoGenericoExpediente;
+
+      // Comprobamos que el archivo pertenece a esta carpeta
+      if (archivo.Carpeta === codigoCarpetaActual) {
+        console.log(`[ARCHIVO] Archivo ${archivo.Nombre} (ID: ${archivo.Cod}) pertenece a carpeta ${codigoCarpetaActual}`);
+        return true;
+      }
+
+      return false;
+    }
+  );
+
+  console.log(`[RESULTADO] Carpeta ${codigoCarpetaActual} - Resultado final: ${subcarpetas.length} subcarpetas, ${archivos.length} archivos`);
+
+  return {
+    carpetaPrincipal,
+    subcarpetas,
+    archivos
+  };
+}
   stopInterval() {
 
     this.destroy$.next();

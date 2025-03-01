@@ -4,22 +4,26 @@ import { GestionArchivosService } from '../../services/gestionArchivos.service';
 import { ArchivoDatos, Documento } from '../../interfaces/archivos.interface';
 import { DialogoSubirArchivoComponent } from '../dialogo-subir-archivo/dialogo-subir-archivo.component';
 import { firstValueFrom } from 'rxjs';
-import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarRef, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarRef,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
 import { SnackBarProgresoComponent } from '../../../shared/components/snack-bar-progreso/snack-bar-progreso.component';
 import { LoaderService } from '../../services/gestionLoader.service';
 import Swal from 'sweetalert2';
 @Component({
   selector: 'app-btn-subir-archivo',
   templateUrl: './btn-subir-archivo.component.html',
-  styleUrl: './btn-subir-archivo.component.css'
+  styleUrl: './btn-subir-archivo.component.css',
 })
 export class BtnSubirArchivoComponent {
-
-  public loaderService = inject(LoaderService)
+  public loaderService = inject(LoaderService);
 
   @Input() carpetaId!: number;
   @Input() mostrarBoton: boolean = true;
-  private colaArchivos: { archivo: File, arregloBits: Uint8Array }[] = [];
+  private colaArchivos: { archivo: File; arregloBits: Uint8Array }[] = [];
   private procesandoArchivos = false;
 
   private snackBarRef: MatSnackBarRef<SnackBarProgresoComponent> | null = null;
@@ -32,8 +36,6 @@ export class BtnSubirArchivoComponent {
     private gestionArchivosService: GestionArchivosService,
     private _snackBar: MatSnackBar
   ) {}
-
-
 
   // async subirArchivo(event: Event) {
   //   const input = event.target as HTMLInputElement;
@@ -58,46 +60,52 @@ export class BtnSubirArchivoComponent {
     const input = event.target as HTMLInputElement;
 
     if (input.files && input.files.length > 0) {
-        this.colaArchivos = [];
+      this.colaArchivos = [];
 
-        await Promise.all(
-            Array.from(input.files).map(archivo => this.procesarArchivo(archivo))
-        );
+      await Promise.all(
+        Array.from(input.files).map((archivo) => this.procesarArchivo(archivo))
+      );
 
-        if (!this.procesandoArchivos && this.colaArchivos.length > 0) {
-            try {
-                const resultadosProcesados = await this.mostrarDialogoSubida(this.colaArchivos);
-                console.log('Resultados procesados:', resultadosProcesados);
+      if (!this.procesandoArchivos && this.colaArchivos.length > 0) {
+        try {
+          const resultadosProcesados = await this.mostrarDialogoSubida(
+            this.colaArchivos
+          );
+          console.log('Resultados procesados:', resultadosProcesados);
 
-                if (resultadosProcesados && Array.isArray(resultadosProcesados) && resultadosProcesados.length > 0) {
-                    await this.crearArchivos(resultadosProcesados, this.colaArchivos);
-                }
-            } catch (error) {
-                console.error('Error en el proceso:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Ocurrió un error al procesar los archivos',
-                    timer: 3000,
-                    showConfirmButton: false
-                });
-            } finally {
-                this.colaArchivos = [];
-                this.procesandoArchivos = false;
-            }
+          if (
+            resultadosProcesados &&
+            Array.isArray(resultadosProcesados) &&
+            resultadosProcesados.length > 0
+          ) {
+            await this.crearArchivos(resultadosProcesados, this.colaArchivos);
+          }
+        } catch (error) {
+          console.error('Error en el proceso:', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Ocurrió un error al procesar los archivos',
+            timer: 3000,
+            showConfirmButton: false,
+          });
+        } finally {
+          this.colaArchivos = [];
+          this.procesandoArchivos = false;
         }
+      }
 
-        input.value = '';
+      input.value = '';
     }
-}
+  }
 
-private procesarArchivo(archivo: File): Promise<void> {
-  return new Promise((resolve) => {
-    // Ya no necesitamos leer el archivo, solo lo guardamos
-    this.colaArchivos.push({ archivo, arregloBits: new Uint8Array() }); // arregloBits vacío por compatibilidad
-    resolve();
-});
-}
+  private procesarArchivo(archivo: File): Promise<void> {
+    return new Promise((resolve) => {
+      // Ya no necesitamos leer el archivo, solo lo guardamos
+      this.colaArchivos.push({ archivo, arregloBits: new Uint8Array() }); // arregloBits vacío por compatibilidad
+      resolve();
+    });
+  }
 
   // private async procesarSiguienteArchivo() {
   //   if (this.procesandoArchivos || this.colaArchivos.length === 0) {
@@ -144,27 +152,32 @@ private procesarArchivo(archivo: File): Promise<void> {
 
   //   return firstValueFrom(dialogRef.afterClosed());
   // }
-  private async mostrarDialogoSubida(archivos: { archivo: File, arregloBits: Uint8Array }[]): Promise<any[]> {
+  private async mostrarDialogoSubida(
+    archivos: { archivo: File; arregloBits: Uint8Array }[]
+  ): Promise<any[]> {
     const dialogRef = this.dialog.open(DialogoSubirArchivoComponent, {
-        width: '80%',
-        height: '550px',
-        maxWidth: '100%',
-        data: {
-            colaArchivos: archivos  // Enviamos todo el array de archivos
-        },
-        disableClose: true,
+      width: '80%',
+      height: '550px',
+      maxWidth: '100%',
+      data: {
+        colaArchivos: archivos, // Enviamos todo el array de archivos
+      },
+      disableClose: true,
     });
 
     return firstValueFrom(dialogRef.afterClosed());
-}
+  }
 
   private showProgressSnackBar() {
     if (!this.snackBarRef) {
-      this.snackBarRef = this._snackBar.openFromComponent(SnackBarProgresoComponent, {
-        duration: undefined,
-        horizontalPosition: this.horizontalPosition,
-        verticalPosition: this.verticalPosition,
-      });
+      this.snackBarRef = this._snackBar.openFromComponent(
+        SnackBarProgresoComponent,
+        {
+          duration: undefined,
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        }
+      );
     }
   }
 
@@ -177,136 +190,155 @@ private procesarArchivo(archivo: File): Promise<void> {
     }
   }
 
-
-  private async crearArchivos(resultadosArchivos: ArchivoDatos[], archivoBits: { archivo: File, arregloBits: Uint8Array }[]): Promise<void> {
+  private async crearArchivos(
+    resultadosArchivos: ArchivoDatos[],
+    archivoBits: { archivo: File; arregloBits: Uint8Array }[]
+  ): Promise<void> {
     console.log(resultadosArchivos, 'archivos procesados');
 
     const archivosExitosos: string[] = [];
     const archivosFallidos: string[] = [];
 
     const uploadAlert = Swal.mixin({
-        title: 'Subiendo archivos',
-        html: 'Iniciando subida...',
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        allowEnterKey: false,
-        showConfirmButton: false,
-        didOpen: () => {
-            Swal.showLoading();
-        }
+      title: 'Subiendo archivos',
+      html: 'Iniciando subida...',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      allowEnterKey: false,
+      showConfirmButton: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
     });
 
     uploadAlert.fire();
 
     try {
-        for (let i = 0; i < resultadosArchivos.length; i++) {
-            const result = resultadosArchivos[i];
-            const archivo = archivoBits[i].archivo; // Usamos el File directamente
+      for (let i = 0; i < resultadosArchivos.length; i++) {
+        const result = resultadosArchivos[i];
+        const archivo = archivoBits[i].archivo; // Usamos el File directamente
 
-            // Crear FormData
-            const formData = new FormData();
+        // Crear FormData
+        const formData = new FormData();
 
-            // Añadir todos los campos del documento
-            formData.append('Nombre', result.nombre);
-            formData.append('Carpeta', this.carpetaId.toString());
-            formData.append('FimarPor', result.firmar || '');
-            formData.append('TipoArchivo', result.tipoArchivo.toString());
-            formData.append('Formato', result.formato || '');
-            formData.append('NumeroHojas', (result.numeroHojas || 0).toString());
-            formData.append('Duracion', result.duracion || '00:00:00');
-            formData.append('Tamaño', typeof result.tamanio === 'string' ? result.tamanio : '0KB');
-            formData.append('Indice', i.toString());
-            formData.append('ArchivoFile', archivo);
+        // Añadir todos los campos del documento
+        formData.append('Nombre', result.nombre);
+        formData.append('Carpeta', this.carpetaId.toString());
+        formData.append('FimarPor', result.firmar || '');
+        formData.append('TipoArchivo', result.tipoArchivo.toString());
+        formData.append('Formato', result.formato || '');
+        formData.append('NumeroHojas', (result.numeroHojas || 0).toString());
+        formData.append('Duracion', result.duracion || '00:00:00');
+        formData.append(
+          'Tamaño',
+          typeof result.tamanio === 'string' ? result.tamanio : '0KB'
+        );
+        formData.append('Indice', i.toString());
+        formData.append('ArchivoFile', archivo);
 
-            uploadAlert.update({
-                html: `Subiendo archivo ${i + 1} de ${resultadosArchivos.length}: ${result.nombre}`
-            });
+        uploadAlert.update({
+          html: `Subiendo archivo ${i + 1} de ${resultadosArchivos.length}: ${
+            result.nombre
+          }`,
+        });
 
-            try {
-                await new Promise<void>((resolve, reject) => {
-                    this.gestionArchivosService.crearArchivo(formData).subscribe({
-                        next: (event: any) => {
-                            switch (event.status) {
-                                case 'progress':
-                                    const progressMessage = `⬆️ Subiendo ${result.nombre}: ${event.progress}% (${this.formatBytes(event.loaded)} / ${this.formatBytes(event.total)})`;
-                                    this.updateProgressMessage(progressMessage);
-                                    uploadAlert.update({
-                                        html: progressMessage,
-                                        showConfirmButton: false,
-                                        allowOutsideClick: false,
-                                    });
-                                    break;
+        try {
+          await new Promise<void>((resolve, reject) => {
+            console.log(formData, 'cuerpo archivo');
 
-                                case 'complete':
-                                    this.updateProgressMessage(`✅ Archivo ${result.nombre} subido completamente`);
-                                    archivosExitosos.push(result.nombre);
-                                    uploadAlert.update({
-                                        html: `✅ Archivo ${result.nombre} subido completamente`,
-                                        showConfirmButton: false,
-                                        allowOutsideClick: false,
-                                    });
-                                    resolve();
-                                    break;
-                            }
-                        },
-                        error: (error) => {
-                            console.error(`Error al subir el archivo ${result.nombre}:`, error);
-                            this.updateProgressMessage(`❌ Error al subir el archivo ${result.nombre}`);
-                            archivosFallidos.push(result.nombre);
-                            reject(error);
-                        }
+            this.gestionArchivosService.crearArchivo(formData).subscribe({
+              next: (event: any) => {
+                switch (event.status) {
+                  case 'progress':
+                    const progressMessage = `⬆️ Subiendo ${result.nombre}: ${
+                      event.progress
+                    }% (${this.formatBytes(event.loaded)} / ${this.formatBytes(
+                      event.total
+                    )})`;
+                    this.updateProgressMessage(progressMessage);
+                    uploadAlert.update({
+                      html: progressMessage,
+                      showConfirmButton: false,
+                      allowOutsideClick: false,
                     });
-                });
-            } catch (error) {
-                console.error(`Error al procesar archivo ${result.nombre}:`, error);
-                if (!archivosFallidos.includes(result.nombre)) {
-                    archivosFallidos.push(result.nombre);
+                    break;
+
+                  case 'complete':
+                    this.updateProgressMessage(
+                      `✅ Archivo ${result.nombre} subido completamente`
+                    );
+                    archivosExitosos.push(result.nombre);
+                    uploadAlert.update({
+                      html: `✅ Archivo ${result.nombre} subido completamente`,
+                      showConfirmButton: false,
+                      allowOutsideClick: false,
+                    });
+                    resolve();
+                    break;
                 }
-            }
-        }
-
-        //  Preparar mensaje detallado para Swal
-        let mensajeHtml = '';
-
-        if (archivosExitosos.length > 0) {
-            mensajeHtml += '<strong>Archivos subidos exitosamente:</strong><br>';
-            archivosExitosos.forEach(archivo => {
-                mensajeHtml += `✅ ${archivo}<br>`;
+              },
+              error: (error) => {
+                console.error(
+                  `Error al subir el archivo ${result.nombre}:`,
+                  error
+                );
+                this.updateProgressMessage(
+                  `❌ Error al subir el archivo ${result.nombre}`
+                );
+                archivosFallidos.push(result.nombre);
+                reject(error);
+              },
             });
+          });
+        } catch (error) {
+          console.error(`Error al procesar archivo ${result.nombre}:`, error);
+          if (!archivosFallidos.includes(result.nombre)) {
+            archivosFallidos.push(result.nombre);
+          }
         }
+      }
 
-        if (archivosFallidos.length > 0) {
-            if (archivosExitosos.length > 0) mensajeHtml += '<br>';
-            mensajeHtml += '<strong>Archivos con error:</strong><br>';
-            archivosFallidos.forEach(archivo => {
-                mensajeHtml += `❌ ${archivo}<br>`;
-            });
-        }
+      //  Preparar mensaje detallado para Swal
+      let mensajeHtml = '';
 
-        // Mostrar resultado final
-        Swal.fire({
-            icon: archivosFallidos.length === 0 ? 'success' : 'warning',
-            title: 'Resumen de la subida',
-            html: mensajeHtml,
-            confirmButtonText: 'Aceptar'
+      if (archivosExitosos.length > 0) {
+        mensajeHtml += '<strong>Archivos subidos exitosamente:</strong><br>';
+        archivosExitosos.forEach((archivo) => {
+          mensajeHtml += `✅ ${archivo}<br>`;
         });
+      }
 
+      if (archivosFallidos.length > 0) {
+        if (archivosExitosos.length > 0) mensajeHtml += '<br>';
+        mensajeHtml += '<strong>Archivos con error:</strong><br>';
+        archivosFallidos.forEach((archivo) => {
+          mensajeHtml += `❌ ${archivo}<br>`;
+        });
+      }
+
+      // Mostrar resultado final
+      Swal.fire({
+        icon: archivosFallidos.length === 0 ? 'success' : 'warning',
+        title: 'Resumen de la subida',
+        html: mensajeHtml,
+        confirmButtonText: 'Aceptar',
+      });
     } catch (error) {
-             Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error general en el proceso de subida',
-            confirmButtonText: 'Aceptar'
-        });
-        console.error('Error en la subida:', error);
-        throw error;
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error general en el proceso de subida',
+        confirmButtonText: 'Aceptar',
+      });
+      console.error('Error en la subida:', error);
+      throw error;
     } finally {
-        if (this.snackBarRef) {
-            this.snackBarRef.dismiss();
-            this.snackBarRef = null;
-        }
+      if (this.snackBarRef) {
+        this.snackBarRef.dismiss();
+        this.snackBarRef = null;
+      }
     }
-}
+  }
   private formatBytes(bytes: number): string {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
@@ -314,5 +346,4 @@ private procesarArchivo(archivo: File): Promise<void> {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   }
-
 }

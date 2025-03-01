@@ -112,35 +112,59 @@ async obtenerCarpetasPadre() {
   return carpetas.filter(carpeta => carpeta.CarpetaPadre === 0);
 }
 
-async obtenerCarpetasHijas(codigoPadre:number) {
-  const db = await this.dbPromise;
-  const carpetas = await db.getAll('carpetas');
-  // console.log('carpetas hijas de la carpeta padre', codigoPadre,'son estas',carpetas);
-
-  return carpetas.filter(carpeta => carpeta.CarpetaPadre === codigoPadre);
-}
-
 async validarCarpeta(codigoCarpeta: number): Promise<void> {
   const db = await this.dbPromise;
   const carpeta = await db.get('carpetas', codigoCarpeta);
 
   if (!carpeta) {
+    console.warn(`[INDEXDB] Carpeta ${codigoCarpeta} no encontrada`);
     throw new Error('Carpeta no encontrada');
   }
 
-  if (carpeta.TipoCarpeta !== 3 && carpeta.TipoCarpeta !== 4) {
-    throw new Error('La carpeta debe ser de tipo Expediente Electrónico o Carpeta Genérica');
+  // Tipos de carpeta permitidos
+  const tiposPermitidos = [1, 2, 3, 4];
+
+  console.log(`[INDEXDB] Validando carpeta ${codigoCarpeta}:`, {
+    tipoCarpeta: carpeta.TipoCarpeta,
+    tiposPermitidos: tiposPermitidos
+  });
+
+  // Validar que el tipo de carpeta esté permitido
+  if (!tiposPermitidos.includes(carpeta.TipoCarpeta)) {
+    console.warn(`[INDEXDB] Carpeta ${codigoCarpeta} tiene un tipo no permitido: ${carpeta.TipoCarpeta}`);
+    throw new Error('Tipo de carpeta no permitido');
   }
 
-  const carpetaPadre = await db.get('carpetas', carpeta.CarpetaPadre);
+  // Para carpetas de tipo 3 o 4, validar la carpeta padre
+  if (carpeta.TipoCarpeta === 3 || carpeta.TipoCarpeta === 4) {
+    const carpetaPadre = await db.get('carpetas', carpeta.CarpetaPadre);
 
-  if (!carpetaPadre) {
-    throw new Error('Carpeta padre no encontrada');
-  }
+    if (!carpetaPadre) {
+      console.warn(`[INDEXDB] Carpeta padre ${carpeta.CarpetaPadre} no encontrada para carpeta ${codigoCarpeta}`);
+      throw new Error('Carpeta padre no encontrada');
+    }
 
-  if (carpetaPadre.TipoCarpeta !== 1 && carpetaPadre.TipoCarpeta !== 2) {
-    throw new Error('La carpeta padre debe ser una Serie o Subserie');
+    // Validar que la carpeta padre sea de tipo 1 o 2
+    if (carpetaPadre.TipoCarpeta !== 1 && carpetaPadre.TipoCarpeta !== 2) {
+      console.warn(`[INDEXDB] Carpeta padre ${carpeta.CarpetaPadre} no es una Serie o Subserie`);
+      throw new Error('La carpeta padre debe ser una Serie o Subserie');
+    }
   }
+}
+
+// Método para obtener carpetas hijas con más información de depuración
+async obtenerCarpetasHijas(codigoPadre: number): Promise<any[]> {
+  const db = await this.dbPromise;
+  const carpetas = await db.getAll('carpetas');
+
+  console.log(`[INDEXDB] Buscando carpetas hijas para padre ${codigoPadre}`);
+  console.log(`[INDEXDB] Total de carpetas en base de datos:`, carpetas.length);
+
+  const carpetasHijas = carpetas.filter(carpeta => carpeta.CarpetaPadre === codigoPadre);
+
+  console.log(`[INDEXDB] Carpetas hijas encontradas para ${codigoPadre}:`, carpetasHijas);
+
+  return carpetasHijas;
 }
 
 
@@ -157,4 +181,18 @@ async validarCarpeta(codigoCarpeta: number): Promise<void> {
       console.error('Error al limpiar IndexedDB:', error);
     }
   }
+
+  async obtenerCarpeta(codigoCarpeta: number) {
+    const db = await this.dbPromise;
+    const carpeta = await db.get('carpetas', codigoCarpeta);
+
+    if (!carpeta) {
+      throw new Error(`Carpeta ${codigoCarpeta} no encontrada`);
+    }
+
+    return carpeta;
+  }
+
+
+
 }

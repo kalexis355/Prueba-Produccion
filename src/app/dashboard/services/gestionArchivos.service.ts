@@ -170,6 +170,7 @@ export class GestionArchivosService {
 
           xhr.onload = () => {
               if (xhr.status >= 200 && xhr.status < 300) {
+                this.notificarActualizacion()
                   observer.next({
                       status: 'complete',
                       response: xhr.response

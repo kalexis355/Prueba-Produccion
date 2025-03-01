@@ -108,7 +108,18 @@ export class BtnMasComponent implements OnInit,OnChanges  {
         .subscribe({
           next: (response) =>{
             Swal.fire('Éxito', 'Carpeta Creada', 'success');
-            this.gestionCarpetaService.notificarActualizacion(); // Notificar actualización
+            // this.gestionCarpetaService.notificarActualizacion(); // Notificar actualización
+            this.gestionCarpetaService['cacheCarpetas'].delete(this.id);
+            this.gestionCarpetaService.ObtenerYMostrarGzip()
+            .subscribe({
+              next:()=>{
+                this.gestionCarpetaService.notificarActualizacion()
+              },
+              error: (error) => {
+                console.error('Error al actualizar después de crear carpeta', error);
+              }
+
+            })
           }
         })
       }

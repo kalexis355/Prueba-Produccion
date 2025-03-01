@@ -433,55 +433,118 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
       this.rolesUsuario = this.auth2Service.currentUSer2()!.RolesUsuario
     }
 
-    // Suscribirse al evento global de actualización de contenido
-    this.subscriptions.add(
-      this.gestionCarpetaService.actualizarContenido$.subscribe(() => {
+    // // Suscribirse al evento global de actualización de contenido
+    // this.subscriptions.add(
+    //   this.gestionCarpetaService.actualizarContenido$.subscribe(() => {
+    //     if (this.carpetaActualId !== null) {
+    //       // this.cargarContenido(this.carpetaActualId);
+    //     }
+    //   })
+    // );
+
+    // // Suscribirse al evento de creación de archivos
+    // this.subscriptions.add(
+    //   this.gestionArchivosService.actualizarContenido$.subscribe(() => {
+    //     if (this.carpetaActualId !== null) {
+    //       // this.cargarContenido(this.carpetaActualId); // Actualizar contenido
+    //       Swal.fire('Éxito', 'Archivo Creado', 'success');
+    //     }
+    //   })
+    // );
+
+    // // Suscribirse a los cambios en la ruta
+    // this.subscriptions.add(
+    //   this.route.paramMap.subscribe(async (params) => {
+    //     const id = params.get('id') ? +params.get('id')! : null;
+
+    //     const navigation = this.router.getCurrentNavigation();
+    //     this.carpetaPadre = navigation?.extras.state?.['carpeta'];
+
+    //     this.carpetaHija = navigation?.extras.state?.['carpetaHija'];
+    //     // this.esSerieSubserie();
+    //     // this.carpetaTieneDelegado();
+    //     this.usuarioPuedeSubirArchivos();
+    //     this.usuarioPuedeCrearCarpetas();
+    //     this.usuarioEsDelegado();
+    //     // console.log('Carpeta Padre:', this.carpetaPadre);
+    //     // console.log('Carpeta Hija:', this.carpetaHija);
+
+    //     if (id !== null && id !== this.carpetaActualId) {
+    //       this.id = id;
+    //       this.carpetaActualId = id;
+    //       // this.cargarContenido(id);
+    //       // this.cargarContenido(id);
+    //       // this.cargarContenidoCarpeta(id);
+    //       // this.cargarContenidoUnificado(id)
+    //       console.log(id,'id de la carpeta actual');
+
+    //           // Forzar recarga del contenido
+    //           this.cargarContenidoUnificado(id);
+
+    //       // await this.cargarContenidoUnificado(id);
+    //     } else if (id === null) {
+    //       console.warn('El ID de la carpeta no está presente en la URL');
+    //     }
+    //   })
+    // );
+
+  // Suscribirse al evento global de actualización de contenido
+  this.subscriptions.add(
+    this.gestionCarpetaService.actualizarContenido$.subscribe({
+      next: () => {
+        console.log('[DEBUG] Evento de actualización recibido');
+        console.log('[DEBUG] Carpeta actual ID:', this.carpetaActualId);
+
         if (this.carpetaActualId !== null) {
-          // this.cargarContenido(this.carpetaActualId);
+          // Forzar recarga del contenido con más información de depuración
+          console.log(`[DEBUG] Recargando contenido para carpeta ${this.carpetaActualId}`);
+          this.cargarContenidoUnificado(this.carpetaActualId);
+        } else {
+          console.warn('[DEBUG] No hay carpeta actual para actualizar');
         }
-      })
-    );
+      },
+      error: (error) => {
+        console.error('[DEBUG] Error en suscripción de actualización:', error);
+      }
+    })
+  );
 
-    // Suscribirse al evento de creación de archivos
-    this.subscriptions.add(
-      this.gestionArchivosService.actualizarContenido$.subscribe(() => {
-        if (this.carpetaActualId !== null) {
-          // this.cargarContenido(this.carpetaActualId); // Actualizar contenido
-          Swal.fire('Éxito', 'Archivo Creado', 'success');
-        }
-      })
-    );
+  // Suscribirse al evento de creación de archivos
+  this.subscriptions.add(
+    this.gestionArchivosService.actualizarContenido$.subscribe(() => {
+      if (this.carpetaActualId !== null) {
+        Swal.fire('Éxito', 'Archivo Creado', 'success');
+        this.cargarContenidoUnificado(this.carpetaActualId);
+      }
+    })
+  );
 
-    // Suscribirse a los cambios en la ruta
-    this.subscriptions.add(
-      this.route.paramMap.subscribe(async (params) => {
-        const id = params.get('id') ? +params.get('id')! : null;
+  // Suscribirse a los cambios en la ruta
+  this.subscriptions.add(
+    this.route.paramMap.subscribe(async (params) => {
+      const id = params.get('id') ? +params.get('id')! : null;
 
-        const navigation = this.router.getCurrentNavigation();
-        this.carpetaPadre = navigation?.extras.state?.['carpeta'];
+      const navigation = this.router.getCurrentNavigation();
+      this.carpetaPadre = navigation?.extras.state?.['carpeta'];
+      this.carpetaHija = navigation?.extras.state?.['carpetaHija'];
 
-        this.carpetaHija = navigation?.extras.state?.['carpetaHija'];
-        // this.esSerieSubserie();
-        // this.carpetaTieneDelegado();
-        this.usuarioPuedeSubirArchivos();
-        this.usuarioPuedeCrearCarpetas();
-        this.usuarioEsDelegado();
-        // console.log('Carpeta Padre:', this.carpetaPadre);
-        // console.log('Carpeta Hija:', this.carpetaHija);
+      this.usuarioPuedeSubirArchivos();
+      this.usuarioPuedeCrearCarpetas();
+      this.usuarioEsDelegado();
 
-        if (id !== null && id !== this.carpetaActualId) {
-          this.id = id;
-          this.carpetaActualId = id;
-          // this.cargarContenido(id);
-          // this.cargarContenido(id);
-          // this.cargarContenidoCarpeta(id);
-          // this.cargarContenidoUnificado(id)
-          await this.cargarContenidoUnificado(id);
-        } else if (id === null) {
-          console.warn('El ID de la carpeta no está presente en la URL');
-        }
-      })
-    );
+      if (id !== null && id !== this.carpetaActualId) {
+        console.log('[DEBUG] Cargando contenido para carpeta ID:', id);
+
+        this.id = id;
+        this.carpetaActualId = id;
+
+        // Usar método síncrono sin await
+        this.cargarContenidoUnificado(id);
+      } else if (id === null) {
+        console.warn('[DEBUG] El ID de la carpeta no está presente en la URL');
+      }
+    })
+  );
 
 
   }
@@ -594,39 +657,50 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
   }
 
 
-  private async cargarContenidoUnificado(codigoCarpeta: number) {
-    try {
-      // Primero intentamos cargar desde IndexDB
-      const carpetasIndexDB = await this.indexdbService.obtenerCarpetasHijas(codigoCarpeta);
 
-      // Usamos tu método validarCarpeta existente
-      try {
-        await this.indexdbService.validarCarpeta(codigoCarpeta);
-        // Si llegamos aquí, significa que es una carpeta tipo 3 o 4 válida
-        this.gestionCarpetaService.obtenerContenidoCarpeta(codigoCarpeta)
-          .pipe(take(1))
-          .subscribe({
-            next: (resultado) => {
-              this.carpetaContenido = resultado.subcarpetas;
-              this.DocumentoContenido = resultado.archivos;
-            },
-            error: (error) => {
-              console.error('Error al cargar contenido detallado:', error);
+
+
+
+
+  private async cargarContenidoUnificado(codigoCarpeta: number) {
+    console.log(`[COMPONENTE] Iniciando carga de carpeta ${codigoCarpeta}`);
+
+    try {
+      // Primero intentamos cargar directamente del servicio sin validación
+      console.log(`[COMPONENTE] Intentando cargar directamente desde el servicio para carpeta ${codigoCarpeta}`);
+      this.gestionCarpetaService.obtenerContenidoCarpeta(codigoCarpeta)
+        .pipe(take(1))
+        .subscribe({
+          next: (resultado) => {
+            console.log(`[COMPONENTE] Datos recibidos del servicio para carpeta ${codigoCarpeta}: ${resultado.subcarpetas.length} subcarpetas, ${resultado.archivos.length} archivos`);
+            this.carpetaContenido = resultado.subcarpetas;
+            this.DocumentoContenido = resultado.archivos;
+          },
+          error: async (error) => {
+            console.error(`[COMPONENTE] Error al cargar desde servicio para carpeta ${codigoCarpeta}:`, error);
+
+            // Si falla, intentamos con IndexDB como respaldo
+            try {
+              const carpetasIndexDB = await this.indexdbService.obtenerCarpetasHijas(codigoCarpeta);
+              console.log(`[COMPONENTE] Datos de IndexDB obtenidos para carpeta ${codigoCarpeta}:`, carpetasIndexDB);
               this.carpetaContenido = carpetasIndexDB;
               this.DocumentoContenido = [];
+            } catch (indexDbError) {
+              console.error(`[COMPONENTE] Error también en IndexDB para carpeta ${codigoCarpeta}:`, indexDbError);
+              this.carpetaContenido = [];
+              this.DocumentoContenido = [];
             }
-          });
-      } catch (error) {
-        // Si no es tipo 3 o 4, o no cumple las validaciones, solo mostramos el contenido de IndexDB
-        this.carpetaContenido = carpetasIndexDB;
-        this.DocumentoContenido = [];
-      }
+          }
+        });
     } catch (error) {
-      console.error('Error en la carga unificada:', error);
+      console.error(`[COMPONENTE] Error no capturado para carpeta ${codigoCarpeta}:`, error);
       this.carpetaContenido = [];
       this.DocumentoContenido = [];
     }
   }
+
+
+
 
   // private async cargarContenidoUnificado(codigoCarpeta: number) {
   //   try {
