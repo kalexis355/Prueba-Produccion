@@ -13,6 +13,7 @@ import {
 import { SnackBarProgresoComponent } from '../../../shared/components/snack-bar-progreso/snack-bar-progreso.component';
 import { LoaderService } from '../../services/gestionLoader.service';
 import Swal from 'sweetalert2';
+import { GestionCarpetasService } from '../../services/gestionCarpetas.service';
 @Component({
   selector: 'app-btn-subir-archivo',
   templateUrl: './btn-subir-archivo.component.html',
@@ -34,6 +35,7 @@ export class BtnSubirArchivoComponent {
   constructor(
     private dialog: MatDialog,
     private gestionArchivosService: GestionArchivosService,
+    private gestionCarpetaService:GestionCarpetasService,
     private _snackBar: MatSnackBar
   ) {}
 
@@ -302,6 +304,10 @@ export class BtnSubirArchivoComponent {
       let mensajeHtml = '';
 
       if (archivosExitosos.length > 0) {
+        // this.gestionCarpetaService['cacheCarpetas'].delete(this.carpetaId);
+
+        // this.gestionArchivosService.notificarActualizacion();
+
         mensajeHtml += '<strong>Archivos subidos exitosamente:</strong><br>';
         archivosExitosos.forEach((archivo) => {
           mensajeHtml += `✅ ${archivo}<br>`;

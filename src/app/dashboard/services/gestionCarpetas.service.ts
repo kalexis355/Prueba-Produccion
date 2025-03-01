@@ -375,7 +375,13 @@ export class GestionCarpetasService implements OnDestroy {
   private cacheCarpetas = new Map<number, CarpetaBase & { contenido: (CarpetaBase | ArchivoGenericoExpediente)[] }>();
 
 // Método modificado para buscar subcarpetas dentro de la caché existente
-obtenerContenidoCarpeta(codigoCarpeta: number): Observable<ContenidoCarpetaProcesado> {
+obtenerContenidoCarpeta(codigoCarpeta: number,forzarRecarga?:boolean): Observable<ContenidoCarpetaProcesado> {
+
+  if (forzarRecarga) {
+    console.log(`[CACHÉ] Forzando recarga, eliminando carpeta ${codigoCarpeta} de caché`);
+    this.cacheCarpetas.delete(codigoCarpeta);
+  }
+
   console.log(`[INICIO] Intentando obtener carpeta: ${codigoCarpeta}`);
 
   // Verificamos si tenemos la carpeta directamente en caché
@@ -470,48 +476,49 @@ obtenerContenidoCarpeta(codigoCarpeta: number): Observable<ContenidoCarpetaProce
   );
 }
 
-private procesarDatos(datos: CarpetaBase & { contenido: (CarpetaBase | ArchivoGenericoExpediente)[] }, codigoCarpetaActual: number): ContenidoCarpetaProcesado {
-  console.log(`[PROCESANDO] Procesando datos para carpeta ${codigoCarpetaActual}`);
+  private procesarDatos(datos: CarpetaBase & { contenido: (CarpetaBase | ArchivoGenericoExpediente)[] }, codigoCarpetaActual: number): ContenidoCarpetaProcesado {
+    console.log(`[PROCESANDO] Procesando datos para carpeta ${codigoCarpetaActual}`);
 
-  const { contenido, ...carpetaPrincipal } = datos;
+    const { contenido, ...carpetaPrincipal } = datos;
 
-  // Filtramos subcarpetas que pertenecen directamente a esta carpeta
-  const subcarpetas = contenido.filter(
-    (item): item is CarpetaBase =>
-      item.TipoNodo === 'carpeta' &&
-      (item as CarpetaBase).CarpetaPadre === codigoCarpetaActual
-  );
+    // Filtramos subcarpetas que pertenecen directamente a esta carpeta
+    const subcarpetas = contenido.filter(
+      (item): item is CarpetaBase =>
+        item.TipoNodo === 'carpeta' &&
+        (item as CarpetaBase).CarpetaPadre === codigoCarpetaActual
+    );
 
-  console.log(`[SUBCARPETAS] Encontradas ${subcarpetas.length} subcarpetas para carpeta ${codigoCarpetaActual}`);
-  subcarpetas.forEach(subcarpeta => {
-    console.log(`- Subcarpeta: ${subcarpeta.Nombre} (ID: ${subcarpeta.Cod})`);
-  });
+    console.log(`[SUBCARPETAS] Encontradas ${subcarpetas.length} subcarpetas para carpeta ${codigoCarpetaActual}`);
+    subcarpetas.forEach(subcarpeta => {
+      console.log(`- Subcarpeta: ${subcarpeta.Nombre} (ID: ${subcarpeta.Cod})`);
+    });
 
-  // Filtramos archivos que pertenecen EXCLUSIVAMENTE a esta carpeta
-  const archivos = contenido.filter(
-    (item): item is ArchivoGenericoExpediente => {
-      if (item.TipoNodo !== 'archivo') return false;
+    // Filtramos archivos que pertenecen EXCLUSIVAMENTE a esta carpeta
+    const archivos = contenido.filter(
+      (item): item is ArchivoGenericoExpediente => {
+        if (item.TipoNodo !== 'archivo') return false;
 
-      const archivo = item as ArchivoGenericoExpediente;
+        const archivo = item as ArchivoGenericoExpediente;
 
-      // Comprobamos que el archivo pertenece a esta carpeta
-      if (archivo.Carpeta === codigoCarpetaActual) {
-        console.log(`[ARCHIVO] Archivo ${archivo.Nombre} (ID: ${archivo.Cod}) pertenece a carpeta ${codigoCarpetaActual}`);
-        return true;
+        // Comprobamos que el archivo pertenece a esta carpeta
+        if (archivo.Carpeta === codigoCarpetaActual) {
+          console.log(`[ARCHIVO] Archivo ${archivo.Nombre} (ID: ${archivo.Cod}) pertenece a carpeta ${codigoCarpetaActual}`);
+          return true;
+        }
+
+        return false;
       }
+    );
 
-      return false;
-    }
-  );
+    console.log(`[RESULTADO] Carpeta ${codigoCarpetaActual} - Resultado final: ${subcarpetas.length} subcarpetas, ${archivos.length} archivos`);
 
-  console.log(`[RESULTADO] Carpeta ${codigoCarpetaActual} - Resultado final: ${subcarpetas.length} subcarpetas, ${archivos.length} archivos`);
+    return {
+      carpetaPrincipal,
+      subcarpetas,
+      archivos
+    };
+  }
 
-  return {
-    carpetaPrincipal,
-    subcarpetas,
-    archivos
-  };
-}
   stopInterval() {
 
     this.destroy$.next();

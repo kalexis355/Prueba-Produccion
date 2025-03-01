@@ -668,7 +668,7 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
     try {
       // Primero intentamos cargar directamente del servicio sin validación
       console.log(`[COMPONENTE] Intentando cargar directamente desde el servicio para carpeta ${codigoCarpeta}`);
-      this.gestionCarpetaService.obtenerContenidoCarpeta(codigoCarpeta)
+      this.gestionCarpetaService.obtenerContenidoCarpeta(codigoCarpeta,true)
         .pipe(take(1))
         .subscribe({
           next: (resultado) => {

@@ -107,9 +107,10 @@ export class BtnMasComponent implements OnInit,OnChanges  {
         this.gestionCarpetaService.crearCarpetas(carpeta)
         .subscribe({
           next: (response) =>{
+            // this.gestionCarpetaService.notificarActualizacion()
             Swal.fire('Éxito', 'Carpeta Creada', 'success');
             // this.gestionCarpetaService.notificarActualizacion(); // Notificar actualización
-            this.gestionCarpetaService['cacheCarpetas'].delete(this.id);
+            // this.gestionCarpetaService['cacheCarpetas'].delete(this.id);
             this.gestionCarpetaService.ObtenerYMostrarGzip()
             .subscribe({
               next:()=>{
