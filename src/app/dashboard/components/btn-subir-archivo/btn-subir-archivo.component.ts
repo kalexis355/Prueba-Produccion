@@ -333,6 +333,7 @@ export class BtnSubirArchivoComponent {
                     //   showConfirmButton: false,
                     //   allowOutsideClick: false,
                     // });
+                    
                     resolve();
                     break;
                 }
