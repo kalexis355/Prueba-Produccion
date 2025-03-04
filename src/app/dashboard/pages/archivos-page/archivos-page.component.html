@@ -10,6 +10,7 @@
       <div class="col-6 d-flex align-items-center mt-3">
         <a class="ruta me-2 mt-1 fs-5" [routerLink]="['/dashboard']">Mis archivos</a>
         <img src="assets/imgs/flechas-a-la-derecha.png" alt="" height="20" width="20" class="me-2">
+        <a *ngFor="let rutaNavegada of ruta">Carpeta {{rutaNavegada}}-</a>
       </div>
 
       <!-- Botones derecha -->
@@ -43,7 +44,8 @@
     <app-carpetas-contenido
     [carpetas]="carpetaContenido"
     [rolesUsuario]="rolesUsuario"
-    (contextMenu)="mostrarMenuContextual($event.event, $event.cod)">
+    (contextMenu)="mostrarMenuContextual($event.event, $event.cod)"
+    (carpetaClick)="manejarCarpetaClick($event)">
   </app-carpetas-contenido>
 
 

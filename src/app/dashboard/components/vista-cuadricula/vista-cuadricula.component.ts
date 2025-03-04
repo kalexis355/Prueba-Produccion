@@ -109,6 +109,8 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
 
 
   async ngOnInit() {
+
+    this.gestionCarpetaService.reiniciarRuta()
     if (!this.router.url.includes('principal/cuadricula')) {
       return;
     }
@@ -140,6 +142,15 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
   }
   respuesta: any;
   error: string = '';
+
+  agregarAlaRuta(cod:number){
+    console.log('entro a la ruta');
+
+    this.gestionCarpetaService.agregarACamino(cod)
+
+    console.log(this.gestionCarpetaService.obtenerCaminoActual());
+
+  }
 
 
   async obtenerCarpetasPadres() {

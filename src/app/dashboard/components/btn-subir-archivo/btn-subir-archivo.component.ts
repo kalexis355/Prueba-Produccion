@@ -14,6 +14,8 @@ import { SnackBarProgresoComponent } from '../../../shared/components/snack-bar-
 import { LoaderService } from '../../services/gestionLoader.service';
 import Swal from 'sweetalert2';
 import { GestionCarpetasService } from '../../services/gestionCarpetas.service';
+import { ArchivoGenericoExpediente } from '../../interfaces/carpeta.interface';
+import { IndexDbService } from '../../services/indexdb.service';
 @Component({
   selector: 'app-btn-subir-archivo',
   templateUrl: './btn-subir-archivo.component.html',
@@ -21,6 +23,7 @@ import { GestionCarpetasService } from '../../services/gestionCarpetas.service';
 })
 export class BtnSubirArchivoComponent {
   public loaderService = inject(LoaderService);
+  public indexdbService = inject(IndexDbService);
 
   @Input() carpetaId!: number;
   @Input() mostrarBoton: boolean = true;
@@ -35,9 +38,9 @@ export class BtnSubirArchivoComponent {
   constructor(
     private dialog: MatDialog,
     private gestionArchivosService: GestionArchivosService,
-    private gestionCarpetaService:GestionCarpetasService,
+    private gestionCarpetaService: GestionCarpetasService,
     private _snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   // async subirArchivo(event: Event) {
   //   const input = event.target as HTMLInputElement;
@@ -201,19 +204,19 @@ export class BtnSubirArchivoComponent {
     const archivosExitosos: string[] = [];
     const archivosFallidos: string[] = [];
 
-    const uploadAlert = Swal.mixin({
-      title: 'Subiendo archivos',
-      html: 'Iniciando subida...',
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      allowEnterKey: false,
-      showConfirmButton: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
+    // const uploadAlert = Swal.mixin({
+    //   title: 'Subiendo archivos',
+    //   html: 'Iniciando subida...',
+    //   allowOutsideClick: false,
+    //   allowEscapeKey: false,
+    //   allowEnterKey: false,
+    //   showConfirmButton: false,
+    //   didOpen: () => {
+    //     Swal.showLoading();
+    //   },
+    // });
 
-    uploadAlert.fire();
+    // uploadAlert.fire();
 
     try {
       for (let i = 0; i < resultadosArchivos.length; i++) {
@@ -238,11 +241,10 @@ export class BtnSubirArchivoComponent {
         formData.append('Indice', i.toString());
         formData.append('ArchivoFile', archivo);
 
-        uploadAlert.update({
-          html: `Subiendo archivo ${i + 1} de ${resultadosArchivos.length}: ${
-            result.nombre
-          }`,
-        });
+        // uploadAlert.update({
+        //   html: `Subiendo archivo ${i + 1} de ${resultadosArchivos.length}: ${result.nombre
+        //     }`,
+        // });
 
         try {
           await new Promise<void>((resolve, reject) => {
@@ -252,29 +254,85 @@ export class BtnSubirArchivoComponent {
               next: (event: any) => {
                 switch (event.status) {
                   case 'progress':
-                    const progressMessage = `⬆️ Subiendo ${result.nombre}: ${
-                      event.progress
-                    }% (${this.formatBytes(event.loaded)} / ${this.formatBytes(
-                      event.total
-                    )})`;
+                    const progressMessage = `⬆️ Subiendo ${result.nombre}: ${event.progress
+                      }% (${this.formatBytes(event.loaded)} / ${this.formatBytes(
+                        event.total
+                      )})`;
                     this.updateProgressMessage(progressMessage);
-                    uploadAlert.update({
-                      html: progressMessage,
-                      showConfirmButton: false,
-                      allowOutsideClick: false,
-                    });
+                    // uploadAlert.update({
+                    //   html: progressMessage,
+                    //   showConfirmButton: false,
+                    //   allowOutsideClick: false,
+                    // });
                     break;
 
                   case 'complete':
                     this.updateProgressMessage(
                       `✅ Archivo ${result.nombre} subido completamente`
                     );
-                    archivosExitosos.push(result.nombre);
-                    uploadAlert.update({
-                      html: `✅ Archivo ${result.nombre} subido completamente`,
-                      showConfirmButton: false,
-                      allowOutsideClick: false,
+                    // console.log('Archivos recibidos:', event.response);
+                    const archivoNuevo: ArchivoGenericoExpediente = {
+                      Cod: event.response[0].Cod,
+                      Nombre: event.response[0].Nombre,
+                      Carpeta: event.response[0].Carpeta,
+                      NombreCarpeta: event.response[0].NombreCarpeta,
+                      Copia: event.response[0].Copia,
+                      Firmado: event.response[0].Firmado,
+                      FimarPor: event.response[0].FimarPor,
+                      Ruta: event.response[0].Ruta,
+                      TipoArchivo: event.response[0].TipoArchivo,
+                      NombreTipoArchivo: event.response[0].NombreTipoArchivo,
+                      Formato: event.response[0].Formato,
+                      NumeroHojas: event.response[0].NumeroHojas,
+                      Duracion: event.response[0].Duracion,
+                      Tamaño: event.response[0].Tamaño,
+                      Estado: event.response[0].Estado,
+                      Indice: event.response[0].Indice,
+                      TipoNodo: 'archivo',
+                    };
+                    console.log('Archivos a guardar:', archivoNuevo);
+
+                    this.indexdbService.agregarElemento(archivoNuevo)
+                    .then(() => {
+                      console.log('Nuevo archivo agregado a IndexedDB');
+
+                      // Actualizar la visualización
+                    })
+                    .catch(error => {
+                      console.error('Error al guardar nueva carpeta en IndexedDB:', error);
                     });
+
+
+
+                    this.indexdbService
+                      .carpetaExisteEnElementos(event.response[0].Carpeta)
+                      .then((existe) => {
+                        if (existe) {
+                          console.log('si esxiste');
+                          this.gestionArchivosService.notificarActualizacion();
+                        } else {
+                          console.log('no existe');
+                          this.indexdbService
+                            .carpetaTieneContenidoEnIndexDB(
+                              event.response[0].Carpeta
+                            )
+                            .then((existe) => {
+                              if (existe) {
+                                console.log('si existe en indexdb');
+                                this.gestionArchivosService.notificarActualizacion();
+                              } else {
+                                console.log('no existe en indexdb');
+                              }
+                            });
+                        }
+                      });
+
+                    archivosExitosos.push(result.nombre);
+                    // uploadAlert.update({
+                    //   html: `✅ Archivo ${result.nombre} subido completamente`,
+                    //   showConfirmButton: false,
+                    //   allowOutsideClick: false,
+                    // });
                     resolve();
                     break;
                 }

@@ -4,12 +4,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { DashboardService } from '../../services/dashboard.service';
 import { AuthService } from '../../../login/services/auth.service';
 import { v4 as uuidv4 } from 'uuid';
-import { Carpeta, CrearCarpeta, NivelVisualizacion } from '../../interfaces/carpeta.interface';
+import { Carpeta, CarpetaBase, CrearCarpeta, NivelVisualizacion } from '../../interfaces/carpeta.interface';
 import { Auth2Service } from '../../../login/services/auth2.service';
 import { GestionCarpetasService } from '../../services/gestionCarpetas.service';
 import { response } from 'express';
 import Swal from 'sweetalert2'
 import { ActivatedRoute } from '@angular/router';
+import { IndexDbService } from '../../services/indexdb.service';
 
 
 @Component({
@@ -30,6 +31,7 @@ export class BtnMasComponent implements OnInit,OnChanges  {
   public authService2 = inject(Auth2Service)
   public gestionCarpetaService = inject(GestionCarpetasService)
   public route = inject(ActivatedRoute)
+  public indexdbService = inject(IndexDbService)
 
 
   roles: any[] = [];
@@ -109,18 +111,83 @@ export class BtnMasComponent implements OnInit,OnChanges  {
           next: (response) =>{
             // this.gestionCarpetaService.notificarActualizacion()
             Swal.fire('Éxito', 'Carpeta Creada', 'success');
-            // this.gestionCarpetaService.notificarActualizacion(); // Notificar actualización
-            // this.gestionCarpetaService['cacheCarpetas'].delete(this.id);
-            this.gestionCarpetaService.ObtenerYMostrarGzip()
-            .subscribe({
-              next:()=>{
-                this.gestionCarpetaService.notificarActualizacion()
-              },
-              error: (error) => {
-                console.error('Error al actualizar después de crear carpeta', error);
-              }
 
+            const nuevaCarpeta: CarpetaBase = {
+              Cod: response[0].Cod,
+              CodSerie: response[0].CodSerie,
+              CodSubSerie: response[0].CodSubSerie,
+              Estado: response[0].Estado,
+              EstadoCarpeta: response[0].EstadoCarpeta,
+              NombreEstadoCarpeta: response[0].NombreEstadoCarpeta, // Ajustar según tus valores
+              Nombre: response[0].Nombre,
+              Descripcion: response[0].Descripcion,
+              Copia: response[0].Copia,
+              CarpetaPadre: response[0].CarpetaPadre,
+              NombreCarpetaPadre: "", // Si tienes acceso al nombre de la carpeta padre, añádelo aquí
+              FechaCreacion: response[0].FechaCreacion,
+              IndiceElectronico: response[0].IndiceElectronico,
+              Delegado: response[0].Delegado,
+              TipoCarpeta: response[0].TipoCarpeta,
+              NombreTipoCarpeta: "", // Obtener nombre según el tipo
+              NivelVisualizacion: carpeta.NivelVisualizacion,
+              NombreNivelVisualizacion: "", // Obtener nombre según el nivel
+              SerieRaiz: carpeta.SerieRaiz,
+              TipoNodo: "carpeta"
+            };
+
+            this.indexdbService.agregarElemento(nuevaCarpeta)
+            .then(() => {
+              console.log('Nueva carpeta agregada a IndexedDB');
+
+              // Actualizar la visualización
             })
+            .catch(error => {
+              console.error('Error al guardar nueva carpeta en IndexedDB:', error);
+            });
+            console.log('carpetapadrecod',response[0].CarpetaPadre);
+            console.log(response,'respuesta del server');
+            // this.gestionCarpetaService.notificarActualizacion()
+
+            this.indexdbService.carpetaExisteEnElementos(response[0].CarpetaPadre)
+            .then(existe=>{
+              if(existe){
+                console.log('si esxiste');
+            this.gestionCarpetaService.notificarActualizacion()
+              }else{
+                console.log('no existe');
+                this.indexdbService.carpetaTieneContenidoEnIndexDB(response[0].CarpetaPadre)
+                .then(existe=>{
+                  if(existe){
+                    console.log('si existe en indexdb');
+                    this.gestionCarpetaService.notificarActualizacion()
+                  }else{
+                    console.log('no existe en indexdb');
+
+                  }
+                })
+              }
+            })
+
+
+            this.indexdbService.obtenerCarpeta(response[0].CarpetaPadre)
+            .then((carpetaPadre)=>{
+              if(carpetaPadre.TipoCarpeta===2 || carpetaPadre.TipoCarpeta ===1){
+                this.gestionCarpetaService.ObtenerYMostrarGzip()
+                .subscribe({
+                  next:()=>{
+                    console.log('notificando');
+
+                    this.gestionCarpetaService.notificarActualizacion()
+                  },
+                  error: (error) => {
+                    console.error('Error al actualizar después de crear carpeta', error);
+                  }
+
+                })
+              }
+            })
+
+
           }
         })
       }
@@ -128,6 +195,8 @@ export class BtnMasComponent implements OnInit,OnChanges  {
 
 
 }
+
+
 
 
 }

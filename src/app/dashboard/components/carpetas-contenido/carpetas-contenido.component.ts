@@ -18,9 +18,14 @@ export class CarpetasContenidoComponent {
 
   @Output() contextMenu = new EventEmitter<{event: MouseEvent, cod:number}>();
 
+  @Output() carpetaClick = new EventEmitter<CarpetasPadre>();
   //Inyeccion de servicios
   public auth2Service = inject(Auth2Service);
 
+
+  onCarpetaClick(carpeta: CarpetasPadre): void {
+    this.carpetaClick.emit(carpeta);
+  }
 
   onContextMenu(event: MouseEvent, cod:number) {
     this.contextMenu.emit({ event, cod });

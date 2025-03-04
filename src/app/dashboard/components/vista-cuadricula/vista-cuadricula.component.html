@@ -52,8 +52,9 @@
 
          <button class="btn btun flex-grow-1 "
         [routerLink]="['/dashboard/carpeta',carpeta.Cod]"
-        [state]="{ carpeta: carpeta }">
-
+        [state]="{ carpeta: carpeta }"
+        (click)="agregarAlaRuta(carpeta.Cod)"
+        >
            <img class="" src="assets/imgs/carpeta-vacia.png" alt="carpeta" width="100" height="100">
            <h4 class="mt-2 mb-0 texto" [title]="carpeta.Nombre">{{carpeta.Nombre }}</h4>
            <!-- {{carpeta.Cod}} -->

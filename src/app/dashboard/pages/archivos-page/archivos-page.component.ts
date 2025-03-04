@@ -1,6 +1,6 @@
-import {Component,computed,effect,HostListener,inject,OnDestroy,OnInit,signal} from '@angular/core';
+import {Component,computed,effect,HostListener,inject,OnChanges,OnDestroy,OnInit,signal, SimpleChanges} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {Carpeta,Archivo,EstadoCarpeta,CarpetaRaiz,CortarPegar,CopiarPegar, CarpetasPadre, ArchivoGenericoExpediente, CarpetaBase, DetalleCarpeta} from '../../interfaces/carpeta.interface';
+import { Carpeta, Archivo, EstadoCarpeta, CarpetaRaiz, CortarPegar, CopiarPegar, CarpetasPadre, ArchivoGenericoExpediente, CarpetaBase, DetalleCarpeta, ContenidoCarpetaResponse } from '../../interfaces/carpeta.interface';
 import { DashboardService } from '../../services/dashboard.service';
 import { v4 as uuidv4 } from 'uuid';
 import { ToastService } from '../../services/toast.service';
@@ -23,6 +23,7 @@ import { VisualizadorArchivosComponent } from '../../components/visualizador-arc
 import Swal from 'sweetalert2';
 import { MenuContextualService } from '../../services/gestionMenuContextual.service';
 import { IndexDbService } from '../../services/indexdb.service';
+import { error } from 'console';
 // import { NavegacionCarpetasService } from '../../../../../copias/navegacionEntreCarpetas.service';
 
 @Component({
@@ -30,7 +31,7 @@ import { IndexDbService } from '../../services/indexdb.service';
   templateUrl: './archivos-page.component.html',
   styleUrl: './archivos-page.component.css',
 })
-export class ArchivosPageComponent implements OnInit, OnDestroy {
+export class ArchivosPageComponent implements OnInit, OnDestroy,OnChanges {
   //propiedad que contendra la informacion de la carpeta a mostrar
   carpeta!: Carpeta | undefined;
   carpetas: { id: string; nombre: string }[] = []; // Arreglo para carpetas
@@ -105,6 +106,8 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
 
   rolesUsuario: RolesUsuario[]=[]
 
+  ruta:number[]=[]
+
   constructor(public dialog: MatDialog, private router: Router) {}
 
   habilitarOpcionCortar:boolean = false;
@@ -120,10 +123,10 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
 
   obtenerEstadoCarpeta() {
     this.gestionCarpetaService
-      .ObtenerEstadosCarpeta()
-      .subscribe((estadosObtenidos) => {
-        this.estadosCarpeta = estadosObtenidos;
-      });
+    .ObtenerEstadosCarpeta()
+    .subscribe((estadosObtenidos) => {
+      this.estadosCarpeta = estadosObtenidos;
+    });
   }
 
   obtenerNombreEstadoCarpeta(): string {
@@ -139,7 +142,7 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
       .subscribe((usuarioObtenidos) => {
         this.usuarios = usuarioObtenidos;
       });
-  }
+    }
 
   obtenerNombreDelegado(): string {
     const delegado = this.usuarios.find(
@@ -148,6 +151,19 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
     return delegado ? delegado.Nombres : 'Delegado no asignado';
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+
+  }
+
+  cargarCarpeta(id: number) {
+    // Actualizar el historial de navegación
+    this.gestionCarpetaService.agregarACamino(id);
+
+    // Obtener la ruta actual
+    this.ruta = this.gestionCarpetaService.obtenerCaminoActual();
+    console.log(this.ruta,'esta es la ruta');
+
+  }
 
   mostrarMenuContextual(event: MouseEvent, cod:number): void {
     event.preventDefault();
@@ -425,6 +441,9 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
   }
 
    ngOnInit() {
+
+
+
     this.obtenerUSuarios();
 
     this.obtenerEstadoCarpeta();
@@ -433,78 +452,21 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
       this.rolesUsuario = this.auth2Service.currentUSer2()!.RolesUsuario
     }
 
-    // // Suscribirse al evento global de actualización de contenido
-    // this.subscriptions.add(
-    //   this.gestionCarpetaService.actualizarContenido$.subscribe(() => {
-    //     if (this.carpetaActualId !== null) {
-    //       // this.cargarContenido(this.carpetaActualId);
-    //     }
-    //   })
-    // );
 
-    // // Suscribirse al evento de creación de archivos
-    // this.subscriptions.add(
-    //   this.gestionArchivosService.actualizarContenido$.subscribe(() => {
-    //     if (this.carpetaActualId !== null) {
-    //       // this.cargarContenido(this.carpetaActualId); // Actualizar contenido
-    //       Swal.fire('Éxito', 'Archivo Creado', 'success');
-    //     }
-    //   })
-    // );
-
-    // // Suscribirse a los cambios en la ruta
-    // this.subscriptions.add(
-    //   this.route.paramMap.subscribe(async (params) => {
-    //     const id = params.get('id') ? +params.get('id')! : null;
-
-    //     const navigation = this.router.getCurrentNavigation();
-    //     this.carpetaPadre = navigation?.extras.state?.['carpeta'];
-
-    //     this.carpetaHija = navigation?.extras.state?.['carpetaHija'];
-    //     // this.esSerieSubserie();
-    //     // this.carpetaTieneDelegado();
-    //     this.usuarioPuedeSubirArchivos();
-    //     this.usuarioPuedeCrearCarpetas();
-    //     this.usuarioEsDelegado();
-    //     // console.log('Carpeta Padre:', this.carpetaPadre);
-    //     // console.log('Carpeta Hija:', this.carpetaHija);
-
-    //     if (id !== null && id !== this.carpetaActualId) {
-    //       this.id = id;
-    //       this.carpetaActualId = id;
-    //       // this.cargarContenido(id);
-    //       // this.cargarContenido(id);
-    //       // this.cargarContenidoCarpeta(id);
-    //       // this.cargarContenidoUnificado(id)
-    //       console.log(id,'id de la carpeta actual');
-
-    //           // Forzar recarga del contenido
-    //           this.cargarContenidoUnificado(id);
-
-    //       // await this.cargarContenidoUnificado(id);
-    //     } else if (id === null) {
-    //       console.warn('El ID de la carpeta no está presente en la URL');
-    //     }
-    //   })
-    // );
 
   // Suscribirse al evento global de actualización de contenido
   this.subscriptions.add(
     this.gestionCarpetaService.actualizarContenido$.subscribe({
       next: () => {
-        console.log('[DEBUG] Evento de actualización recibido');
-        console.log('[DEBUG] Carpeta actual ID:', this.carpetaActualId);
 
         if (this.carpetaActualId !== null) {
-          // Forzar recarga del contenido con más información de depuración
-          console.log(`[DEBUG] Recargando contenido para carpeta ${this.carpetaActualId}`);
-          this.cargarContenidoUnificado(this.carpetaActualId);
+          this.cargarCarpetasHijas(this.carpetaActualId)
+          this.obtenerContenidoCarpetaIndex(this.carpetaActualId)
+
         } else {
-          console.warn('[DEBUG] No hay carpeta actual para actualizar');
         }
       },
       error: (error) => {
-        console.error('[DEBUG] Error en suscripción de actualización:', error);
       }
     })
   );
@@ -513,8 +475,10 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
   this.subscriptions.add(
     this.gestionArchivosService.actualizarContenido$.subscribe(() => {
       if (this.carpetaActualId !== null) {
-        Swal.fire('Éxito', 'Archivo Creado', 'success');
-        this.cargarContenidoUnificado(this.carpetaActualId);
+        // Swal.fire('Éxito', 'Archivo Creado', 'success');
+        // this.cargarContenidoUnificado(this.carpetaActualId);
+        this.obtenerContenidoCarpetaIndex(this.carpetaActualId)
+
       }
     })
   );
@@ -533,13 +497,45 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
       this.usuarioEsDelegado();
 
       if (id !== null && id !== this.carpetaActualId) {
-        console.log('[DEBUG] Cargando contenido para carpeta ID:', id);
 
         this.id = id;
         this.carpetaActualId = id;
+        console.log('id a navegar',id);
+
+        this.gestionCarpetaService.agregarACamino(id)
+        this.ruta = this.gestionCarpetaService.obtenerCaminoActual()
+
+        console.log('la ruta va asi',this.ruta);
 
         // Usar método síncrono sin await
-        this.cargarContenidoUnificado(id);
+        this.indexdbService.obtenerCarpeta(id).then(carpeta=>{
+          console.log(carpeta,'holiwis');
+
+          if(carpeta.CarpetaPadre ===0 || carpeta.TipoCarpeta ===2){
+            console.log('entreeeee jejej');
+
+            this.cargarContenidoUnificado(id);
+          }else {
+            // Verificar si la carpeta ya tiene contenido en IndexedDB
+            console.log(`Carpeta de tipo ${carpeta.TipoCarpeta}, verificando contenido en elementos`);
+            this.obtenerContenidoCarpetaIndex(id);
+
+          }
+        }).catch(()=>{
+          console.log('entro al error');
+
+          this.indexdbService.carpetaExisteEnElementos(id)
+          .then(existe => {
+            if (existe) {
+              console.log(`La carpeta ${id} existe en elementos`);
+              this.obtenerContenidoCarpetaIndex(id);
+            } else {
+              // Si no existe en ninguna parte, intentar cargarla del servidor
+              // console.log(`La carpeta ${id} no existe localmente, intentando cargar del servidor`);
+              // this.cargarContenidoUnificado(id);
+            }
+          });
+        })
       } else if (id === null) {
         console.warn('[DEBUG] El ID de la carpeta no está presente en la URL');
       }
@@ -657,89 +653,86 @@ export class ArchivosPageComponent implements OnInit, OnDestroy {
   }
 
 
+  manejarCarpetaClick(carpeta: CarpetasPadre): void {
+    console.log('Carpeta clickeada:', carpeta);
+
+    if(carpeta.TipoCarpeta ===3 || carpeta.TipoCarpeta ===4){
+      console.log(carpeta.CarpetaPadre,'cod de carpeta padre');
+
+      this.indexdbService.obtenerCarpeta(carpeta.CarpetaPadre)
+      .then(carpetaPadre=>{
+        console.log('soy la carpeta padre',carpetaPadre.Cod);
+        if(carpetaPadre.TipoCarpeta===1 || carpetaPadre.TipoCarpeta === 2){
+          console.log('entreeooeeoe');
+
+          this.cargarContenidoDeCarpeta(carpeta);
+        }
+      })
+      console.log('hola soy de las dos ultimas');
+
+    }
 
 
+  }
 
+  public cargarContenidoDeCarpeta(carpeta: CarpetasPadre) {
 
+    console.log('holitaa');
 
-  private async cargarContenidoUnificado(codigoCarpeta: number) {
-    console.log(`[COMPONENTE] Iniciando carga de carpeta ${codigoCarpeta}`);
+    this.gestionCarpetaService.obtenerContenidoCarpeta(carpeta.Cod).subscribe({
+      next: (contenido:ContenidoCarpetaResponse) => {
+        console.log(`Contenido de carpeta ${carpeta.Cod}:`, contenido.contenido);
+        this.indexdbService.guardarContenidoCarpeta(carpeta.Cod, contenido)
+        .then((contenidoGuardado) => {
 
-    try {
-      // Primero intentamos cargar directamente del servicio sin validación
-      console.log(`[COMPONENTE] Intentando cargar directamente desde el servicio para carpeta ${codigoCarpeta}`);
-      this.gestionCarpetaService.obtenerContenidoCarpeta(codigoCarpeta,true)
-        .pipe(take(1))
-        .subscribe({
-          next: (resultado) => {
-            console.log(`[COMPONENTE] Datos recibidos del servicio para carpeta ${codigoCarpeta}: ${resultado.subcarpetas.length} subcarpetas, ${resultado.archivos.length} archivos`);
-            this.carpetaContenido = resultado.subcarpetas;
-            this.DocumentoContenido = resultado.archivos;
-          },
-          error: async (error) => {
-            console.error(`[COMPONENTE] Error al cargar desde servicio para carpeta ${codigoCarpeta}:`, error);
+          console.log('Contenido guardado exitosamente en IndexedDB',contenidoGuardado);
+           // Una vez guardado, obtener los hijos directos para mostrar
 
-            // Si falla, intentamos con IndexDB como respaldo
-            try {
-              const carpetasIndexDB = await this.indexdbService.obtenerCarpetasHijas(codigoCarpeta);
-              console.log(`[COMPONENTE] Datos de IndexDB obtenidos para carpeta ${codigoCarpeta}:`, carpetasIndexDB);
-              this.carpetaContenido = carpetasIndexDB;
-              this.DocumentoContenido = [];
-            } catch (indexDbError) {
-              console.error(`[COMPONENTE] Error también en IndexDB para carpeta ${codigoCarpeta}:`, indexDbError);
-              this.carpetaContenido = [];
-              this.DocumentoContenido = [];
-            }
-          }
+           this.obtenerContenidoCarpetaIndex(carpeta.Cod)
+        })
+        .catch(error => {
+          console.error('Error al guardar en IndexedDB:', error);
         });
+        // this.DocumentoContenido=archivos;
+      },
+      error: (error) => {
+        console.error(`Error al obtener contenido de carpeta ${carpeta.Cod}:`, error);
+      }
+    });
+  }
+
+obtenerContenidoCarpetaIndex(cod:number){
+  this.carpetaContenido = [];
+  this.DocumentoContenido = [];
+
+  this.indexdbService.obtenerContenidoCarpetaDesdeIndexDB(cod)
+           .then(resultado =>{
+            console.log('Contenido a mostrar:', resultado);
+            this.carpetaContenido = resultado.carpetas;
+            this.DocumentoContenido = resultado.archivos;
+
+           })
+}
+
+
+  private async cargarCarpetasHijas(codigoCarpeta: number) {
+    console.log('Cargando carpetas hijas de la carpeta:', codigoCarpeta);
+    this.DocumentoContenido=[];
+    try {
+      const carpetasHijas: CarpetasPadre[] = await this.indexdbService.obtenerCarpetasHijas(codigoCarpeta);
+      // console.log('Carpetas hijas obtenidas:', carpetasHijas);
+      this.carpetaContenido = carpetasHijas;
     } catch (error) {
-      console.error(`[COMPONENTE] Error no capturado para carpeta ${codigoCarpeta}:`, error);
-      this.carpetaContenido = [];
-      this.DocumentoContenido = [];
+      console.log('Error al cargar las carpetas hijas:', error);
     }
   }
 
 
+  private async cargarContenidoUnificado(codigoCarpeta: number) {
 
+    await this.cargarCarpetasHijas(codigoCarpeta);
 
-  // private async cargarContenidoUnificado(codigoCarpeta: number) {
-  //   try {
-  //     await this.navegacionService.navigateToFolder(codigoCarpeta);
-  //     const { currentFolder, hierarchy } = this.navegacionService.getCurrentFolderContent();
-
-  //     if (currentFolder) {
-  //       const contenidoActual = hierarchy[codigoCarpeta] || { carpetas: [], archivos: [] };
-  //       this.carpetaContenido = contenidoActual.carpetas;
-  //       this.DocumentoContenido = contenidoActual.archivos;
-  //     }
-  //   } catch (error) {
-  //     console.error('Error en la carga unificada:', error);
-  //     this.carpetaContenido = [];
-  //     this.DocumentoContenido = [];
-  //   }
-  // }
-  // // Método para navegar a una carpeta
-  // async navegarACarpeta(codigoCarpeta: number) {
-  //   await this.cargarContenidoUnificado(codigoCarpeta);
-  // }
-
-  // // Método para volver a la carpeta anterior
-  // async volverACarpetaAnterior() {
-  //   if (this.navegacionService.canNavigateBack()) {
-  //     await this.navegacionService.navigateBack();
-  //     const parentId = this.navegacionService.getParentFolder();
-  //     if (parentId) {
-  //       await this.cargarContenidoUnificado(parentId);
-  //     }
-  //   }
-  // }
-
-  // // Método para obtener la ruta actual (útil para breadcrumbs)
-  // getRutaActual(): number[] {
-  //   return this.navegacionService.getCurrentPath();
-  // }
-
-
+  }
 
 
 

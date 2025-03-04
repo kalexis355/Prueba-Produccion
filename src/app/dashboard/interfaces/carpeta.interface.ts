@@ -236,3 +236,27 @@ export interface FolderNavigationState {
   currentFolder?: number;       // ID de la carpeta actual
   folderCache: Map<number, CarpetaBase & { contenido: (CarpetaBase | ArchivoGenericoExpediente)[] }>;  // Caché de carpetas
 }
+
+export interface ContenidoCarpetaResponse {
+  Cod: number;
+  CodSerie: number;
+  CodSubSerie: number;
+  Estado: boolean;
+  EstadoCarpeta: number;
+  NombreEstadoCarpeta: string;
+  Nombre: string;
+  Descripcion: string;
+  Copia: boolean;
+  CarpetaPadre: number;
+  NombreCarpetaPadre: string;
+  FechaCreacion: string;
+  IndiceElectronico: string;
+  Delegado: number;
+  TipoCarpeta: number;
+  NombreTipoCarpeta: string;
+  NivelVisualizacion: number;
+  NombreNivelVisualizacion: string;
+  SerieRaiz: number;
+  TipoNodo: string;
+  contenido: Array<CarpetaBase | ArchivoGenericoExpediente>;
+}

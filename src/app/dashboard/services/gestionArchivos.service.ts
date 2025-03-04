@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { environments2 } from '../../../environments/environments-dev';
 import { Documento, TipoArchivos } from '../interfaces/archivos.interface';
 import { catchError, map, Observable, of, Subject, tap } from 'rxjs';
+import { ArchivoGenericoExpediente } from '../interfaces/carpeta.interface';
 
 @Injectable({providedIn: 'root'})
 export class GestionArchivosService {
@@ -148,12 +149,15 @@ export class GestionArchivosService {
     //   });
     // }
 
-    crearArchivo(formData: FormData): Observable<any> {
+    crearArchivo(formData: FormData): Observable<
+    { status: 'progress', progress: number, loaded: number, total: number, type: 'upload' } |
+    { status: 'complete', response: ArchivoGenericoExpediente[] }> {
       return new Observable(observer => {
           const token = localStorage.getItem('token');
           const url = `${this.baseUrl2}/Api/Archivos`;
 
           const xhr = new XMLHttpRequest();
+          xhr.responseType = 'json';
 
           xhr.upload.onprogress = (event) => {
               if (event.lengthComputable) {
@@ -170,10 +174,11 @@ export class GestionArchivosService {
 
           xhr.onload = () => {
               if (xhr.status >= 200 && xhr.status < 300) {
-                this.notificarActualizacion()
+                // console.log('Respuesta del servidor:', xhr.response);
+                // this.notificarActualizacion()
                   observer.next({
                       status: 'complete',
-                      response: xhr.response
+                      response: xhr.response as (ArchivoGenericoExpediente[])
                   });
                   observer.complete();
               } else {

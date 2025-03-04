@@ -10,7 +10,8 @@
           <button class="btn btun"
 
                   [routerLink]="['/dashboard/carpeta',carpeta.Cod]"
-                  [state]="{ carpetaHija: carpeta }">
+                  [state]="{ carpetaHija: carpeta }"
+                  (click)="onCarpetaClick(carpeta)">
             <img class="mt-2" src="assets/imgs/carpeta-vacia2.png" alt="archivo" width="100" height="100">
             <h4 class="mt-2 mb-0 texto" [title]="carpeta.Nombre">{{carpeta.Nombre}}</h4>
           </button>
