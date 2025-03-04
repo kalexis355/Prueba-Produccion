@@ -37,7 +37,7 @@ export class IndexDbService {
   private dbPromise: Promise<IDBPDatabase<MyDB>>;
 
   constructor() {
-    this.dbPromise = openDB<MyDB>('MiBaseDeDatos', 1, {
+    this.dbPromise = openDB<MyDB>('MiBaseDeDatos', 2, {
       upgrade(db) {
         if (!db.objectStoreNames.contains('carpetas')) {
           db.createObjectStore('carpetas', { keyPath: 'Cod' });
