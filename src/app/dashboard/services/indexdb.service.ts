@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
-import { ArchivoGenericoExpediente, CarpetaBase, CarpetaEstructura, ContenidoCarpetaResponse } from '../interfaces/carpeta.interface';
+import { ArchivoGenericoExpediente, CarpetaBase, CarpetaEstructura, CarpetasPadre, ContenidoCarpetaResponse } from '../interfaces/carpeta.interface';
 
 interface MyDB extends DBSchema {
   carpetas: {
@@ -172,7 +172,7 @@ async validarCarpeta(codigoCarpeta: number): Promise<void> {
 }
 
 // Método para obtener carpetas hijas con más información de depuración
-async obtenerCarpetasHijas(codigoPadre: number): Promise<any[]> {
+async obtenerCarpetasHijas(codigoPadre: number): Promise<CarpetasPadre[] | CarpetaBase[]> {
   const db = await this.dbPromise;
   const carpetas = await db.getAll('carpetas');
 

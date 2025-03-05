@@ -719,7 +719,7 @@ obtenerContenidoCarpetaIndex(cod:number){
     console.log('Cargando carpetas hijas de la carpeta:', codigoCarpeta);
     this.DocumentoContenido=[];
     try {
-      const carpetasHijas: CarpetasPadre[] = await this.indexdbService.obtenerCarpetasHijas(codigoCarpeta);
+      const carpetasHijas: CarpetasPadre[] | CarpetaBase[] = await this.indexdbService.obtenerCarpetasHijas(codigoCarpeta);
       // console.log('Carpetas hijas obtenidas:', carpetasHijas);
       this.carpetaContenido = carpetasHijas;
     } catch (error) {
