@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
-import { ArchivoGenericoExpediente, CarpetaBase, CarpetaEstructura, CarpetasPadre, ContenidoCarpetaResponse } from '../interfaces/carpeta.interface';
+import { ArchivoGenericoExpediente, Carpeta, CarpetaBase, CarpetaEstructura, CarpetasPadre, ContenidoCarpetaResponse } from '../interfaces/carpeta.interface';
+import { Oficinas, RespuestaBackend, RespuestaOficinaCreada } from '../../login/interfaces/oficina.interface';
 
 interface MyDB extends DBSchema {
   carpetas: {
@@ -27,6 +28,10 @@ interface MyDB extends DBSchema {
     key: string;
     value: CarpetaBase | ArchivoGenericoExpediente; // Puede ser cualquiera de los dos tipos
   };
+  oficinas:{
+    key:string;
+    value: Oficinas;
+  }
 
 
 
@@ -37,7 +42,7 @@ export class IndexDbService {
   private dbPromise: Promise<IDBPDatabase<MyDB>>;
 
   constructor() {
-    this.dbPromise = openDB<MyDB>('MiBaseDeDatos', 2, {
+    this.dbPromise = openDB<MyDB>('MiBaseDeDatos', 3, {
       upgrade(db) {
         if (!db.objectStoreNames.contains('carpetas')) {
           db.createObjectStore('carpetas', { keyPath: 'Cod' });
@@ -49,6 +54,10 @@ export class IndexDbService {
 
         if (!db.objectStoreNames.contains('elementos')) {
           db.createObjectStore('elementos', { keyPath: 'Cod' });
+        }
+
+        if(!db.objectStoreNames.contains('oficinas')){
+          db.createObjectStore('oficinas',{keyPath:'Cod'})
         }
       },
     });
@@ -122,6 +131,27 @@ export class IndexDbService {
   async obtenerCarpetas() {
     const db = await this.dbPromise;
     return db.getAll('carpetas');
+  }
+
+  async obtenerCarpetaPorId(carpetaId: number): Promise<any > {
+    try {
+      // Obtener referencia a la base de datos
+      const db = await this.dbPromise;
+
+      // Obtener la carpeta por su ID
+      const carpeta = await db.get('carpetas', carpetaId);
+
+      if (carpeta) {
+        // console.log(`Carpeta encontrada con ID ${carpetaId}:`, carpeta);
+      } else {
+        console.log(`No se encontró carpeta con ID ${carpetaId}`);
+      }
+
+      return carpeta;
+    } catch (error) {
+      console.error(`Error al obtener carpeta con ID ${carpetaId}:`, error);
+      return undefined;
+    }
   }
 
   // Agregar este nuevo método
@@ -385,6 +415,54 @@ async carpetaExisteEnElementos(carpetaId: number): Promise<boolean> {
   } catch (error) {
     console.error(`Error al verificar si la carpeta ${carpetaId} existe:`, error);
     return false;
+  }
+}
+
+
+//Guardar oficinas en el indexdb
+// Guardar una oficina
+async guardarOficina(respuesta: RespuestaBackend): Promise<void> {
+  if (respuesta && respuesta[0]) {
+    // Acceder a la oficina
+    const oficina = respuesta[0].Oficina[0];
+
+    if (oficina) {
+      console.log('Oficina a guardar:', oficina);
+      const db = await this.dbPromise;
+      // Aquí podrías proceder a guardar la oficina en IndexedDB
+      await db.put('oficinas', oficina);
+      // console.log('Oficina guardada correctamente en IndexedDB');
+    }
+  }
+}
+
+async guardarOficinas(oficinas: Oficinas[]): Promise<void> {
+  const db = await this.dbPromise;
+  const tx = db.transaction('oficinas', 'readwrite');
+
+  // Guardar cada oficina en la transacción
+  await Promise.all(
+    oficinas.map(oficina => tx.store.put(oficina))
+  );
+
+  // Completar la transacción
+  await tx.done;
+}
+
+async obtenerOficinas(): Promise<Oficinas[]> {
+  try {
+    // Obtener referencia a la base de datos
+    const db = await this.dbPromise;
+
+
+    // Obtener todas las oficinas
+    const oficinas = await db.getAll('oficinas');
+    console.log(`Se obtuvieron ${oficinas.length} oficinas de IndexedDB`);
+
+    return oficinas;
+  } catch (error) {
+    console.error('Error al obtener oficinas de IndexedDB:', error);
+    return [];
   }
 }
 }

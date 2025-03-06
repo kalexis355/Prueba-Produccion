@@ -6,6 +6,8 @@ import { GestionOficinasService } from '../../services/gestionOficinas.service';
 import Swal from 'sweetalert2'
 import imageCompression from 'browser-image-compression';
 import { ActualizarOficinas, CrearOficina, Oficinas } from '../../../login/interfaces/oficina.interface';
+import { IndexDbService } from '../../services/indexdb.service';
+import { CrearCarpetaResponse } from '../../interfaces/carpeta.interface';
 
 
 @Component({
@@ -17,6 +19,7 @@ export class FormOficinaComponent implements OnInit,OnChanges {
   officeForm!: FormGroup;
   // public authService = inject(AuthService);
   public oficinaService = inject(GestionOficinasService)
+  private indexdbService = inject(IndexDbService)
 
   public oficinasCreadas:Oficinas[]=[]
   iconoBytes: number[] | null = null; // Cambiamos a tipo number[]
@@ -142,9 +145,18 @@ export class FormOficinaComponent implements OnInit,OnChanges {
       console.log(body,'body de crear');
 
       this.oficinaService.crearOficina(body).subscribe({
-        next: () => {
+        next: (oficinaCreada) => {
+
           Swal.fire('Éxito', 'Dependencia creada', 'success');
           this.oficinaService.actualizarOficinas();
+          this.indexdbService.guardarOficina(oficinaCreada)
+          .then(()=>{
+            console.log('coleccion oficinas actualizado');
+          })
+          .catch((error)=>{
+            console.log('error al actualizar coleccion oficinas');
+
+          })
           this.officeForm.reset();
         },
         error: (error) => {

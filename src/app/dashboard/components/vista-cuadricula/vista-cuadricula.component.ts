@@ -150,6 +150,23 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
 
     console.log(this.gestionCarpetaService.obtenerCaminoActual());
 
+    this.indexdbService.obtenerOficinas()
+    .then((oficinas)=>{
+      // console.log('oficinas obtenidas desde el index',oficinas);
+
+      this.indexdbService.obtenerCarpetaPorId(cod)
+      .then((carpetaObtenida)=>{
+        console.log('carpeta obtenida', carpetaObtenida);
+        const oficinaEncontrada = oficinas.find(oficina =>
+          oficina.CodigoSerie === carpetaObtenida.CodSerie
+        );
+        // console.log('oficina encontrada ',oficinaEncontrada);
+        if(oficinaEncontrada)
+        localStorage.setItem('idOficina',oficinaEncontrada?.Cod.toString())
+      })
+    })
+
+
   }
 
 

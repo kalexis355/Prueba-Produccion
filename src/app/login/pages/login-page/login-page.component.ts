@@ -1,12 +1,14 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { log } from 'console';
+import { error, log } from 'console';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { ValidatorsService } from '../../services/validators.service';
 //librerias de terceros
 import Swal from 'sweetalert2'
 import { Auth2Service } from '../../services/auth2.service';
+import { GestionOficinasService } from '../../../dashboard/services/gestionOficinas.service';
+import { IndexDbService } from '../../../dashboard/services/indexdb.service';
 
 @Component({
   selector: 'app-login-page',
@@ -21,6 +23,8 @@ export class LoginPageComponent {
   private authService = inject(AuthService);
   private authService2 = inject(Auth2Service)
   private router = inject(Router)
+  private oficinaService = inject(GestionOficinasService)
+  private indexdbService = inject(IndexDbService)
 
   // injecciones en el constructor
   constructor(private fb: FormBuilder,
@@ -94,6 +98,19 @@ export class LoginPageComponent {
           console.log(data, 'onLogin2');
 
           this.router.navigateByUrl('/dashboard')
+          this.oficinaService.obtenerOficinas().subscribe(
+            (oficinas)=>{
+              console.log('oficinas',oficinas);
+              this.indexdbService.guardarOficinas(oficinas)
+              .then(()=>{
+                console.log('oficinas guardadas');
+              })
+              .catch(error=>{
+                console.log('error al guardar las oficinas');
+
+              })
+            }
+          )
          } ,
         //si algo sale mal se incluye la propiedad error
         error:(message) =>{

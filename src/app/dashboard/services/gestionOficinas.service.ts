@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environments2 } from '../../../environments/environments-dev';
-import { ActualizarOficinas, CrearOficina, CrearOficinaResponse, Oficinas } from '../../login/interfaces/oficina.interface';
+import { ActualizarOficinas, CrearOficina, CrearOficinaResponse, Oficinas, RespuestaBackend, RespuestaOficinaCreada } from '../../login/interfaces/oficina.interface';
 import { BehaviorSubject, catchError, Observable, of, tap } from 'rxjs';
 import { error } from 'console';
 import { BorrarResponse } from '../../login/interfaces/proceso.interface';
@@ -31,7 +31,7 @@ export class GestionOficinasService {
   constructor() { }
 
 
-  crearOficina(bodyCrear:CrearOficina):Observable<CrearOficinaResponse>{
+  crearOficina(bodyCrear:CrearOficina):Observable<RespuestaBackend>{
     const token = localStorage.getItem('token')
 
     const url = `${this.baseUrl2}/Api/Oficinas?ByEntidad=true`;
@@ -42,7 +42,7 @@ export class GestionOficinasService {
     const body = bodyCrear
     console.log(body,'body a crear');
 
-    return this.http.post<CrearOficinaResponse>(url,body,{headers})
+    return this.http.post<RespuestaBackend>(url,body,{headers})
   }
 
   obtenerOficinas():Observable<Oficinas[]>{

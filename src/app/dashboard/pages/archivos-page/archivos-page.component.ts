@@ -673,6 +673,7 @@ export class ArchivosPageComponent implements OnInit, OnDestroy,OnChanges {
     }
 
 
+
   }
 
   public cargarContenidoDeCarpeta(carpeta: CarpetasPadre) {
