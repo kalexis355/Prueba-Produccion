@@ -1,0 +1,460 @@
+@import "../../../tokens.scss";
+
+.x-1--login_3-212 {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  gap: 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: $primary-main-background;
+  width: 1600px;
+}
+.fondo-colo{
+  background-color: #2e7895;
+}
+.x-98--login-v-1_3-213 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0px;
+  box-sizing: border-box;
+  width: -webkit-fill-available;
+}
+.group-1636_29-50740 {
+  width: 670px;
+  height: 850px;
+}
+.pexels-tiago-alves-710726839-19357343-1_12-45652 {
+  display: flex;
+}
+
+.frame-1484_29-50737 {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  gap: 222px;
+  box-sizing: border-box;
+  width: 477px;
+}
+.text-nublu_12-45655 {
+  color: $contrast-color;
+  font-size: 48px;
+  font-family: Inter;
+  line-height: 56px;
+  letter-spacing: 0px;
+  text-decoration: none;
+  font-weight: 700;
+  text-align: left;
+  height: 58px;
+  width: -webkit-fill-available;
+}
+
+.frame-1482_13-49382 {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  gap: 8px;
+  box-sizing: border-box;
+  width: -webkit-fill-available;
+}
+.text-m-s-del-70--de-las-empresas-pierden-tiempo-buscando-documentos--con-nublu--cada-archivo-est--donde-debe-estar-_13-49383 {
+  color: $contrast-color;
+  font-size: 32px;
+  line-height: 40px;
+  letter-spacing: 0.25px;
+  text-decoration: none;
+  text-align: left;
+  text-wrap: wrap;
+  width: -webkit-fill-available;
+}
+
+.frame-1483_12-45645 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 17px;
+  box-sizing: border-box;
+  height: 24px;
+  width: -webkit-fill-available;
+}
+.text-t-rminos-y-condiciones_12-45641 {
+  color: $contrast-color;
+  @include tipografia-body-1-text;
+  font-weight: 400;
+  text-align: left;
+  text-wrap: nowrap;
+}
+
+.text-pol-ticas-de-privacidad_12-45643 {
+  color: $contrast-color;
+  @include tipografia-body-1-text;
+  font-weight: 400;
+  text-align: left;
+  text-wrap: nowrap;
+}
+
+.frame-1422_3-332 {
+  padding: 0px 25px 0px 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 28px;
+  box-sizing: border-box;
+  border-radius: 56px 0px 0px 56px;
+  background: #ffffff;
+  width: 1011px;
+  height: 853px;
+}
+.frame-1478_4-421 {
+  padding: 0px 31px 0px 31px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 28px;
+  box-sizing: border-box;
+  width: 521px;
+}
+.frame-1482_12-59 {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  gap: 8px;
+  box-sizing: border-box;
+  width: -webkit-fill-available;
+}
+.text-bienvenido-a-nublu_3-336 {
+  color: $text-primary-color;
+  @include tipografia-h-4-text;
+  font-weight: 500;
+  text-align: center;
+  height: 32px;
+  width: -webkit-fill-available;
+}
+
+.text-gestione-sus-documentos-de-forma-segura-_12-58 {
+  color: $text-primary-color;
+  @include tipografia-subtitle-1-text;
+  font-weight: 400;
+  text-align: center;
+  text-wrap: wrap;
+  width: -webkit-fill-available;
+}
+
+.frame-1477_3-362 {
+  padding: 10px 13px 10px 13px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border-color: #c5c5c5;
+  border-style: solid;
+  border-width: 1px;
+  width: -webkit-fill-available;
+}
+.group-1516_4-420 {
+  display: flex;
+}
+.path-1853_3-366 {
+  display: flex;
+}
+
+.path-1854_3-367 {
+  display: flex;
+}
+
+.path-1855_3-368 {
+  display: flex;
+}
+
+.path-1852_3-365 {
+  display: flex;
+}
+
+.text-iniciar-sesi-n-con-google_3-369 {
+  color: $text-primary-color;
+  @include components-button-medium-text;
+  font-weight: 500;
+  text-align: left;
+  text-wrap: nowrap;
+}
+
+.frame-1479_3-370 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 13px;
+  box-sizing: border-box;
+  width: -webkit-fill-available;
+}
+.line-116_3-372 {
+  display: flex;
+}
+
+.text-ingrese-con-su-usuario_3-371 {
+  color: $text-primary-color;
+  font-size: 15px;
+  font-family: Open Sans;
+  letter-spacing: 0%;
+  text-decoration: none;
+  font-weight: 400;
+  text-align: left;
+  text-wrap: wrap;
+  width: -webkit-fill-available;
+}
+
+.line-117_3-373 {
+  display: flex;
+}
+
+.frame-1480_4-422 {
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border-color: #c5c5c5;
+  border-style: solid;
+  border-width: 1px;
+  width: -webkit-fill-available;
+}
+.text-usuario-o-correo-electr-nico_4-431 {
+  color: $text-disabled-color;
+  @include tipografia-subtitle-1-text;
+  font-weight: 400;
+  text-align: left;
+  text-wrap: nowrap;
+}
+
+.form_3-342 {
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border-color: #c5c5c5;
+  border-style: solid;
+  border-width: 1px;
+  width: -webkit-fill-available;
+}
+.text-contrase-a_3-344 {
+  color: $text-disabled-color;
+  @include tipografia-subtitle-1-text;
+  font-weight: 400;
+  text-align: left;
+  text-wrap: nowrap;
+}
+
+.eye-off-outline_3-345 {
+  display: flex;
+}
+.path-1500_3-346 {
+  display: flex;
+}
+
+.path-1501_3-347 {
+  display: flex;
+}
+
+.path-1502_3-348 {
+  display: flex;
+}
+
+.path-1503_3-349 {
+  display: flex;
+}
+
+.path-1504_3-350 {
+  display: flex;
+}
+
+.frame-1481_4-439 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 28px;
+  box-sizing: border-box;
+  width: -webkit-fill-available;
+}
+.form-checklist_3-354 {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 9px;
+  box-sizing: border-box;
+}
+.rectangle-263_3-356 {
+  display: flex;
+}
+.vector_3-357 {
+  display: flex;
+}
+
+.vector_3-358 {
+  display: flex;
+}
+
+.text-recordarme_3-355 {
+  color: $text-primary-color;
+  @include tipografia-body-1-text;
+  font-weight: 400;
+  text-align: left;
+  text-wrap: nowrap;
+}
+
+.text--olvid--su-contrase-a-_3-360 {
+  color: $primary-main-color;
+  @include tipografia-body-1-text;
+  font-weight: 400;
+  text-align: left;
+  text-wrap: nowrap;
+}
+
+.text--problemas-para-ingresar--cont-ctenos-para-recibir-ayuda-_3-361 {
+  @include tipografia-body-1-text;
+  font-weight: 400;
+  text-align: left;
+  text-wrap: nowrap;
+  // width: -webkit-fill-available;
+}
+
+.save-product_3-338 {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  background: $primary-main-background;
+  width: -webkit-fill-available;
+}
+.text-ingresar_3-341 {
+  color: $white-color;
+  @include components-button-large-text;
+  font-weight: 700;
+  text-align: left;
+  text-wrap: nowrap;
+}
+
+
+
+
+
+.butn:hover{
+  border: none;
+}
+.large-icon {
+  font-size: 48px; /* Ajusta el tamaño según tus necesidades */
+  width: 48px;
+  height: 48px;
+}
+
+.fondo{
+  /* background-color: rgba(201, 201, 201, 0.342); */
+  background-color: #d5eaeb;
+
+}
+
+.btn3{
+background-color: #84dcdf;
+font-size: 24px;
+border-bottom: 5px solid #2dcdd3;
+}
+
+.btn3:hover{
+  background-color: #a1dddf;
+}
+
+.olvido{
+  color: #2dcdd3;
+}
+
+.olvido:hover{
+  color: #03b5bb;
+}
+
+.card{
+  box-shadow: 1px 1px 12px 4px #a1dddf;
+}
+.form-check-input{
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+
+.form-check-label{
+  cursor: pointer;
+}
+
+
+
+
+
+@media (max-width: 960px) and (max-height: 540px) and (orientation: landscape) {
+
+  .olvido {
+font-size: 9px;
+  }
+  .olvido2 {
+    /* Cambia el tamaño del checkbox */
+    font-size: 12px;
+
+    /* Ajustes adicionales según tus necesidades */
+  }
+
+  .btn3{
+    font-size: 20px;
+  }
+}
+@media (max-width: 540px) and (max-height: 960px) and (orientation: portrait) {
+  .olvido {
+    font-size: 12px; /* Estilos específicos para dispositivos móviles en vertical */
+  }
+
+  .olvido2 {
+    font-size: 13px; /* Estilos específicos para el mat-checkbox en dispositivos móviles en vertical */
+    /* Ajustes adicionales según tus necesidades */
+  }
+}
+
+
+
+
+

@@ -13,7 +13,7 @@ import { IndexDbService } from '../../../dashboard/services/indexdb.service';
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
-  styleUrl: './login-page.component.css'
+  styleUrl: './login-page.component.scss'
 })
 export class LoginPageComponent {
   // propiedad de tipo FormGroup formulario reactivo
@@ -94,23 +94,26 @@ export class LoginPageComponent {
       this.authService2.login2(email,password)
       .subscribe({
         //si todo sale bien se llama la propiedad next
-         next: (data) =>{
+         next: (data ) =>{
           console.log(data, 'onLogin2');
+          if(data !== false){
+            console.log('holaaaa',data);
+            this.router.navigateByUrl('/dashboard')
+            this.oficinaService.obtenerOficinas().subscribe(
+              (oficinas)=>{
+                console.log('oficinas',oficinas);
+                this.indexdbService.guardarOficinas(oficinas)
+                .then(()=>{
+                  console.log('oficinas guardadas');
+                })
+                .catch(error=>{
+                  console.log('error al guardar las oficinas');
 
-          this.router.navigateByUrl('/dashboard')
-          this.oficinaService.obtenerOficinas().subscribe(
-            (oficinas)=>{
-              console.log('oficinas',oficinas);
-              this.indexdbService.guardarOficinas(oficinas)
-              .then(()=>{
-                console.log('oficinas guardadas');
-              })
-              .catch(error=>{
-                console.log('error al guardar las oficinas');
+                })
+              }
+            )
+          }
 
-              })
-            }
-          )
          } ,
         //si algo sale mal se incluye la propiedad error
         error:(message) =>{

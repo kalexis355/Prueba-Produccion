@@ -12,12 +12,12 @@ export class AuthInterceptor implements HttpInterceptor {
 
         if (error.status === 401) {
           console.log('Interceptor ejecutando logout por 401');
-
+          console.log('Condición de 401 cumplida');
           Swal.fire({
             title: 'Sesión expirada',
             text: 'Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.',
             icon: 'warning',
-            timer: 3000,
+            timer: 5000,
             showConfirmButton: false,
             timerProgressBar: true,
             allowOutsideClick: false

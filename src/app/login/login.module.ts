@@ -8,12 +8,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LayoutPageComponent } from './layouts/layout-page/layout-page.component';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { SharedModule } from '../shared/shared.module';
+import { RecuperaContrasenaComponent } from './pages/recupera-contrasena/recupera-contrasena.component';
 
 
 @NgModule({
   declarations: [
     LoginPageComponent,
-    LayoutPageComponent
+    LayoutPageComponent,
+    RecuperaContrasenaComponent
   ],
   imports: [
     CommonModule,
