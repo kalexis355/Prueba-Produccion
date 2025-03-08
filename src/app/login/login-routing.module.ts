@@ -12,7 +12,7 @@ const routes: Routes=[{
     {path:'sign-in', component:LoginPageComponent},
     {path:'recuperar', component:RecuperaContrasenaComponent},
     {path:'reiniciar',component:ReiniciarContrasenaComponent},
-    {path:'**',redirectTo:'reiniciar'}
+    {path:'**',redirectTo:'sign-in'}
   ]
 }]
 
