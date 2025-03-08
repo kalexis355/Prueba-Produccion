@@ -3,6 +3,7 @@ import { Route, RouterModule, Routes } from '@angular/router';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { LayoutPageComponent } from './layouts/layout-page/layout-page.component';
 import { RecuperaContrasenaComponent } from './pages/recupera-contrasena/recupera-contrasena.component';
+import { ReiniciarContrasenaComponent } from './pages/reiniciar-contrasena/reiniciar-contrasena.component';
 
 const routes: Routes=[{
   path:'',
@@ -10,7 +11,8 @@ const routes: Routes=[{
   children:[
     {path:'sign-in', component:LoginPageComponent},
     {path:'recuperar', component:RecuperaContrasenaComponent},
-    {path:'**',redirectTo:'sign-in'}
+    {path:'reiniciar',component:ReiniciarContrasenaComponent},
+    {path:'**',redirectTo:'reiniciar'}
   ]
 }]
 

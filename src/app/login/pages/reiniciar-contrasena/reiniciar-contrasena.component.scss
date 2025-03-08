@@ -1,0 +1,86 @@
+@import "../../../tokens.scss";
+
+
+.save-product_3-338 {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  background: $success-main-color;
+  width: -webkit-fill-available;
+}
+
+.text-nublu_12-45655 {
+  color: $contrast-color;
+  font-size: 48px;
+  font-family: Inter;
+  line-height: 56px;
+  letter-spacing: 0px;
+  text-decoration: none;
+  font-weight: 700;
+  text-align: left;
+  height: 58px;
+  width: -webkit-fill-available;
+}
+
+.frame-1482_13-49382 {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  gap: 8px;
+  box-sizing: border-box;
+  width: -webkit-fill-available;
+}
+.text-m-s-del-70--de-las-empresas-pierden-tiempo-buscando-documentos--con-nublu--cada-archivo-est--donde-debe-estar-_13-49383 {
+  color: $contrast-color;
+  font-size: 32px;
+  line-height: 40px;
+  letter-spacing: 0.25px;
+  text-decoration: none;
+  text-align: right;
+  text-wrap: wrap;
+  width: -webkit-fill-available;
+}
+.frame-1483_12-45645 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 17px;
+  box-sizing: border-box;
+  height: 24px;
+  width: -webkit-fill-available;
+}
+.text-t-rminos-y-condiciones_12-45641 {
+  color: $contrast-color;
+  @include tipografia-body-1-text;
+  font-weight: 400;
+  text-align: left;
+  text-wrap: nowrap;
+  text-decoration: underline;
+}
+
+.text-pol-ticas-de-privacidad_12-45643 {
+  color: $contrast-color;
+  @include tipografia-body-1-text;
+  font-weight: 400;
+  text-align: left;
+  text-wrap: nowrap;
+  text-decoration: underline;
+}
+.text-bienvenido-a-nublu_3-336 {
+  color: $text-primary-color;
+  @include tipografia-h-4-text;
+  font-weight: 500;
+  text-align: center;
+  height: 32px;
+  width: -webkit-fill-available;
+}

@@ -1,0 +1,64 @@
+<div class="container-fluid  vh-100" style="font-family: Inter ; background-color: #51cc28;">
+  <div class="row h-100">
+    <div class="col-7 d-flex justify-content-center align-items-center " style="background-color: white; border-top-right-radius: 6%; border-bottom-right-radius: 6%;">
+      <div class="d-flex flex-column" style="width: 55%;">
+        <span class="text-bienvenido-a-nublu_3-336 mb-3 ">Reiniciar contraseña</span>
+
+
+        <!-- <input type="text" class="form-control placeholder-gris mb-3" placeholder="Correo electrónico"> -->
+        <mat-form-field appearance="outline" class="w-100 custom-outline-field">
+
+          <mat-label> Nueva contraseña</mat-label>
+          <input matInput [type]="hide() ? 'password' : 'text'" formControlName="password" class="" />
+          <button class="btn butn" type="button" matSuffix (click)="clickEvent($event)"
+            [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide()">
+            <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100 custom-outline-field">
+
+          <mat-label> Confirmar contraseña</mat-label>
+          <input matInput [type]="hide2() ? 'password' : 'text'" formControlName="password" class="" />
+          <button class="btn butn" type="button" matSuffix (click)="clickEvent2($event)"
+            [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide2()">
+            <mat-icon>{{hide2() ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-hint class="text-danger" *ngIf="isValidField('password')">No es la misma contraseña</mat-hint>
+        </mat-form-field>
+
+        <button class="save-product_3-338 " routerLink="/auth/sign-in"  style="border: none;">
+          <span class="text-ingresar_3-341">Recuperar</span>
+        </button>
+
+        <span class="text-recordarme_3-355 mt-3 text-center">
+          ¿Recordaste tu contraseña? Inicia sesión <a routerLink="/auth/sign-in" style="color: #51cc28;">aquí</a>.</span>
+      </div>
+
+
+
+    </div>
+    <div class="col-5  position-relative"
+      style="border-top-left-radius: 6%; border-bottom-left-radius: 6%; background-color: #51cc28;">
+      <div class=" d-flex flex-column align-items-end " style=" gap: 160px; z-index: 1;">
+        <div class="" style="padding-top: 7%; margin-right: 7%;">
+          <h1 class="text-nublu_12-45655">NUBLU</h1>
+        </div>
+
+        <div class="frame-1482_13-49382" style="width: 75%; margin-right: 7%; ">
+          <span
+            class="text-m-s-del-70--de-las-empresas-pierden-tiempo-buscando-documentos--con-nublu--cada-archivo-est--donde-debe-estar-_13-49383"><span
+              class="fw-bold">Una constraseña segura es su mejor defensa.</span> Establezca
+              una nueva y vuelva a la acción.</span>
+        </div>
+
+        <div class="frame-1483_12-45645" style="margin-left: 15%;">
+          <a class="text-t-rminos-y-condiciones_12-45641">
+            Términos y condiciones</a>
+          <a class="text-pol-ticas-de-privacidad_12-45643" style="margin-right: 7%;">
+            Políticas de privacidad</a>
+        </div>
+
+
+      </div>
+    </div>
+  </div>

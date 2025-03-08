@@ -9,13 +9,15 @@ import { LayoutPageComponent } from './layouts/layout-page/layout-page.component
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { SharedModule } from '../shared/shared.module';
 import { RecuperaContrasenaComponent } from './pages/recupera-contrasena/recupera-contrasena.component';
+import { ReiniciarContrasenaComponent } from './pages/reiniciar-contrasena/reiniciar-contrasena.component';
 
 
 @NgModule({
   declarations: [
     LoginPageComponent,
     LayoutPageComponent,
-    RecuperaContrasenaComponent
+    RecuperaContrasenaComponent,
+    ReiniciarContrasenaComponent
   ],
   imports: [
     CommonModule,
