@@ -10,7 +10,7 @@ const routes: Routes=[{
   children:[
     {path:'sign-in', component:LoginPageComponent},
     {path:'recuperar', component:RecuperaContrasenaComponent},
-    {path:'**',redirectTo:'recuperar'}
+    {path:'**',redirectTo:'sign-in'}
   ]
 }]
 
