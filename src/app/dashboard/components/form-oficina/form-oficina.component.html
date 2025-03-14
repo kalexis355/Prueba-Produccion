@@ -1,37 +1,91 @@
 <app-loader-personalizado></app-loader-personalizado>
 <div class="container-fluid ">
   <div class="row h-100 d-flex justify-content-center align-items-center ">
-    <div class="col-9   " style="height: 550px; display: flex; flex-direction: column; justify-content: center;">
-      <h1 class="text-center fs-3 mt-4">
-       {{esModoEdicion ? 'Editar dependencia': 'Crear Nueva dependencia'}}
-      </h1>
+    <div class="col-12   " style="height: 550px; display: flex; flex-direction: column; justify-content: center;">
+      <span class="text-center mt-4 crear-editar">
+       {{esModoEdicion ? 'EDITAR DEPENDENCIA': 'CREAR NUEVA DEPENDENCIA'}}
+      </span>
+      <span class="text-center descripcion ">
+        {{esModoEdicion ? 'Ingrese la información de creación de una dependencia':
+         'Ingrese la información para editar una dependencia'}}
+      </span>
       <form [formGroup]="officeForm" (ngSubmit)="onSubmit()">
-        <!-- Nombre de la oficina -->
-         <div class="mb-3">
-          <label class="form-label">Nombre de la Dependencia:</label>
-          <input class="form-control" formControlName="nombre" type="text" required />
-         </div>
+        <div class="d-flex justify-content-between mt-3">
+          <!-- Nombre de la oficina -->
+           <!-- <div class="mb-3">
+            <label class="form-label nombre-dependendicia">Nombre de la Dependencia:</label>
+            <input class="form-control" formControlName="nombre" type="text" required />
+           </div> -->
 
-         <!-- Numero de serie de la oficina -->
-         <div class="mb-3">
-          <label class="form-label">Codigo de serie </label>
-          <input type="number" formControlName="codigoSerie" class="form-control" required>
-         </div>
+           <!-- Numero de serie de la oficina -->
+           <!-- <div class="input-container">
+            <label class="">Codigo de serie </label>
+            <input type="number" formControlName="codigoSerie" class="" required>
+           </div> -->
+           <div class="col-6 d-flex justify-content-center mt-2">
+            <mat-form-field appearance="outline"  style="width: 95%;">
+              <mat-label>Número de la dependencia</mat-label>
+              <input type="number" matInput  formControlName="codigoSerie" style="color: #65677A;"/>
+            </mat-form-field>
+          </div>
+           <div class="col-6 d-flex justify-content-center mt-2">
+            <mat-form-field appearance="outline" class="" style="width: 95%;">
 
-         <div class="mb-3 d-flex">
-          <label class="form-label me-3">Estado Dependencia</label>
-          <mat-slide-toggle formControlName="estado"></mat-slide-toggle>
+              <mat-label>Nombre de la dependencia</mat-label>
+              <input matInput  formControlName="nombre" style="color: #65677A;"/>
+            </mat-form-field>
+          </div>
+
+
+        </div>
+        <div class="col-12 d-flex justify-content-center">
+          <mat-form-field appearance="outline" class="" style="width: 98%;">
+            <mat-label>Unidad Administrativa</mat-label>
+            <input matInput style="color: #65677A;"/>
+          </mat-form-field>
         </div>
 
-        <div class="mb-3" *ngIf="esModoEdicion && oficinaAEditar?.Icono">
+        <span class="ajustes-opcionales ms-3">Ajustes opcionales</span>
+
+        <div class="d-flex ms-3 mt-3  align-items-center">
+          <span class="estado">Estado</span>
+          <div class="form-check form-switch ms-5">
+            <mat-slide-toggle class="toogle"  formControlName="estado"></mat-slide-toggle>
+          </div>
+        </div>
+
+        <div class=" ms-3 mt-4 contenedor-usuarios mb-5">
+          <span class="ajustes-opcionales ms-2 " >Usuarios con acceso</span>
+          <div class="d-flex justify-content-between align-items-center mb-5 ">
+            <button type="button" class="align-items-center d-flex btn-exportar ms-2 mt-2">
+              <mat-icon style="color: #6D788D;">ios_share_outlined</mat-icon>
+              <span class="exportar">EXPORTAR</span>
+            </button>
+            <div class="d-flex">
+              <input type="text" class=" buscar-usuario" placeholder="Buscar usuario">
+              <button type="button" class="btn-añadir-usuario">
+                AÑADIR USUARIO
+              </button>
+            </div>
+
+          </div>
+        </div>
+        <!-- <input class="form-check-input" type="checkbox" role="switch" formControlName="estado" id="flexSwitchCheckChecked" checked> -->
+
+         <!-- <div class="mb-3 d-flex">
+          <label class="form-label me-3">Estado Dependencia</label>
+          <mat-slide-toggle formControlName="estado"></mat-slide-toggle>
+        </div> -->
+
+        <!-- <div class="mb-3" *ngIf="esModoEdicion && oficinaAEditar?.Icono">
           <label class="form-label">Icono Elegido</label>
           <div >
             <img [src]=" 'data:image/png;base64,' + oficinaAEditar?.Icono" alt="Icono actual" width="100" height="100">
           </div>
-        </div>
+        </div> -->
 
 
-         <div class="mb-3">
+         <!-- <div class="mb-3">
           <label class="form-label">Icono (Opcional)</label>
           <label class="btn btun2 rounded-pill d-flex align-items-center">
             <i class="fa-solid fa-icons"></i>
@@ -39,13 +93,13 @@
 
             <input type="file" formControlName="icono" (change)="onFileSelected($event)"  accept="image/png, image/jpeg, image/jpg" style="display: none;">
           </label>
-         </div>
+         </div> -->
 
          <!-- Botones -->
          <div class="d-flex justify-content-end">
-          <button type="button" class="btn btn-secondary me-2" (click)="cancelar()">Cancelar</button>
-          <button type="submit" *ngIf="esModoEdicion===false" [disabled]="estaCreando" class="btn btn-primary " >{{ estaCreando ? 'Creando...' : 'Crear Oficina' }}</button>
-          <button *ngIf="esModoEdicion===true" [disabled]="estaEditando" type="submit" class="btn btn-primary" >{{estaEditando? 'Editando...': 'Editar Oficina'}}</button>
+          <button type="button" class="btn btn-cancelar me-2" (click)="cancelar()">CANCELAR</button>
+          <button type="submit" *ngIf="esModoEdicion===false" [disabled]="estaCreando" class="btn btn-crear " >{{ estaCreando ? 'Creando...' : 'CREAR OFICINA' }}</button>
+          <button *ngIf="esModoEdicion===true" [disabled]="estaEditando" type="submit" class="btn btn-crear" >{{estaEditando? 'Editando...': 'EDITAR OFICINA'}}</button>
         </div>
 
       </form>

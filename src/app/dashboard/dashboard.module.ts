@@ -49,6 +49,7 @@ import { SharedModule } from '../shared/shared.module';
 import { DialogoDetallesArchivosComponent } from './components/dialogo-detalles-archivos/dialogo-detalles-archivos.component';
 import { MenuContextualArchivosComponent } from './components/menu-contextual-archivos/menu-contextual-archivos.component';
 import { DetallesArchivosComponent } from './components/detalles-archivos/detalles-archivos.component';
+import { DashboardMigradoComponent } from './layouts/dashboard-migrado/dashboard-migrado.component';
 
 @NgModule({
   declarations: [
@@ -91,6 +92,7 @@ import { DetallesArchivosComponent } from './components/detalles-archivos/detall
     DialogoDetallesArchivosComponent,
     MenuContextualArchivosComponent,
     DetallesArchivosComponent,
+    DashboardMigradoComponent,
 
   ],
   imports: [

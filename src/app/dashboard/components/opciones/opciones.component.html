@@ -2,11 +2,86 @@
 
 <div class="container">
   <ul class="list-group list-unstyled ps-3 py-3 me-2">
-    <li class="item" routerLinkActive="active">
-      <a href="" routerLink="principal" (click)="borrarTodaRuta()">
-        <img src="assets/imgs/casa.png" alt=""> Pagina principal
+
+    <li class="item align-content-center" routerLink="active">
+      <a  class="a-tablero-inicial">
+        <mat-icon class="" style="color: #475767; ">dashboard</mat-icon>
+        <span class="ps-2 tablero-inicio">Tablero de inicio</span>
       </a>
     </li>
+
+    <li class="item mt-3">
+      <a class="a-tablero-inicial">
+        <mat-icon style="color: #475767;">person_outline</mat-icon>
+        <span class="ps-2 tablero-inicio">Perfil personal</span>
+      </a>
+    </li>
+
+    <span class="mt-4 gestion-documental" style="color: #475767ae ;">Gestión Documental</span>
+
+    <li class="item mt-3" routerLinkActive="active">
+      <a class="a-tablero-inicial" routerLink="principal" (click)="borrarTodaRuta()">
+        <mat-icon style="color: #475767;">workspaces</mat-icon>
+        <span class="ps-2 tablero-inicio">Oficinas</span>
+      </a>
+    </li>
+
+    <li class="item mt-3">
+      <a class="a-tablero-inicial">
+        <mat-icon style="color: #475767;">folder_open</mat-icon>
+        <span class="ps-2 tablero-inicio">Expedientes</span>
+      </a>
+    </li>
+
+    <li class="item mt-3" routerLinkActive="active" *ngIf="rolAdminSa()">
+      <a class="a-tablero-inicial" routerLink="gestion" >
+        <mat-icon>room_preferences</mat-icon>
+        <span class="ps-2 tablero-inicio">Gestion administrativa</span>
+      </a>
+    </li>
+
+
+    <span class="mt-4 gestion-documental" style="color: #475767ae ;">Firma y seguridad</span>
+
+    <li class="item mt-3">
+      <a class="a-tablero-inicial">
+        <mat-icon class="material-icons-outlined" style="color: #475767;">edit_outline</mat-icon>
+        <span class="ps-2 tablero-inicio">Firma electrónica</span>
+      </a>
+    </li>
+
+    <li class="item mt-3">
+      <a class="a-tablero-inicial">
+        <mat-icon class="" style="color: #475767; width: 20%;">update</mat-icon>
+        <span class="ps-2 tablero-inicio">Trazabilidad de documentos</span>
+      </a>
+    </li>
+
+    <span class="mt-4 gestion-documental" style="color: #475767ae ;">Ajustes</span>
+
+    <li class="item mt-3">
+      <a class="a-tablero-inicial">
+        <mat-icon class="material-icons-outlined" style="color: #475767;">manage_accounts</mat-icon>
+        <span class="ps-2 tablero-inicio">Usuarios y roles</span>
+      </a>
+    </li>
+
+    <li class="item mt-3">
+      <a class="a-tablero-inicial">
+        <mat-icon class="material-icons-outlined" style="color: #475767;">settings</mat-icon>
+        <span class="ps-2 tablero-inicio">Configuración</span>
+      </a>
+    </li>
+
+    <li class="item mt-3">
+      <a class="a-tablero-inicial">
+        <mat-icon class="" style="color: #475767;">fact_check</mat-icon>
+        <span class="ps-2 tablero-inicio">Auditoria</span>
+      </a>
+    </li>
+
+
+
     <!-- <li class="item">
       <div class="list-group">
         <a href="#item1" class="" data-bs-toggle="collapse" aria-expanded="false" (click)="setActive()">
@@ -23,16 +98,13 @@
       </div>
     </div> -->
     <!-- *ngIf="rolAdministrador()"  -->
-    <li class="item" routerLinkActive="active" *ngIf="rolAdminSa()">
-      <a routerLink="gestion" >
-        <img src="assets/imgs/gestion.png" alt="Gestion" height="25"> Gestion administrativa
-      </a>
-    </li>
-    <li class="item">
+
+    <!-- <li class="item">
       <a  (click)="onLogout()">
         <img src="assets/imgs/cerrado.png" alt=""> Cerrar sesión
       </a>
-    </li>
+    </li> -->
+
   </ul>
 </div>
 

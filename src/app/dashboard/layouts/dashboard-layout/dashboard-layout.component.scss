@@ -1,7 +1,8 @@
 @import "../../../tokens.scss";
 
 .fondo{
-  background-color: #dee0e0;
+  // background-color: #dee0e0;
+  background-color: #ffff;
 
 }
 
@@ -33,7 +34,7 @@
 }
 
 .bord{
-  background-color: rgba(243, 243, 243, 0.473);
+  background-color: rgb(243, 243, 243);
 }
 
 
@@ -90,8 +91,6 @@
     transform: rotate(360deg);
   }
 }
-.nublu{
-  font-family: Inter;
-  font-size: 40px;
-  
-}
+
+
+

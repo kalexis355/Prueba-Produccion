@@ -158,7 +158,9 @@ export class IndexDbService {
 async obtenerCarpetasPadre() {
   const db = await this.dbPromise;
   const carpetas = await db.getAll('carpetas');
-  return carpetas.filter(carpeta => carpeta.CarpetaPadre === 0);
+  const carpetasPadres=carpetas.filter(carpeta => carpeta.CarpetaPadre === 0);
+  console.log(carpetasPadres,'carpetas=0');
+  return carpetasPadres;
 }
 
 async validarCarpeta(codigoCarpeta: number): Promise<void> {

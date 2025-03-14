@@ -80,7 +80,22 @@ export class FormOficinaComponent implements OnInit,OnChanges {
 
 
 
-      if ( !this.esModoEdicion) {
+      if (!this.iconoBytes && !this.esModoEdicion) {
+        Swal.fire({
+          title: '¿No desea elegir un Icono?',
+          text: 'No podrás revertir esta acción',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Sí, confirmar',
+          cancelButtonText: 'Cancelar'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.crearOActualizarOficina()
+          }
+        });
+      } else {
         this.crearOActualizarOficina()
       }
 
@@ -110,7 +125,7 @@ export class FormOficinaComponent implements OnInit,OnChanges {
         Estado: estado,
         Entidad: this.oficinaAEditar.Entidad,
         CodigoSerie: codigoSerie,
-        Icono: this.iconoBytes!  // Usa el nuevo icono si existe, de lo contrario usa el actual
+        Icono: this.iconoBytes || this.convertirBase64ABits(this.oficinaAEditar.Icono!)  // Usa el nuevo icono si existe, de lo contrario usa el actual
       }
       console.log('bodyActualizar',bodyActualizar);
 
@@ -159,7 +174,102 @@ export class FormOficinaComponent implements OnInit,OnChanges {
       });
     }
 
+
+
   }
+
+  convertirBase64ABits(base64: string): number[] {
+
+    // Verifica si el Base64 incluye el prefijo 'data:image/png;base64,' y elimínalo si es necesario
+    const base64SinPrefijo = base64.includes(",") ? base64.split(",")[1] : base64;
+
+    try {
+      // Decodifica el string Base64 a una cadena binaria
+      const binaryString = atob(base64SinPrefijo);
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+
+      // Llena el Uint8Array con los valores de cada carácter en la cadena binaria
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+
+      // Convierte `Uint8Array` a un arreglo de `number[]`
+      return Array.from(bytes);
+    } catch (error) {
+      console.error("Error al decodificar Base64:", error);
+      return []; // Devuelve un arreglo vacío en caso de error
+    }
+  }
+
+  // onFileSelected(event: Event) {
+  //   const input = event.target as HTMLInputElement;
+  //   if (input.files && input.files[0]) {
+  //     const file = input.files[0];
+  //     const reader = new FileReader();
+
+
+
+  //     reader.onload = () => {
+  //       // `result` es un ArrayBuffer que contiene los datos binarios del archivo
+  //       const arrayBuffer = reader.result as ArrayBuffer;
+
+  //       // Convierte ArrayBuffer a Uint8Array (arreglo de bytes)
+  //       const byteArray = new Uint8Array(arrayBuffer);
+
+  //       // Imprime el arreglo de bytes en la consola para verificar
+  //       this.iconoBytes = Array.from(byteArray); // Convertimos Uint8Array a number[]
+  //       console.log(this.iconoBytes, 'ArregloBits');
+
+  //       // Puedes enviar `byteArray` al backend o procesarlo como necesites
+  //     };
+
+  //     reader.readAsArrayBuffer(file);
+  //   }
+  // }
+  async onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+
+      // Opciones de compresión
+      const options = {
+        maxSizeMB: 1, // Tamaño máximo después de comprimir (1MB)
+        maxWidthOrHeight: 800, // Máxima dimensión permitida
+        useWebWorker: true,
+      };
+
+      try {
+        // Comprimir la imagen
+        const compressedFile = await imageCompression(file, options);
+        console.log('Tamaño original:', file.size / 1024 / 1024, 'MB');
+        console.log('Tamaño comprimido:', compressedFile.size / 1024 / 1024, 'MB');
+
+        // Convertir a ArrayBuffer
+        const reader = new FileReader();
+        reader.onload = () => {
+          const arrayBuffer = reader.result as ArrayBuffer;
+          const byteArray = new Uint8Array(arrayBuffer);
+          this.iconoBytes = Array.from(byteArray);
+          console.log('Imagen comprimida convertida a bytes:', this.iconoBytes.length);
+        };
+
+        reader.readAsArrayBuffer(compressedFile);
+
+        // Opcional: Mostrar preview de la imagen
+        const previewReader = new FileReader();
+        previewReader.onload = () => {
+          this.iconoPrevisualizacion = previewReader.result as string;
+        };
+        previewReader.readAsDataURL(compressedFile);
+
+      } catch (error) {
+        console.error('Error al comprimir la imagen:', error);
+        Swal.fire('Error', 'No se pudo procesar la imagen', 'error');
+      }
+    }
+  }
+
 
 
   cancelar(){

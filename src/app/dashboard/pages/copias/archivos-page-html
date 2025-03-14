@@ -1,5 +1,5 @@
-<div class="container-fluid d-flex flex-column " style="height: 90% !important;">
-  <div class="d-flex justify-content-between mt-3 ">
+<div class="container-fluid d-flex flex-column h-100 overflow-x-hidden overflow-y-auto contenedor">
+
     <div class="row w-100 position-relative">
       <!-- Loader centralizado -->
       <app-loader-personalizado class="position-absolute"></app-loader-personalizado>
@@ -16,10 +16,10 @@
         <ng-container >
           <div class="d-flex gap-3 align-items-center me-3">
 
-            <!-- <app-btn-subir-archivo *ngIf="puedeSubirArchivos"
+            <app-btn-subir-archivo *ngIf="puedeSubirArchivos"
               [carpetaId]="id"
               [mostrarBoton]="NoEsSerieOSubserie">
-            </app-btn-subir-archivo> -->
+            </app-btn-subir-archivo>
 
             <div *ngIf="puedeCrearCarpetas">
               <dashboard-btn-mas [noEsSerieOSubserie]="NoEsSerieOSubserie"></dashboard-btn-mas>
@@ -29,34 +29,32 @@
         </ng-container>
       </div>
     </div>
-  </div>
-
-  <div class="flex-grow-1 overflow-x-hidden contenedor  mt-4" style="height: 50px; overflow-y: auto;">
-    <div class=" col-12" *ngIf="carpetaContenido.length === 0 && DocumentoContenido.length === 0">
+    <!--  -->
+    <div class="bg-danger" *ngIf="carpetaContenido.length === 0 && DocumentoContenido.length === 0">
       <div class="col-12 d-flex justify-content-center mt-5">
         <img src="assets/imgs/vacia.png" alt="imagen Vacia" height="300" width="400">
       </div>
+
       <h3 class="d-flex justify-content-center texto3">La carpeta esta vacia</h3>
     </div>
 
-      <div class="">
-      <app-carpetas-contenido
-      [carpetas]="carpetaContenido"
-      [rolesUsuario]="rolesUsuario"
-      (contextMenu)="mostrarMenuContextual($event.event, $event.cod)"
-      (carpetaClick)="manejarCarpetaClick($event)">
-      </app-carpetas-contenido>
-    </div>
 
-      <div class="">
-        <app-archivos-contenido
-        [archivos]="DocumentoContenido">
-        </app-archivos-contenido>
-      </div>
+    <app-carpetas-contenido
+    [carpetas]="carpetaContenido"
+    [rolesUsuario]="rolesUsuario"
+    (contextMenu)="mostrarMenuContextual($event.event, $event.cod)"
+    (carpetaClick)="manejarCarpetaClick($event)">
+  </app-carpetas-contenido>
 
-  </div>
-</div>
-  <!-- Menú contextual -->
+
+  <app-archivos-contenido
+  [archivos]="DocumentoContenido"
+  >
+</app-archivos-contenido>
+
+
+
+    <!-- Menú contextual -->
     <app-menu-contextual
       [visible]="menuVisible"
       [posX]="menuPosX"
@@ -81,3 +79,9 @@
     <app-detalles-carpeta
     [carpetaSeleccionada]="carpetaSeleccionada">
     </app-detalles-carpeta>
+
+
+    <!-- carpetas opciones -->
+<!--     [hayCarpetaSeleccionada]="hayCarpetaSeleccionada"
+    [carpetaParaCortar]="carpetaParaCortar"
+    [carpetaParaCopiar]="carpetaParaCopiar" -->

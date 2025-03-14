@@ -43,6 +43,16 @@ export interface Oficinas {
   Entidad: number;
   CodigoSerie: number;
   Icono?: string;
+
+    CodSerie?: number;
+    CodSubSerie?: number;
+
+    CarpetaPadre?: number;
+    FechaCreacion?: string;
+    Delegado?: number;
+    TipoCarpeta?: number;
+    NivelVisualizacion?: number;
+    SerieRaiz?: number;
 }
 
 // Interfaz para la estructura de Carpeta

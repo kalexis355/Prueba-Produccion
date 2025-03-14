@@ -53,6 +53,7 @@ import { LoaderService } from './gestionLoader.service';
 import { IndexDbService } from './indexdb.service';
 import * as pako from 'pako';
 import { openDB } from 'idb';
+import { GestionOficinasService } from './gestionOficinas.service';
 interface MixedItem {
   Cod: number;
   Nombre: string;
@@ -71,6 +72,7 @@ export class GestionCarpetasService implements OnDestroy {
   private http = inject(HttpClient);
   private loaderService = inject(LoaderService);
   private indexService = inject(IndexDbService);
+  private gestionOficinas = inject(GestionOficinasService)
 
   private readonly baseUrl2: string = environments2.baseUrl;
 
@@ -239,6 +241,8 @@ export class GestionCarpetasService implements OnDestroy {
   }
 
   ObtenerYMostrarGzip(): Observable<CarpetaEstructura> {
+    console.log('acabas de entrar');
+
     const token = localStorage.getItem('token');
     const url = `${this.baseUrl2}/Api/Carpetas?EstructuraDocumental=true`;
     // console.log('consumiendo el primer endpoint');
@@ -267,7 +271,9 @@ export class GestionCarpetasService implements OnDestroy {
             // Usar el nuevo método selectivo de guardarCarpetas
             this.indexService
               .guardarCarpetas(jsonData.estructura_documental)
-              .then(() => console.log('Carpetas actualizadas selectivamente'))
+              .then(() => {
+                this.gestionOficinas.actualizarOficinas()
+              })
               .catch((err) =>
                 console.error('Error actualizando carpetas:', err)
               );

@@ -1,56 +1,58 @@
+<div class="container">
+  <div class="table-responsive mt-3 table-bordered">
+    <table class="table">
+      <thead class="">
+        <tr class="cabecera ">
+          <th style="width: 10%"></th>
+          <th style="width: 20%">Oficina</th>
+          <th style="width: 10%">Exp. Activos</th>
+          <th style="width: 10%">Documentos</th>
+          <th style="width: 10%">Usuarios</th>
+          <th style="width: 15%">Últ. Modif.</th>
+          <th style="width: 10%">Estado</th>
+          <th style="width: 15%">Acciones</th>
+        </tr>
+      </thead>
+      <tbody >
 
-
-
-<div class="container"  >
-  <div class="row">
-    <div class="col-1">
-      {{carpetasSeleccionadas?.length}}
-    </div>
-    <div class="col-2">
-      <h1>Nombre</h1>
-    </div>
-    <!-- <div class="col-4 text-center">
-      <h1>Creador</h1>
-    </div> -->
-    <!-- <div class="col-5 text-center">
-      <h1>Fecha Creación</h1>
-    </div> -->
-    <hr>
-    <div *ngFor="let carpeta of carpetasActivas" >
-
-      <!-- <app-arrastrar-soltar [carpetaIdFocu]="carpeta.id"> -->
-<!--                     [checked]="ischecked(carpeta.id)"
-                    (change)="toggleCheckbox(carpeta.id)" -->
-<!-- [ngClass]="{ 'selected-border': ischecked(carpeta.id) }" -->
-          <div class="row " >
-            <div class="col-1">
-              <input type="checkbox"  class="form-check-input"
->
+        <tr  *ngFor="let carpeta of oficinasFiltradas; let i=index">
+          <td>
+            <div [routerLink]="['/dashboard/carpeta',carpeta.Cod]"
+            (click)="clicCarpeta(carpeta.Cod)"
+             class="busines me-2" [ngStyle]="{'background-color': getColor3(i), 'color': getColor(i)}">
+              <mat-icon >business</mat-icon>
             </div>
-            <div class="col-2 text-truncate d-flex align-items-center">
-              <a [routerLink]="['/dashboard/carpeta',carpeta.Cod]" class="etiqueta d-flex">
-                <img class="me-2" [src]="'data:image/png;base64,' + carpeta.Icono" alt="carpeta" width="25" height="25">
-                <span [title]="carpeta.Nombre" class="texto">{{carpeta.Nombre}}</span>
-              </a>
+          </td>
+          <td class="text-truncate" style="max-width: 50px;">
+            <span [title]="carpeta.Nombre" class="texto">{{carpeta.Nombre}}</span>
+          </td>
+          <td>
+            <span class="texto">10</span>
+          </td>
+          <td>
+            <span class="texto">250</span>
+          </td>
+          <td>
+            <span class="texto">10</span>
+          </td>
+          <td>
+            <span class="texto">Hace 2 días</span>
+          </td>
+          <td>
+            <div class="activa-desactiva col-7 text-center">
+              <span>Activa</span>
+            </div>
+          </td>
+          <td>
+            <div class="d-flex justify-content-center">
+              <mat-icon class="material-icons-outlined iconos me-1" style="color: #9A9BA8;">edit_outline</mat-icon>
+              <mat-icon class="material-icons-outlined iconos me-1" style="color: #9A9BA8;">remove_red_eye</mat-icon>
+            <mat-icon class="material-icons-outlined iconos" style="color: #9A9BA8;">settings</mat-icon>
 
             </div>
-            <!-- <div class="col-4 text-center" >
-              <span class="boton-estilo rounded-circle">{{carpeta.creador| primeraUltima }}</span>
-
-            </div> -->
-            <!-- <div class="col-5 text-center">
-              {{carpeta.fechaCreacion | date:'dd/MM/yyyy'}}
-            </div> -->
-          </div>
-
-
-        <hr>
-      <!-- </app-arrastrar-soltar> -->
-
-
-    </div>
-
-
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-
 </div>

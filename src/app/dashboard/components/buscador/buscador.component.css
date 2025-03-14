@@ -11,5 +11,12 @@
 .input-icon .icon {
   position: absolute;
   left: 10px; /* Ajusta esta distancia según necesites */
-  color: #aaa; /* Color del ícono */
+  color: #465666a2; /* Color del ícono */
 }
+
+input{
+  background-color: #F7F7F9;
+  border: none;
+}
+
+

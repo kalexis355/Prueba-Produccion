@@ -9,3 +9,93 @@
   box-shadow: 1px 1px 10px 1px rgba(128, 128, 128, 0.599);
 
 }
+.crear-editar{
+  font-family: Inter;
+  color: #636578;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.descripcion{
+  font-family: Inter;
+  color:#888991;
+  font-size: 14px;
+
+}
+
+.ajustes-opcionales{
+  font-family: Inter;
+  color: #636578;
+  font-size: 20px;
+  font-weight: 700;
+}
+.estado{
+  font-family: Inter;
+  color: #636578;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.contenedor-usuarios{
+  border-radius: 5px;
+  width: 98%;
+  box-shadow: 2px 2px 8px 2px #e6e6e6;
+}
+
+.exportar{
+  font-family: Inter;
+  font-size: 12px;
+  color: #6D788D;
+  font-weight: 500;
+}
+
+.btn-exportar{
+  border: 1px solid #DADDE2;
+  background-color: white;
+  border-radius: 5px;
+  padding: 8px;
+}
+
+.btn-añadir-usuario{
+  font-family: Inter;
+  font-size: 12px;
+  height: 40px;
+  color: white;
+  background-color: #2E7895;
+  border-radius: 8px;
+  border: none;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.buscar-usuario {
+  font-family: Inter;
+  font-size: 15px;
+  background-color: white;
+  border: 1px solid #BCBDC5;
+  height: 40px;
+  border-radius: 8px;
+  color: #757575;
+  font-weight: 500;
+  padding-left: 10px;
+}
+
+.btn-cancelar{
+  font-family: Inter;
+  color: #757575;
+  letter-spacing: 0.5px;
+  border: 1px solid #C7CCD3;
+  background-color: white;
+  font-size: 14px;
+  height: 40px;
+}
+
+.btn-crear{
+  font-family: Inter;
+  color: white;
+  letter-spacing: 0.5px;
+  border: none;
+  background-color: #00BCD4;
+  font-size: 14px;
+  height: 40px;
+}

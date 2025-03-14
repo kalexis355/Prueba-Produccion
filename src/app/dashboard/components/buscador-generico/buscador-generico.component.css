@@ -13,3 +13,8 @@
   left: 10px; /* Ajusta esta distancia según necesites */
   color: #aaa; /* Color del ícono */
 }
+
+input{
+  background-color: #ffffff;
+  border: none;
+}

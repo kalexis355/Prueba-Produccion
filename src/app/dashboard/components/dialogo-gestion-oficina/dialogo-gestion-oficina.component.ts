@@ -1,15 +1,17 @@
-import { Component, EventEmitter, inject, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import Swal from 'sweetalert2';
 import { GestionOficinasService } from '../../services/gestionOficinas.service';
 import { ActualizarOficinas, Oficinas } from '../../../login/interfaces/oficina.interface';
 import { MatTabGroup } from '@angular/material/tabs';
+import { MatDialogRef } from '@angular/material/dialog';
+import { DialogoService } from '../../services/dialogo.service';
 
 @Component({
   selector: 'app-dialogo-gestion-oficina',
   templateUrl: './dialogo-gestion-oficina.component.html',
   styleUrl: './dialogo-gestion-oficina.component.css'
 })
-export class DialogoGestionOficinaComponent  implements OnInit {
+export class DialogoGestionOficinaComponent  implements OnInit,OnDestroy {
 
   public oficinaService = inject(GestionOficinasService)
 
@@ -21,18 +23,20 @@ public oficinaSeleccionada!:Oficinas
 @ViewChild('tabGroup') tabGroup!: MatTabGroup;
 
 
-  ngOnInit(): void {
-    this.cargarOficinas();
-    this.oficinaService.oficinas$.subscribe(oficinas=>{
-      this.oficinasCreadas = oficinas
-      this.oficinasFiltradas = oficinas;
-    })
-  }
+ngOnInit(): void {
+  this.cargarOficinas();
+  this.oficinaService.oficinas$.subscribe(oficinas=>{
+    // this.oficinasCreadas = oficinas
+    // this.oficinasFiltradas = oficinas;
+  })
+}
 
+ngOnDestroy(): void {
+}
 
-  cargarOficinas():void{
-    this.oficinaService.obtenerOficinas()
-    .subscribe(oficinas => {
+cargarOficinas():void{
+  this.oficinaService.obtenerOficinas()
+  .subscribe(oficinas => {
       this.oficinasCreadas = oficinas
       this.oficinasFiltradas = oficinas;
       console.log(this.oficinasCreadas);

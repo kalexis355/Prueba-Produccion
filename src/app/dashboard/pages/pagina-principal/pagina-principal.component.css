@@ -1,7 +1,8 @@
 
 .btn1{
-  background-color: rgb(245, 245, 245);
-  border: 1px solid black;
+  background-color: white;
+  border: none;
+  height: 30px;
 }
 
 .btn1:hover{
@@ -18,18 +19,18 @@
 }
 
 .contenedor::-webkit-scrollbar-thumb {
-  background-color: #55cfd3b9;
+  background-color: #2E7895;
   border-radius: 4px; /* Color del pulgar de la barra de desplazamiento */
 
 }
 
 .contenedor::-webkit-scrollbar-thumb:active {
-  background-color: #1cc4cade; /* Cambia el color a tu preferencia */
+  background-color: #2E7895; /* Cambia el color a tu preferencia */
 }
 
 .active {
-  background-color: #87e2e7d7; /* Ejemplo de color de fondo para el botón activo */
-  color: black;
+  background-color: #2E7895 !important; /* Ejemplo de color de fondo para el botón activo */
+  color: white;
 }
 
 a{
@@ -42,4 +43,53 @@ background-color: #9dd2d477;
 .opciones{
   background-color: rgb(245, 245, 245);
   box-shadow: 1px 1px 7px 1px rgba(128, 128, 128, 0.507);
+}
+
+.oficinas{
+  font-family: Inter;
+  font-size: 32px;
+  color: #465666;
+  font-weight: 500;
+}
+
+.crear-oficina{
+
+  color: white;
+  background-color: #205468;
+  padding-left: 5px;
+  font-family: Inter;
+  font-size: 12px;
+  letter-spacing: 1px;
+  height: 30px;         /* O establece una altura específica como height: 30px; */
+  font-weight: 300;
+  border-radius: 5px;
+  border: none;
+}
+
+.crear-oficina:hover{
+  background-color: #286b86;
+
+}
+
+.boton-plus{
+  font-size: 20px;
+  padding-top: 2px;
+}
+
+.propiedad-intelectual{
+  font-family: Inter;
+  color: #7E8994;
+  font-size: 14px;
+
+}
+
+.terminos{
+  font-family: Inter;
+  color: #347C98;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.icono-grid{
+  font-size: 20px;
 }

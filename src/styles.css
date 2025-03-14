@@ -1,7 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
+/* Para iconos outlined */
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');
+
+/* Para iconos rounded */
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Round');
+
+/* Para iconos sharp */
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Sharp');
+
+/* Para iconos two-tone */
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Two+Tone');
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
+body { margin: 0; font-family: Inter;
 
 
 }
@@ -9,6 +21,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
 html, body { height: 100%; }
 body {
   margin: 0;
-  font-family:  'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif, "Helvetica Neue", sans-serif;
+  font-family:  Inter;
   /* background-color: cadetblue; */
 }

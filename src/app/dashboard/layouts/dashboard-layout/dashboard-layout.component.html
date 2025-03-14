@@ -5,7 +5,7 @@
 <div *ngIf="!isLoading" class="fondo vh-100  w-100 d-flex flex-column">
   <div class="d-flex justify-content-between w-100 ">
 
-    <div class="col-3 d-flex align-items-center " [routerLink]="['/dashboard']" style="cursor: pointer;">
+    <!-- <div class="col-3 d-flex align-items-center " [routerLink]="['/dashboard']" style="cursor: pointer;">
       <img class="py-2 px-2 " src="assets/imgs/icloud.png" alt="archivo" width="70" height="70">
       <div class="col d-flex  align-content-center">
 
@@ -14,9 +14,15 @@
 
       </div>
 
+    </div> -->
+    <div class=" d-flex  justify-content-between mt-3 ms-4" style="width: 14%;">
+
+      <span class="nublu " >NUBLU</span>
+      <span class=" text-center" style="align-self: flex-end;" ><mat-icon class="flecha-esconder">keyboard_double_arrow_left</mat-icon></span>
     </div>
-    <div class="col-7 align-content-center text-center">
-      <div class="d-inline-block  ancho ">
+
+    <div class="col-7  text-start" style="background-color: red;">
+      <div class="  ancho ">
         <app-buscador></app-buscador>
         <!-- <app-buscador-generico placeHolder="Buscar archivos..."></app-buscador-generico> -->
       </div>

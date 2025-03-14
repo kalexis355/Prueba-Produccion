@@ -5,11 +5,14 @@ import { ActualizarOficinas, CrearOficina, CrearOficinaResponse, Oficinas, Respu
 import { BehaviorSubject, catchError, Observable, of, tap } from 'rxjs';
 import { error } from 'console';
 import { BorrarResponse } from '../../login/interfaces/proceso.interface';
+import { CarpetasPadre } from '../interfaces/carpeta.interface';
+import { IndexDbService } from './indexdb.service';
 
 @Injectable({providedIn: 'root'})
 export class GestionOficinasService {
 
   private http = inject(HttpClient);
+  private indexdbService = inject(IndexDbService)
   private readonly baseUrl2: string = environments2.baseUrl
 
   public oficinaCreada = signal<Oficinas>({
@@ -24,9 +27,22 @@ export class GestionOficinasService {
 
   public Oficinas = signal<Oficinas[]>([])
 
-  private oficinasSubject = new BehaviorSubject<Oficinas[]>([]);
+  private oficinasSubject = new BehaviorSubject<CarpetasPadre[]>([]);
   public oficinas$ = this.oficinasSubject.asObservable();
+  // BehaviorSubject que mantiene el estado actual de las oficinas filtradas
+  private oficinasFiltradas = new BehaviorSubject<any[]>([]);
 
+  // Observable al que los componentes pueden suscribirse
+  oficinasFiltradas$ = this.oficinasFiltradas.asObservable();
+
+  setOficinasFiltradas(oficinas: any[]) {
+    this.oficinasFiltradas.next(oficinas);
+  }
+
+  // Método para obtener el valor actual
+  getOficinasFiltradas() {
+    return this.oficinasFiltradas.value;
+  }
 
   constructor() { }
 
@@ -78,10 +94,17 @@ export class GestionOficinasService {
     )
   }
 
-  actualizarOficinas(): void {
-    this.obtenerOficinas().subscribe(oficinas => {
-      this.oficinasSubject.next(oficinas);
-    });
+  // this.obtenerOficinas().subscribe(oficinas => {
+  //   this.oficinasSubject.next(oficinas);
+  // });
+  async actualizarOficinas() {
+    console.log('esta actualizando oficinas');
+
+    const carpetasPadres = await this.indexdbService.obtenerCarpetasPadre()
+    this.oficinasFiltradas.next(carpetasPadres)
+    console.log(carpetasPadres,'notificacion de nueva carpeta creada');
+
+    // this.oficinasSubject.next(carpetasPadres)
   }
 
   actualizarDependencia(bodyActualizar:ActualizarOficinas):Observable<CrearOficinaResponse>{

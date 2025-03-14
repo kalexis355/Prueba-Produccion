@@ -5,11 +5,12 @@ import { DialogoRolesComponent } from '../../components/dialogo-roles/dialogo-ro
 import { Router } from '@angular/router';
 import { Auth2Service } from '../../../login/services/auth2.service';
 import { ProcesosUsuarioService } from '../../services/procesoUsuarios.service';
+import KeyboardDoubleArrowLeftTwoToneIcon from '@mui/icons-material/KeyboardDoubleArrowLeftTwoTone';
 
 @Component({
   selector: 'app-dashboard-layout',
   templateUrl: './dashboard-layout.component.html',
-  styleUrl: './dashboard-layout.component.css'
+  styleUrl: './dashboard-layout.component.scss'
 })
 export class DashboardLayoutComponent implements OnInit {
 

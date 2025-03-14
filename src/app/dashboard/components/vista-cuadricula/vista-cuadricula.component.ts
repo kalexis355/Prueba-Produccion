@@ -30,7 +30,7 @@ import { Oficinas } from '../../../login/interfaces/oficina.interface';
 import { GestionCarpetasService } from '../../services/gestionCarpetas.service';
 import Swal from 'sweetalert2';
 import { RolesUsuario } from '../../../login/interfaces';
-import { catchError, of, Subject, takeUntil, tap, timeout } from 'rxjs';
+import { catchError, of, Subject, Subscription, takeUntil, tap, timeout } from 'rxjs';
 import { LoaderService } from '../../services/gestionLoader.service';
 import { Router } from '@angular/router';
 import { HttpRequest } from '@angular/common/http';
@@ -92,6 +92,8 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
     SerieRaiz: 0,
     NombreCarpetaPadre: ''
   };
+  oficinasFiltradas: CarpetasPadre[] = [];
+  private subscription!: Subscription;
 
   // indiceElectronico:IndiceElectronico={
   //   Cod: 0,
@@ -139,6 +141,15 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
       // Solo llamamos a obtenerCarpetas la primera vez
       this.gestionCarpetaService.inicializarServicio();
       this.obtenerCarpetasPadres()
+      // this.cargarOficinas()
+
+      this.subscription = this.oficinaService.oficinasFiltradas$.subscribe(
+        (oficinas) => {
+          this.oficinasFiltradas = oficinas;
+          console.log('Oficinas filtradas actualizadas:', oficinas);
+          // Aquí puedes realizar cualquier lógica adicional cuando los datos cambien
+        }
+      );
   }
   respuesta: any;
   error: string = '';
@@ -169,13 +180,37 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
 
   }
 
+  // cargarOficinas():void{
+  //   this.oficinaService.obtenerOficinas()
+  //   .subscribe(oficinas => {
+  //     this.oficinasFiltradas = oficinas;
+
+  //   })
+  // }
+
+  getColor(index: number): string {
+    const colors = ['#00BCD4', '#2E7895', '#FDB528', '#51CC28', '#6D788D', '#FF4D49'];
+    return colors[index % colors.length];
+  }
+
+  getColor2(index:number):string{
+    const colors = ['#80DEE9', '#97BBCA', '#FEDA93', '#A8E693', '#B6BBC6', '#FFA6A4'];
+    return colors[index % colors.length];
+  }
+  getColor3(index:number):string{
+    const colors = ['#E0F7FA', '#E6EFF2', '#FFF6E5', '#EAF9E5', '#EDEFF1', '#FFEAE9'];
+    return colors[index % colors.length];
+  }
+
 
   async obtenerCarpetasPadres() {
     try {
       const carpetasPadre = await this.indexdbService.obtenerCarpetasPadre();
-      // console.log('Carpetas padre:', carpetasPadre);
+      console.log('Carpetas padre:', carpetasPadre);
       // Aquí puedes asignar las carpetas a una variable del componente
       this.carpetasPadre = carpetasPadre;
+      this.oficinasFiltradas = carpetasPadre;
+
     } catch (error) {
       console.error('Error al obtener carpetas padre:', error);
     }
@@ -187,6 +222,10 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
     this.checkService.checkboxStates.set({});
     this.destroy$.next();
     this.destroy$.complete();
+
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   private esperarPorRole(): Promise<void> {

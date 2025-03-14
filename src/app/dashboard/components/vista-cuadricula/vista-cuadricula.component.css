@@ -77,3 +77,77 @@
   margin-top: 8px;
   padding-top: 8px;
 }
+
+.nombre{
+  font-family: Inter;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.busines{
+  text-align: center;
+  color: white;
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 50%;
+}
+
+.card{
+  box-shadow: 2px 2px 3px 2px #E8E8EC;
+  cursor: pointer;
+}
+
+.folder{
+  padding-top: 6px;
+  padding-left: 6px;
+  padding-right: 6px;
+  border-radius: 5px;
+  border-width: 0.5px;
+  border-style: solid
+}
+
+.numero{
+  font-family: Inter;
+  font-weight: 600;
+  color: #475767;
+  font-size: 15px;
+}
+
+.letra{
+  font-family: Inter;
+  color: #9BA4AD;
+  font-size: 13px;
+}
+
+.ultima-modificacion{
+  font-family: Inter;
+  color: #6E7A86;
+  font-size: 12px;
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-bottom: 5px;
+  background-color: #E8E7EA;
+  border-radius: 10px;
+}
+
+.activa-desactiva{
+  font-family: Inter;
+  color: white;
+  font-size: 12px;
+  padding-top: 5px;
+  /* padding-left: 5px; */
+  padding-bottom: 5px;
+  background-color: #51CC28;
+  border-radius: 15px;
+}
+
+.card-footer{
+  border: none;
+  background-color: white;
+}
+
+.iconos{
+  font-size: 20px;
+}

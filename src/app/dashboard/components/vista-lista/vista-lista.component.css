@@ -11,6 +11,8 @@ h1{
   font-weight: 500;
 }
 .texto {
+  font-family: Inter;
+  color: #5F6D7B;
   font-size: 15px;
   white-space: nowrap;
   overflow: hidden;
@@ -35,4 +37,51 @@ cursor: pointer;
 .selected-border {
   border: 2px solid #24a3eca9;
   border-radius: 5px; /* Opcional: para redondear las esquinas */
+}
+
+th{
+  font-family: Inter;
+  font-size: 14px;
+  color: #5F6D7B;
+  font-weight: 500;
+  border: none;
+}
+
+.cabecera{
+  border: none;
+  /* border-radius: 50px;    */
+}
+
+.busines{
+  text-align: center;
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 50%;
+  width: 40%;
+  cursor: pointer;
+}
+
+.activa-desactiva{
+  font-family: Inter;
+  color: white;
+  font-size: 12px;
+  padding-top: 5px;
+  /* padding-left: 5px; */
+  padding-bottom: 5px;
+  background-color: #51CC28;
+  border-radius: 15px;
+}
+
+.iconos{
+  font-size: 20px;
+}
+
+.table-separate {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table-separate thead tr {
+  border-bottom: 10px solid #F7F7F9;
 }

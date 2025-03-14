@@ -187,7 +187,18 @@ export class BtnMasComponent implements OnInit,OnChanges  {
               }
             })
 
+            // this.gestionCarpetaService.ObtenerYMostrarGzip()
+            // .subscribe({
+            //   next:()=>{
+            //     console.log('notificando');
 
+            //     this.gestionCarpetaService.notificarActualizacion()
+            //   },
+            //   error: (error) => {
+            //     console.error('Error al actualizar después de crear carpeta', error);
+            //   }
+
+            // })
           }
         })
       }

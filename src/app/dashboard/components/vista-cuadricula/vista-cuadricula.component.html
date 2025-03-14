@@ -1,68 +1,52 @@
-<!--
+<!-- <app-loader-personalizado></app-loader-personalizado> -->
 
+  <div class="row g-4">
 
-  <div class="row g-5">
-
-    <div class="col-md-2 " *ngFor="let carpeta of carpetas" >
-      <app-arrastrar-soltar [hijo]="'hijo1'"
-                            [deshabilitado]="persmisoService.permisoArrastrar(carpeta,'write')"
-                            [carpetaIdFocu]="carpeta.id">
-          <div class="btun d-flex flex-column justify-content-between align-items-end "
-          [ngClass]="{ 'selected-border': isChecked(carpeta.id) }" >
-
-
-             <input
-             type="checkbox"
-             class="form-check-input"
-             [checked]="isChecked(carpeta.id)"
-             (change)="toggleCheckbox(carpeta.id)"
-             >
-
-            <button class="btn btun flex-grow-1 " (click)="guardarRuta(carpeta)"  [routerLink]="['/dashboard/carpeta',carpeta.id]" >
-
-              <img class="" src="/assets/imgs/carpeta-vacia2.png" alt="carpeta" width="100" height="100">
-              <h4 class="mt-2 mb-0 texto" [title]="carpeta.nombre">{{carpeta.nombre }}</h4>
-              <span class="texto2">{{carpeta.fechaCreacion | date:'dd/MM/yyyy'}}</span>
-            </button>
+    <div class="col-md-2 " *ngFor="let carpeta of oficinasFiltradas; let i = index" style="width: 25%;">
+      <!-- <button [ngStyle]="{'background-color': getColor(i)}">hola</button> -->
+       <div class="card" (contextmenu)="mostrarMenuContextual($event,carpeta.Cod)"
+       [routerLink]="['/dashboard/carpeta',carpeta.Cod]"
+       [state]="{ carpeta: carpeta }"
+       (click)="agregarAlaRuta(carpeta.Cod)">
+        <div class="card-header d-flex align-items-center p-3  "[ngStyle]="{'background-color': getColor(i)}">
+          <div class="busines me-2" [ngStyle]="{'background-color': getColor2(i)}">
+            <mat-icon >business</mat-icon>
           </div>
+          <span class="nombre">{{carpeta.Nombre}}</span>
+        </div>
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex align-items-center">
+            <div class="folder me-2" [ngStyle]="{'background-color': getColor3(i), 'border-color': getColor2(i)}">
+                <mat-icon  [ngStyle]="{'color': getColor(i)}">folder_open</mat-icon>
+            </div>
+            <span class="letra"> <span class="numero">10</span> Expedientes Activos</span>
+          </div>
+          <div class="d-flex align-items-center">
+            <div  class="folder mt-2 me-2" [ngStyle]="{'background-color': getColor3(i), 'border-color': getColor2(i)}">
+              <mat-icon [ngStyle]="{'color': getColor(i)}">description</mat-icon>
+            </div>
+            <span class="letra"> <span class="numero">250</span> Documentos totales</span>
+          </div>
+          <div class="d-flex align-items-center">
+            <div  class="folder mt-2 me-2" [ngStyle]="{'background-color': getColor3(i), 'border-color': getColor2(i)}">
+              <mat-icon [ngStyle]="{'color': getColor(i)}" >people</mat-icon>
+            </div>
+            <span class="letra"><span class="numero">10</span> Usuarios con Acceso</span>
+          </div>
+          <div class="ultima-modificacion mt-2 col-10">
+            <span>Última modificación: Hace 2 días</span>
+          </div>
+          <div class="activa-desactiva mt-2 col-3 text-center">
+            <span>Activa</span>
+          </div>
+        </div>
+        <div class="card-footer d-flex justify-content-center pb-4">
+          <mat-icon class="material-icons-outlined iconos me-1" style="color: #9A9BA8;">edit_outline</mat-icon>
+          <mat-icon class="material-icons-outlined iconos me-1" style="color: #9A9BA8;">remove_red_eye</mat-icon>
+        <mat-icon class="material-icons-outlined iconos" style="color: #9A9BA8;">settings</mat-icon>
 
-
-
-      </app-arrastrar-soltar>
-
-    </div>
-  </div> -->
-
-
-  <!-- <app-loader-personalizado></app-loader-personalizado> -->
-
-  <div class="row g-5">
-
-    <div class="col-md-2 " *ngFor="let carpeta of carpetasPadre" >
-
-      <!-- <app-arrastrar-soltar > -->
-        <div class="btun d-flex flex-column justify-content-between align-items-end "
-        (contextmenu)="mostrarMenuContextual($event,carpeta.Cod)">
-
-          <input
-          type="checkbox"
-          class="form-check-input"
-
-          >
-
-         <button class="btn btun flex-grow-1 "
-        [routerLink]="['/dashboard/carpeta',carpeta.Cod]"
-        [state]="{ carpeta: carpeta }"
-        (click)="agregarAlaRuta(carpeta.Cod)"
-        >
-           <img class="" src="assets/imgs/carpeta-vacia.png" alt="carpeta" width="100" height="100">
-           <h4 class="mt-2 mb-0 texto" [title]="carpeta.Nombre">{{carpeta.Nombre }}</h4>
-           <!-- {{carpeta.Cod}} -->
-           <span class="texto2">{{carpeta.FechaCreacion | date:'dd/MM/yyyy'}}</span>
-         </button>
+        </div>
        </div>
-      <!-- </app-arrastrar-soltar> -->
-
     </div>
 
   </div>
@@ -138,3 +122,21 @@
 
 
   <!-- (click)="guardarCodigo(carpeta)" -->
+
+
+          <!-- <div class="btun d-flex flex-column justify-content-between align-items-end "
+        (contextmenu)="mostrarMenuContextual($event,carpeta.Cod)">
+
+          <input
+          type="checkbox"
+          class="form-check-input">
+
+         <button class="btn btun flex-grow-1 "
+        [routerLink]="['/dashboard/carpeta',carpeta.Cod]"
+        [state]="{ carpeta: carpeta }"
+        (click)="agregarAlaRuta(carpeta.Cod)">
+           <img class="" src="assets/imgs/carpeta-vacia.png" alt="carpeta" width="100" height="100">
+           <h4 class="mt-2 mb-0 texto" [title]="carpeta.Nombre">{{carpeta.Nombre }}</h4>
+           <span class="texto2">{{carpeta.FechaCreacion | date:'dd/MM/yyyy'}}</span>
+         </button>
+       </div> -->

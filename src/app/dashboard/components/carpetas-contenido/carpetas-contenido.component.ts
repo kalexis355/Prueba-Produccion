@@ -112,7 +112,7 @@ export class CarpetasContenidoComponent {
           return true;
 
         case 3:
-           return this.esVisibleUltimoNivel(carpeta);
+          //  return this.esVisibleUltimoNivel(carpeta);
           return true;
 
         default:

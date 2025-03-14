@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { Carpeta, CarpetaRaiz } from '../../interfaces/carpeta.interface';
+import { Carpeta, CarpetaRaiz, CarpetasPadre } from '../../interfaces/carpeta.interface';
 import { DashboardService } from '../../services/dashboard.service';
 import { SortService } from '../../services/sort-service.service';
 import { AuthService } from '../../../login/services/auth.service';
@@ -8,7 +8,8 @@ import { GestionOficinasService } from '../../services/gestionOficinas.service';
 import { Oficinas } from '../../../login/interfaces/oficina.interface';
 import { GestionCarpetasService } from '../../services/gestionCarpetas.service';
 import { Auth2Service } from '../../../login/services/auth2.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
+import { IndexDbService } from '../../services/indexdb.service';
 
 @Component({
   selector: 'app-vista-lista',
@@ -24,6 +25,7 @@ export class VistaListaComponent implements OnInit,OnDestroy{
   public checkService = inject(CheckBoxService)
   public oficinaService = inject(GestionOficinasService)
   public gestionCarpetaService = inject(GestionCarpetasService);
+  public indexdbService = inject(IndexDbService)
   private authService2 = inject(Auth2Service);
 
 
@@ -33,7 +35,10 @@ export class VistaListaComponent implements OnInit,OnDestroy{
 
   user = this.authService.currentUSer2()
   public CarpetasRaiz:CarpetaRaiz[]=[]
+  oficinasFiltradas: CarpetasPadre[] = [];
   private destroy$ = new Subject<void>();
+  private subscription!: Subscription;
+
 
   constructor(){
 
@@ -54,11 +59,49 @@ export class VistaListaComponent implements OnInit,OnDestroy{
     //   this.sortCarpetas();
     // });
     // this.cargarListadoDependencias()
+    this.obtenerCarpetasPadres()
+
+
+    this.subscription = this.oficinaService.oficinasFiltradas$.subscribe(
+      (oficinas) => {
+        this.oficinasFiltradas = oficinas;
+        console.log('Oficinas filtradas actualizadas:', oficinas);
+        // Aquí puedes realizar cualquier lógica adicional cuando los datos cambien
+      }
+    );
   }
+
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
+  getColor(index: number): string {
+    const colors = ['#00BCD4', '#2E7895', '#FDB528', '#51CC28', '#6D788D', '#FF4D49'];
+    return colors[index % colors.length];
+  }
+
+
+  getColor3(index:number):string{
+    const colors = ['#E0F7FA', '#E6EFF2', '#FFF6E5', '#EAF9E5', '#EDEFF1', '#FFEAE9'];
+    return colors[index % colors.length];
+  }
+
+  async obtenerCarpetasPadres() {
+    try {
+      const carpetasPadre = await this.indexdbService.obtenerCarpetasPadre();
+      // console.log('Carpetas padre:', carpetasPadre);
+      // Aquí puedes asignar las carpetas a una variable del componente
+      // this.carpetasPadre = carpetasPadre;
+      this.oficinasFiltradas = carpetasPadre;
+    } catch (error) {
+      console.error('Error al obtener carpetas padre:', error);
+    }
   }
 
 
@@ -101,5 +144,26 @@ export class VistaListaComponent implements OnInit,OnDestroy{
   ischecked(id:string):boolean{
     return this.checkService.isChecked(id);
 
+  }
+
+  clicCarpeta(cod:number){
+    this.gestionCarpetaService.agregarACamino(cod)
+
+
+    this.indexdbService.obtenerOficinas()
+    .then((oficinas)=>{
+      // console.log('oficinas obtenidas desde el index',oficinas);
+
+      this.indexdbService.obtenerCarpetaPorId(cod)
+      .then((carpetaObtenida)=>{
+        console.log('carpeta obtenida', carpetaObtenida);
+        const oficinaEncontrada = oficinas.find(oficina =>
+          oficina.CodigoSerie === carpetaObtenida.CodSerie
+        );
+        // console.log('oficina encontrada ',oficinaEncontrada);
+        if(oficinaEncontrada)
+        localStorage.setItem('idOficina',oficinaEncontrada?.Cod.toString())
+      })
+    })
   }
 }

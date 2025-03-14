@@ -12,11 +12,12 @@ import { FormProcesosComponent } from './components/form-procesos/form-procesos.
 import { TodosUsuariosComponent } from './components/todos-usuarios/todos-usuarios.component';
 import { FormularioComponent } from './components/formulario/formulario.component';
 import { DefaultGestionComponent } from './components/default-gestion/default-gestion.component';
+import { DashboardMigradoComponent } from './layouts/dashboard-migrado/dashboard-migrado.component';
 
 const routes: Routes = [
   {
     path: '',
-    component:DashboardLayoutComponent,
+    component:DashboardMigradoComponent,
     children: [
       {path:'principal', component:PaginaPrincipalComponent,
       children:[
