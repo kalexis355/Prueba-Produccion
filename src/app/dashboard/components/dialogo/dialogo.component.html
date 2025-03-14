@@ -54,7 +54,7 @@
       <select class="form-select w-100 mb-3"
       formControlName="nivelVisualizacion"
       aria-label="Seleccionar Nivel">
-       <option >Seleccionar Nivel</option>
+       <option [disabled]="true">Seleccionar Nivel</option>
 
        <option *ngFor="let nivel of NivelVisualizacion"
         [value]="nivel.Cod">
