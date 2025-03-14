@@ -21,7 +21,7 @@
       <select class="form-select w-100 mb-3"
        formControlName="carpetaEstado"
        aria-label="Selección de estado">
-        <option selected >Seleccionar Estado carpeta</option>
+        <option [disabled]="true" selected >Seleccionar Estado carpeta</option>
         <option *ngFor="let estado of estadoCarpeta"
          [value]="estado.Cod">
         {{ estado.Nombre }}
@@ -68,7 +68,7 @@
       <select class="form-select w-100 mb-3"
        formControlName="delegado"
        aria-label="Seleccionar Delegado">
-        <option >Seleccionar Delegado</option>
+        <option [disabled]="true">Seleccionar Delegado</option>
 
         <option *ngFor="let usuario of usuarios"
          [value]="usuario.Cod">
