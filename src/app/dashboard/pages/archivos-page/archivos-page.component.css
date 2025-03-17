@@ -1,21 +1,22 @@
 
 .contenedor::-webkit-scrollbar {
-  width: 0.5em; /* Ancho de la barra de desplazamiento */
+  width: 0.3em; /* Ancho de la barra de desplazamiento */
   border-radius: 5px;
 }
 
 .contenedor::-webkit-scrollbar-thumb {
-  background-color: #55cfd3b9;
+  background-color: #2E7895;
   border-radius: 4px; /* Color del pulgar de la barra de desplazamiento */
 
 }
 
 .contenedor::-webkit-scrollbar-thumb:active {
-  background-color: #1cc4cade; /* Cambia el color a tu preferencia */
+  background-color: #378cae; /* Cambia el color a tu preferencia */
 }
 
 .texto3{
- color: #0ba7acd8;
+  font-family: Inter;
+ color: #2E7895;
 }
 .texto2 {
   font-size: 13px;
@@ -164,4 +165,31 @@
     cursor: not-allowed;
   }
 
+.gestion{
+  font-family: Inter;
+  font-size: 30px;
+  font-weight: 500;
+  color: #465666;
 
+}
+
+.nombre-carpeta{
+  font-family: Inter;
+  font-size: 22px;
+  font-weight: 500;
+  color: #465666;
+}
+
+.btn1{
+  background-color: white;
+  border: none;
+  height: 30px;
+}
+
+.btn1:hover{
+  background-color: rgba(219, 219, 219, 0.473);
+}
+.active {
+  background-color: #2E7895 !important; /* Ejemplo de color de fondo para el botón activo */
+  color: white;
+}

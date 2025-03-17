@@ -12,6 +12,7 @@ import { IndexDbService } from '../../services/indexdb.service';
   styleUrl: './carpetas-contenido.component.css'
 })
 export class CarpetasContenidoComponent {
+  @Input() tipoVista: 'cuadricula' | 'lista' = 'cuadricula';
   @Input() carpetas: CarpetasPadre[] | CarpetaBase[] = [];
   @Input() rolesUsuario: RolesUsuario[]=[]
   // @Input() hayCarpetaSeleccionada: boolean = false;

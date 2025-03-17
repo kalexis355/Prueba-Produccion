@@ -1,16 +1,19 @@
 .btun{
   /* height: 60px; */
-  background-color: rgb(245, 245, 245);
+  background-color: #2E7895;
   box-shadow: 1px 1px 7px 1px rgba(128, 128, 128, 0.507);
-  width: 190px;
+  width: auto;
+  border-radius: 10px;
 }
 
 .btun:hover{
-  background-color: rgb(219, 219, 219, 0.473);
+  background-color: #3a93b6;
   box-shadow: 1px 1px 10px 1px rgba(128, 128, 128, 0.599);
 
 }
 
 .texto{
-font-size: 19px;
+font-family: Inter;
+color: white;
+font-size: 14px;
 }

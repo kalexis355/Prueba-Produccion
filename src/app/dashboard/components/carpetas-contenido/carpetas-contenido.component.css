@@ -33,3 +33,81 @@
 .carpeta-cortar {
   animation: borderPulse 2s infinite;
 }
+
+
+.avatar-group {
+  display: flex;
+}
+
+.avatar {
+  padding: 0px;
+  font-size: 13px;
+  width: 30px;
+  height:30px;
+  border-radius: 50%;
+  background-color: #BDBDBD;
+  overflow: hidden;
+  border: 2px solid #fff;
+  position: relative;
+  margin-left: -10px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+
+
+.avatar.more {
+  background-color: #e0e0e0;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.cuarenta-archivos{
+  font-family: Inter;
+  font-size: 12px;
+  color: #02BCD4;
+}
+
+.carpeta-icono{
+  height: 30px;
+  width: 30px;
+  background-color: #d7f4ff90;
+  border-radius: 50%;
+}
+.cuarenta-archivos-contenedor{
+  height: 20px;
+  width: auto;
+  border-radius: 10px;
+  background-color: #d7f4ff90;
+
+}
+
+.card-header{
+  border: 1px solid transparent;
+}
+
+.carpeta-nombre{
+  font-family: Inter;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+}
+
+.modificacion{
+  font-family: Inter;
+  font-size: 10px;
+  color: white;
+}
+
+.division{
+  border: none;
+  height: 1.5px;
+  background-color: white;
+}

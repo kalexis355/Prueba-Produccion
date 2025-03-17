@@ -38,7 +38,6 @@ export class ArchivosPageComponent implements OnInit, OnDestroy,OnChanges {
   archivos: { id: string; nombre: string; previsualizacion: string }[] = []; // Arreglo para archivos
   carpetaPadre: CarpetaRaiz | undefined;
   carpetaHija: CarpetaContenido | undefined;
-
   // public rolesUsuario: RolesUsuario[] = [];
 
   carpetaActual?: any;
@@ -120,6 +119,7 @@ export class ArchivosPageComponent implements OnInit, OnDestroy,OnChanges {
   carpetaParaCortar:number | null = null;
   carpetaParaCopiar:number | null = null;
   submenuPosition: 'left' | 'right' = 'right';
+  tipoVista: 'cuadricula' | 'lista' = 'cuadricula'; // Valor por defecto
 
   obtenerEstadoCarpeta() {
     this.gestionCarpetaService
@@ -509,6 +509,7 @@ export class ArchivosPageComponent implements OnInit, OnDestroy,OnChanges {
 
         // Usar método síncrono sin await
         this.indexdbService.obtenerCarpeta(id).then(carpeta=>{
+          this.carpetaActual = carpeta;
           console.log(carpeta,'holiwis');
 
           if(carpeta.CarpetaPadre ===0 || carpeta.TipoCarpeta ===2){
