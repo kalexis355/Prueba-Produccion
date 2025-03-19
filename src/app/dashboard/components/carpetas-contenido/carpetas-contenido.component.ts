@@ -122,6 +122,12 @@ export class CarpetasContenidoComponent {
     });
   }
 
+    getColor(index: number): string {
+      const colors = ['#00BCD4', '#2E7895', '#FDB528', '#51CC28', '#6D788D', '#FF4D49'];
+      return colors[index % colors.length];
+    }
+
+
 
 
 }

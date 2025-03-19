@@ -68,15 +68,16 @@
       <h3 class="d-flex justify-content-center texto3">La carpeta esta vacia</h3>
   </div>
 
-    <div class="">
+    <div class="" *ngIf="carpetaContenido.length > 0" >
       <app-carpetas-contenido
       [tipoVista]="tipoVista"
       [carpetas]="carpetaContenido"
       [rolesUsuario]="rolesUsuario"
       (contextMenu)="mostrarMenuContextual($event.event, $event.cod)"
       (carpetaClick)="manejarCarpetaClick($event)">
+
       </app-carpetas-contenido>
-      </div>
+    </div>
 
       <div class="">
         <app-archivos-contenido

@@ -111,3 +111,27 @@
   height: 1.5px;
   background-color: white;
 }
+
+.iconos-opciones{
+
+  color: white;
+}
+
+th{
+  font-family: Inter;
+  font-size: 14px;
+  color: #5F6D7B;
+  font-weight: 500;
+  border: none;
+}
+
+.nombre-lista{
+  font-family: Inter;
+  font-weight: 400;
+  font-size: 15px;
+  color: #536271;
+
+}
+.iconos{
+  font-size: 20px;
+}

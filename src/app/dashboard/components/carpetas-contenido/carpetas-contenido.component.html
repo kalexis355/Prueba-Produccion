@@ -58,7 +58,13 @@
         <span class="modificacion mt-1">última modificación hace 2 dias</span>
         <span class="modificacion mt-1">Fecha de creación {{carpeta.FechaCreacion | date}}</span>
         <mat-divider class="division mt-2"></mat-divider>
-
+        <div class="d-flex justify-content-between mt-2">
+          <mat-icon  style="color: white">share</mat-icon>
+          <mat-icon  style="color: white">download</mat-icon>
+          <mat-icon  style="color: white">drive_file_rename_outline</mat-icon>
+          <mat-icon  style="color: white">drive_file_move</mat-icon>
+          <mat-icon  style="color: white">dehaze</mat-icon>
+        </div>
         <div>
 
         </div>
@@ -68,8 +74,59 @@
     </div>
   </div>
 </div>
-<div *ngIf="tipoVista === 'lista'">
-  diseño lista
+<div *ngIf="tipoVista === 'lista'" class="container">
+  <div class="table-responsive mt-3 table-bordered">
+    <table class="table">
+      <thead >
+        <tr style="border: none;">
+          <th>Expediente</th>
+          <th>Fecha Creación</th>
+          <th>Oficina</th>
+          <th>Responsable</th>
+          <th>Tipo de expediente</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let carpeta of carpetasFiltradas; let i = index">
+          <td>
+            <div class="d-flex align-items-center "
+            style="cursor: pointer;" [routerLink]="['/dashboard/carpeta',carpeta.Cod]"
+            [state]="{ carpetaHija: carpeta }"
+            (click)="onCarpetaClick(carpeta)"
+            [ngStyle]="{'color': getColor(i)}"
+            (contextmenu)="onContextMenu($event, carpeta.Cod)">
+              <mat-icon style="font-size: 35px; height: 35px; width: 35px;">folder_copy_two_tone</mat-icon>
+              <span class="nombre-lista ms-2">{{carpeta.Nombre}}</span>
+            </div>
+          </td>
+          <td>
+            <span class="nombre-lista">{{carpeta.FechaCreacion|date:'yyyy-MM-dd'}}</span>
+          </td>
+          <td>
+            <span class="nombre-lista">Recursos Humanos</span>
+          </td>
+          <td>
+            <span class="nombre-lista">Usuario 1</span>
+          </td>
+          <td>
+            <span class="nombre-lista">Contrato</span>
+          </td>
+          <td>
+            <span class="nombre-lista">{{carpeta.Estado}}</span>
+          </td>
+          <td>
+            <div class="d-flex justify-content-center align-items-center">
+              <mat-icon class="material-icons-outlined iconos me-1" style="color: #9A9BA8;">edit_outline</mat-icon>
+              <mat-icon class="material-icons-outlined iconos me-1" style="color: #9A9BA8;">remove_red_eye</mat-icon>
+            <mat-icon class="material-icons-outlined iconos" style="color: #9A9BA8;">settings</mat-icon>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 <!--   [class.carpeta-cortar]="(hayCarpetaSeleccionada && carpeta.Cod === carpetaParaCortar) ||
                                         (hayCarpetaSeleccionada && carpeta.Cod === carpetaParaCopiar)" -->
