@@ -77,7 +77,7 @@
 
       <div class="table-responsive mt-3">
         <div class=" d-flex justify-content-end align-content-end mt-3 mb-3">
-          <app-btn-subir-archivo></app-btn-subir-archivo>
+          <app-btn-subir-archivo ></app-btn-subir-archivo>
         </div>
         <table class="table ">
           <thead class="" style="background-color: #157de4;">
@@ -125,10 +125,10 @@
               </td>
               <td>
                 <div class="d-flex justify-content-between mt-2">
-                  <button class="btn m-0 p-0 me-2" (click)="abrirDetalles(archivo)">
+                  <button type="button" class="btn m-0 p-0 me-2" (click)="abrirDetalles(archivo)">
                     <mat-icon title="Detalles" style="color: #9E9FAB" >remove_red_eye_outlined</mat-icon>
                   </button>
-                  <button class="btn m-0 p-0 me-2" (click)="eliminarArchivo(i)">
+                  <button type="button" class="btn m-0 p-0 me-2" (click)="eliminarArchivo(i)">
                     <mat-icon title="Eliminar" style="color: #9E9FAB" >delete</mat-icon>
                   </button>
                 </div>
