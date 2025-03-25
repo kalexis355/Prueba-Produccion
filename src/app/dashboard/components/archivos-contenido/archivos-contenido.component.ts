@@ -13,7 +13,7 @@ export class ArchivosContenidoComponent {
   @Output() archivoClick = new EventEmitter<DocumentoContenido>();
 
   @Output() contextMenu = new EventEmitter<{event: MouseEvent, cod:number}>();
-
+  @Input() tipoVista: 'cuadricula' | 'lista' = 'cuadricula';
 
   constructor(public dialog: MatDialog){}
 

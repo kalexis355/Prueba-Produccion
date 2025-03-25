@@ -5,6 +5,11 @@ import { Auth2Service } from '../../../login/services/auth2.service';
 import { CarpetaBase, CarpetasPadre } from '../../interfaces/carpeta.interface';
 import { log } from 'console';
 import { IndexDbService } from '../../services/indexdb.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogoCompartirComponent } from '../dialogo-compartir/dialogo-compartir.component';
+import { DialogoDescargarCarpetaComponent } from '../dialogo-descargar-carpeta/dialogo-descargar-carpeta.component';
+import { DialogoComponent } from '../dialogo/dialogo.component';
+import { DialogoEditarComponent } from '../dialogo-editar/dialogo-editar.component';
 
 @Component({
   selector: 'app-carpetas-contenido',
@@ -27,6 +32,10 @@ export class CarpetasContenidoComponent {
   //Inyeccion de servicios
   public auth2Service = inject(Auth2Service);
 
+
+  constructor(public dialog: MatDialog){
+
+  }
 
   onCarpetaClick(carpeta: CarpetasPadre): void {
     this.carpetaClick.emit(carpeta);
@@ -128,6 +137,31 @@ export class CarpetasContenidoComponent {
     }
 
 
+    openCompartir(){
+       const dialogRef = this.dialog.open(DialogoCompartirComponent, {
+            width: '900px',
+            height: '500px',
+            maxWidth: '100%',
+            // disableClose: true,
+          });
+    }
 
+    openDescargar(){
+      const dialogRef = this.dialog.open(DialogoDescargarCarpetaComponent, {
+           width: '1000px',
+           height: '300px',
+           maxWidth: '100%',
+           // disableClose: true,
+         });
+   }
+
+   openEditar(){
+    const dialogRef = this.dialog.open(DialogoEditarComponent, {
+      width: '900px',
+      height: '550px',
+      maxWidth: '100%',
+      // disableClose: true,
+    });
+   }
 
 }

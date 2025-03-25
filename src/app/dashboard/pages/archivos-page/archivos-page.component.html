@@ -79,8 +79,9 @@
       </app-carpetas-contenido>
     </div>
 
-      <div class="">
+      <div class=" mt-4" *ngIf="DocumentoContenido.length > 0">
         <app-archivos-contenido
+        [tipoVista]="tipoVista"
         [archivos]="DocumentoContenido">
         </app-archivos-contenido>
       </div>

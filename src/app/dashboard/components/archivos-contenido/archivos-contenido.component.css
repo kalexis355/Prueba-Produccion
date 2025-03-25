@@ -8,11 +8,106 @@
 }
 
 .texto {
-  font-size: 15px;
+  font-family: Inter;
+  font-size: 14px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   display: block;
   width: 100%;
   box-sizing: border-box;
+  color: #565656;
+}
+
+.documentos{
+  font-family: Inter;
+  font-size: 29px;
+  font-weight: 600;
+  color: #465666;
+}
+
+
+.tamano{
+  font-family: Inter;
+  font-size: 12px;
+  color: #565656;
+
+}
+
+.division{
+  border: none;
+  height: 1.5px;
+  background-color: #E4E4E4;
+}
+
+th{
+  font-family: Inter;
+  font-size: 14px;
+  color: #757575;
+  font-weight: 500;
+  border: none;
+}
+
+.detalle-archivo{
+  font-family: Inter;
+  font-size: 30px;
+  font-weight: 600;
+  color: #475767;
+}
+.offcanvas.offcanvas-end {
+  width: 650px; /* Ancho mayor (predeterminado es 400px) */
+}
+
+.trazabilidad{
+  font-family: Inter;
+  font-size: 17px;
+  font-weight: 600;
+  color: #475767;
+}
+
+.contenedor-trazabilidad{
+  border: 1px solid #EFEFF1;
+  border-radius: 10px;
+  box-shadow: 1px 2px 8px 2px #bababb7f;
+  padding: 10px;
+}
+
+.texto-trazabilidad{
+  font-family: Inter;
+  font-size: 14px;
+  font-weight: 600;
+  color: #4A5A6A;
+}
+
+.texto-fechas{
+  font-family: Inter;
+  font-family: 13px;
+  color: #98A1AA;
+}
+
+
+.division2{
+  border: none;
+  height: 1.5px;
+  background-color: #E2E2E2;
+}
+
+.titulo-detalles{
+  font-family: Inter;
+  font-size: 22px;
+  font-weight: 600;
+  color: #475767;
+}
+
+.subtitulo-detalle{
+  font-family: Inter;
+  font-size: 19px;
+  font-weight: 500;
+  color: #475767;
+}
+
+.contenido-detalle{
+  font-family: Inter;
+  font-size: 15px;
+  color: #475767b4;
 }

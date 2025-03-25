@@ -1,0 +1,55 @@
+th{
+  font-family: Inter;
+  font-size: 14px;
+  color: #5F6D7B;
+  font-weight: 500;
+  border: none;
+  background-color: #E7E8E9;
+}
+
+input{
+  color: #636578;
+}
+
+select{
+  color: #636578;
+}
+
+.creacion-archivos{
+  font-family: Inter;
+  font-size: 30px;
+  font-weight: 600;
+  color: #636578;
+}
+
+.btn-subir-archivo{
+  font-family: Inter;
+  font-size: 12px;
+  background-color: #00BCD4;
+  color: white;
+  letter-spacing: 1px;
+  padding: 6px;
+  border-radius: 8px;
+  border: none;
+}
+
+.btn-cancelar{
+  font-family: Inter;
+  font-size: 12px;
+  background-color: white;
+  color: #6c7586;
+  letter-spacing: 1px;
+  padding: 6px;
+  border-radius: 8px;
+  border: 1px solid #caccd0;
+}
+
+.btn-subir-archivo:hover{
+  background-color: #01adc4;
+
+}
+
+.btn-cancelar:hover{
+  background-color: rgb(228, 228, 228);
+
+}

@@ -23,12 +23,13 @@
     </ng-container> -->
 <div *ngIf="tipoVista==='cuadricula'">
   <div class="row g-4">
-    <div class="col-md-2" *ngFor="let carpeta of carpetasFiltradas; let i = index" style="width: 25%; cursor: pointer;">
-      <div class="card" (contextmenu)="onContextMenu($event, carpeta.Cod)"
+    <div class="col-md-2" *ngFor="let carpeta of carpetasFiltradas; let i = index" style="width: 25%; ">
+      <div class="card" >
+      <div class="card-header d-flex justify-content-between align-items-center p-3 " style="cursor: pointer;"
+      (contextmenu)="onContextMenu($event, carpeta.Cod)"
       [routerLink]="['/dashboard/carpeta',carpeta.Cod]"
       [state]="{ carpetaHija: carpeta }"
       (click)="onCarpetaClick(carpeta)">
-      <div class="card-header d-flex justify-content-between align-items-center p-3 " >
 
         <div class="carpeta-icono d-flex align-items-center justify-content-center">
           <mat-icon style="color: #02BCD4;">folder_open</mat-icon>
@@ -59,11 +60,23 @@
         <span class="modificacion mt-1">Fecha de creación {{carpeta.FechaCreacion | date}}</span>
         <mat-divider class="division mt-2"></mat-divider>
         <div class="d-flex justify-content-between mt-2">
-          <mat-icon  style="color: white">share</mat-icon>
-          <mat-icon  style="color: white">download</mat-icon>
-          <mat-icon  style="color: white">drive_file_rename_outline</mat-icon>
-          <mat-icon  style="color: white">drive_file_move</mat-icon>
-          <mat-icon  style="color: white">dehaze</mat-icon>
+          <button class="btn" (click)="openCompartir()">
+            <mat-icon  style="color: white">share</mat-icon>
+          </button>
+
+          <button class="btn" (click)="openDescargar()">
+            <mat-icon  style="color: white">download</mat-icon>
+          </button>
+          <button class="btn" (click)="openEditar()">
+            <mat-icon  style="color: white">drive_file_rename_outline</mat-icon>
+          </button>
+          <button class="btn">
+            <mat-icon  style="color: white">drive_file_move</mat-icon>
+          </button>
+          <button class="btn"
+           data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRightLabel">
+            <mat-icon  style="color: white">dehaze</mat-icon>
+          </button>
         </div>
         <div>
 
@@ -74,6 +87,7 @@
     </div>
   </div>
 </div>
+
 <div *ngIf="tipoVista === 'lista'" class="container">
   <div class="table-responsive mt-3 table-bordered">
     <table class="table">
@@ -117,10 +131,24 @@
             <span class="nombre-lista">{{carpeta.Estado}}</span>
           </td>
           <td>
-            <div class="d-flex justify-content-center align-items-center">
-              <mat-icon class="material-icons-outlined iconos me-1" style="color: #9A9BA8;">edit_outline</mat-icon>
-              <mat-icon class="material-icons-outlined iconos me-1" style="color: #9A9BA8;">remove_red_eye</mat-icon>
-            <mat-icon class="material-icons-outlined iconos" style="color: #9A9BA8;">settings</mat-icon>
+            <div class="d-flex justify-content-between mt-2">
+              <button class="btn p-0 m-0" (click)="openCompartir()">
+                <mat-icon  style="color: #475767">share</mat-icon>
+              </button>
+              <button  class="btn p-0 m-0" (click)="openDescargar()">
+                <mat-icon  style="color: #475767">download</mat-icon>
+              </button>
+
+              <button class="btn p-0 m-0" (click)="openEditar()">
+                <mat-icon  style="color: #475767">drive_file_rename_outline</mat-icon>
+              </button>
+              <button class="btn p-0 m-0">
+                <mat-icon  style="color: #475767">drive_file_move</mat-icon>
+              </button>
+              <button class="btn p-0 m-0"
+              data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRightLabel">
+                <mat-icon  style="color: #475767">dehaze</mat-icon>
+              </button>
             </div>
           </td>
         </tr>
@@ -128,5 +156,6 @@
     </table>
   </div>
 </div>
+
 <!--   [class.carpeta-cortar]="(hayCarpetaSeleccionada && carpeta.Cod === carpetaParaCortar) ||
                                         (hayCarpetaSeleccionada && carpeta.Cod === carpetaParaCopiar)" -->

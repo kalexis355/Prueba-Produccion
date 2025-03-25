@@ -1,34 +1,60 @@
-<div class="">
-  <mat-dialog-content class="col mb-0" style="height: 250px;">
-    <h4 class="text-center">Compartir {{nombreCarpetaDom()}}</h4>
-    <div class="col  text-center ">
-      <div class="input-group mb-3">
-        <button class="btn btn-light " style="cursor: auto;"
-        matTooltip="Agregar un nombre o correo electrónico"
-        matTooltipPosition="below"
-        matTooltipClass="custom-tooltip">
-        <i class="fa-regular fa-user"></i>
-      </button>
-        <input type="text" class="form-control" aria-label="Text input with dropdown button">
-        <select class="form-select" aria-label="Default select example">
-          <option selected>Permisos</option>
-          <option value="1"> Editar</option>
-          <option value="2">Ver</option>
-        </select>
-        <br>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12 ">
-        <textarea name="" id="" class="w-100 form-control  " rows="4" placeholder="Ingresa tu mensaje aqui..."></textarea>
-      </div>
-    </div>
-
-  </mat-dialog-content>
-
-  <mat-dialog-actions class="d-flex justify-content-between mt-0">
-    <button class="btn btn-danger"  (click)="onNoClick()">Cancelar</button>
-    <button class="btn btn-primary"  (click)="onSaveClick()" >Aceptar</button>
-  </mat-dialog-actions>
+<div >
+  <div class="d-flex align-items-center justify-content-center">
+    <span class="titulo-compartir mt-5">Compartir</span>
   </div>
 
+  <div>
+    <span class="titulo-permiso mt-3 ms-3">Permiso</span>
+  </div>
+  <div class="d-flex align-items-center ms-4 mt-2">
+    <button class="btn d-flex align-items-center">
+      <mat-icon class="material-icons-outlined" style="color:  #475767">remove_red_eye</mat-icon>
+      <span  class="ms-2 titulo-botones">Solo lectura</span>
+      <span class="ms-1">|</span>
+    </button>
+
+    <button class="btn  d-flex align-items-center">
+      <mat-icon  style="color: #475767">drive_file_rename_outline</mat-icon>
+      <span class="ms-2 titulo-botones">Edición</span>
+      <span class="ms-1">|</span>
+    </button>
+
+    <button class="btn  d-flex align-items-center">
+      <mat-icon  style="color: #475767">download</mat-icon>
+      <span class="ms-2 titulo-botones">Descarga</span>
+    </button>
+  </div>
+  <div>
+    <span class="titulo-permiso mt-2 ms-3">Seleccionar grupo de usuarios</span>
+  </div>
+  <div class=" ms-3 mt-2" style="width: 95%;">
+    <select name="" id="" class="form-control ">
+      <option value="">Grupo de usuarios</option>
+    </select>
+  </div>
+  <div class="mt-2">
+    <span class="titulo-permiso mt-2 ms-3">Seleccionar o buscar usuario individual</span>
+  </div>
+
+  <div class=" ms-3 mt-4 contenedor-usuarios mb-5 ms-3" style="width: 95%;" >
+    <div class="d-flex justify-content-between align-items-center mb-5 ">
+      <button type="button" class="align-items-center d-flex btn-exportar ms-2 mt-2">
+        <mat-icon style="color: #6D788D;">ios_share_outlined</mat-icon>
+        <span class="exportar">EXPORTAR</span>
+      </button>
+      <div class="d-flex">
+        <input type="text" class=" buscar-usuario" placeholder="Buscar usuario">
+        <button type="button" class="btn-añadir-usuario">
+          AÑADIR USUARIO
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end" style="width: 95%;">
+    <button type="button" class="btn btn-cancelar me-2">CANCELAR</button>
+    <button type="button" class="btn btn-crear " >COMPARTIR</button>
+  </div>
+
+</div>

@@ -50,6 +50,8 @@ import { DialogoDetallesArchivosComponent } from './components/dialogo-detalles-
 import { MenuContextualArchivosComponent } from './components/menu-contextual-archivos/menu-contextual-archivos.component';
 import { DetallesArchivosComponent } from './components/detalles-archivos/detalles-archivos.component';
 import { DashboardMigradoComponent } from './layouts/dashboard-migrado/dashboard-migrado.component';
+import { DialogoDescargarCarpetaComponent } from './components/dialogo-descargar-carpeta/dialogo-descargar-carpeta.component';
+import { DialogoEditarComponent } from './components/dialogo-editar/dialogo-editar.component';
 
 @NgModule({
   declarations: [
@@ -93,6 +95,8 @@ import { DashboardMigradoComponent } from './layouts/dashboard-migrado/dashboard
     MenuContextualArchivosComponent,
     DetallesArchivosComponent,
     DashboardMigradoComponent,
+    DialogoDescargarCarpetaComponent,
+    DialogoEditarComponent,
 
   ],
   imports: [

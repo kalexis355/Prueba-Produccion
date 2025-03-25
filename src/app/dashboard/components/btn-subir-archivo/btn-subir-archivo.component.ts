@@ -285,7 +285,7 @@ export class BtnSubirArchivoComponent {
                       Formato: event.response[0].Formato,
                       NumeroHojas: event.response[0].NumeroHojas,
                       Duracion: event.response[0].Duracion,
-                      Tamaño: event.response[0].Tamaño,
+                      Tamano: event.response[0].Tamaño,
                       Estado: event.response[0].Estado,
                       Indice: event.response[0].Indice,
                       TipoNodo: 'archivo',
@@ -333,7 +333,7 @@ export class BtnSubirArchivoComponent {
                     //   showConfirmButton: false,
                     //   allowOutsideClick: false,
                     // });
-                    
+
                     resolve();
                     break;
                 }

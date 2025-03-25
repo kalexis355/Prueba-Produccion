@@ -17,6 +17,8 @@ export class BuscadorGenericoComponent {
 
   @Input()
   public placeHolder:string=''
+  
+  @Input() conBorde: boolean = false;
 
   //Funciona para poder emitir un valor y que el padre lo pueda escuchar
   @Output()

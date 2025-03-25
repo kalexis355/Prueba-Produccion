@@ -73,18 +73,22 @@
 <div>
   <form [formGroup]="archivoForm" (ngSubmit)="onSaveClick()" autocomplete="off">
     <mat-dialog-content class="col mb-0">
-      <h4 class="text-center">Creación de Archivo</h4>
+      <h4 class="text-center creacion-archivos mt-5">Creación de Archivo</h4>
 
       <div class="table-responsive mt-3">
-        <table class="table table-bordered">
-          <thead class="table-dark">
+        <div class=" d-flex justify-content-end align-content-end mt-3 mb-3">
+          <app-btn-subir-archivo></app-btn-subir-archivo>
+        </div>
+        <table class="table ">
+          <thead class="" style="background-color: #157de4;">
             <tr>
               <th>Nombre</th>
               <th class="col-1 text-center">Formato</th>
               <th >Tipo</th>
               <th class="text-center">Firmar</th>
-              <th class="text-center">Detalles</th>
-              <th class="text-center">Eliminar</th>
+              <th class="text-center">Persona a firmar</th>
+              <th class="text-center">Acciones</th>
+
             </tr>
           </thead>
           <tbody formArrayName="archivos">
@@ -117,10 +121,17 @@
                 </div>
               </td>
               <td class="text-center">
-                <button type="button" class="btn btn-info" (click)="abrirDetalles(archivo)" ><i class="fa-regular fa-eye"></i></button>
+                <app-buscador-generico  [conBorde]="true" placeHolder="Buscar usuario..."></app-buscador-generico>
               </td>
-              <td class="text-center">
-                <button type="button" (click)="eliminarArchivo(i)" class="btn btn-danger"><i class="fa-regular fa-rectangle-xmark"></i></button>
+              <td>
+                <div class="d-flex justify-content-between mt-2">
+                  <button class="btn m-0 p-0 me-2" (click)="abrirDetalles(archivo)">
+                    <mat-icon title="Detalles" style="color: #9E9FAB" >remove_red_eye_outlined</mat-icon>
+                  </button>
+                  <button class="btn m-0 p-0 me-2" (click)="eliminarArchivo(i)">
+                    <mat-icon title="Eliminar" style="color: #9E9FAB" >delete</mat-icon>
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -133,8 +144,8 @@
       <mat-dialog-actions class="d-flex justify-content-between align-items-center">
         <span>Total de archivos a Subir: {{archivosProcessados.length}}</span>
         <div>
-          <button type="button" class="btn btn-danger me-3" (click)="cancelar()">Cancelar Subida</button>
-          <button class="btn btn-primary" [disabled]="archivoForm.invalid || tieneDocumentosSinSeleccionar()">Subir Archivos</button>
+          <button type="button" class="btn-cancelar me-3" (click)="cancelar()">CANCELAR</button>
+          <button class="btn-subir-archivo" [disabled]="archivoForm.invalid || tieneDocumentosSinSeleccionar()">SUBIR ARCHIVOS</button>
         </div>
       </mat-dialog-actions>
 

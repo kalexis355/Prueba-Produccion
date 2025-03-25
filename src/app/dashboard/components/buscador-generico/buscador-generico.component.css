@@ -18,3 +18,7 @@ input{
   background-color: #ffffff;
   border: none;
 }
+.con-borde {
+  border: 1px solid #C3C8CD; /* O el estilo de borde que prefieras */
+  border-radius: 4px; /* Opcional para bordes redondeados */
+}
