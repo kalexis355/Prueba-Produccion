@@ -241,7 +241,7 @@ export class GestionCarpetasService implements OnDestroy {
   }
 
   ObtenerYMostrarGzip(): Observable<CarpetaEstructura> {
-    console.log('acabas de entrar');
+    // console.log('acabas de entrar');
 
     const token = localStorage.getItem('token');
     const url = `${this.baseUrl2}/Api/Carpetas?EstructuraDocumental=true`;

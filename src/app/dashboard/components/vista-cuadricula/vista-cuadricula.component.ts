@@ -146,7 +146,7 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
       this.subscription = this.oficinaService.oficinasFiltradas$.subscribe(
         (oficinas) => {
           this.oficinasFiltradas = oficinas;
-          console.log('Oficinas filtradas actualizadas:', oficinas);
+          // console.log('Oficinas filtradas actualizadas:', oficinas);
           // Aquí puedes realizar cualquier lógica adicional cuando los datos cambien
         }
       );
@@ -206,7 +206,7 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
   async obtenerCarpetasPadres() {
     try {
       const carpetasPadre = await this.indexdbService.obtenerCarpetasPadre();
-      console.log('Carpetas padre:', carpetasPadre);
+      // console.log('Carpetas padre:', carpetasPadre);
       // Aquí puedes asignar las carpetas a una variable del componente
       this.carpetasPadre = carpetasPadre;
       this.oficinasFiltradas = carpetasPadre;

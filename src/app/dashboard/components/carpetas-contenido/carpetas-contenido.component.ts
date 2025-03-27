@@ -55,21 +55,34 @@ export class CarpetasContenidoComponent {
     const idOficina = localStorage.getItem('idOficina')
     const idUsuario = this.auth2Service.currentUSer2()?.Cod
 
-    if(role && idOficina)
-    if(carpeta.NivelVisualizacion === 3){
-      const esAdmin = +role ===2
-      // Verificar si el usuario tiene un rol válido en la oficina correspondiente
-    const perteneceOficina = this.rolesUsuario.some(
-      (rol) => rol.Rol === 3 && rol.Oficina === +idOficina
+    if(role && idOficina){
+      // console.log('si hay rol y idoficina');
 
-    );
+      if(carpeta.NivelVisualizacion === 3 || carpeta.NivelVisualizacion ===2){
+        // console.log('hola este es el nivel de visualizcion');
 
-    const esDelegado = idUsuario === carpeta.Delegado;
-      return esAdmin || perteneceOficina || esDelegado;
+        const esAdmin = +role === 2 || +role === 5;
+        // Verificar si el usuario tiene un rol válido en la oficina correspondiente
+      const perteneceOficina = this.rolesUsuario.some(
+        (rol) => (rol.Rol === 3 || rol.Rol ===5) && rol.Oficina === +idOficina
+
+      );
+
+      const esDelegado = idUsuario === carpeta.Delegado;
+
+      // console.log(esAdmin,perteneceOficina,esDelegado);
+
+        return esAdmin || perteneceOficina || esDelegado;
+      }
+    }else{
+      console.log('no hay rol o idoficina');
+
     }
 
     return false;
   }
+
+
 
   esVisible(carpeta:CarpetasPadre):boolean{
 
@@ -118,12 +131,12 @@ export class CarpetasContenidoComponent {
         case 2:
           // console.log('hola es privada');
 
-          return this.esVisible(carpeta);
+          return this.esVisible(carpeta) || this.esVisibleUltimoNivel(carpeta);
           return true;
 
         case 3:
-          //  return this.esVisibleUltimoNivel(carpeta);
-          return true;
+           return this.esVisibleUltimoNivel(carpeta);
+          // return true;
 
         default:
           return false;

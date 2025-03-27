@@ -21,7 +21,7 @@
       <div class="mx-3 col-6">
         <app-buscador-generico placeHolder="Buscar Oficina" (emitirModeloPresionando)="onBuscarOficina($event)"></app-buscador-generico>
       </div>
-      <div class="mx-3">
+      <div class="mx-3" *ngIf="rolAdminSa()">
         <button class="d-flex align-items-center crear-oficina" (click)="openOficinaModal()">
          <span class="ps-2">CREAR OFICINA</span>
          <mat-icon class="boton-plus">add_circle_outline</mat-icon>

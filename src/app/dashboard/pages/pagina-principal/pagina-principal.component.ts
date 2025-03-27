@@ -108,4 +108,11 @@ export class PaginaPrincipalComponent implements OnInit {
     });
   }
 
+  rolAdminSa():boolean{
+    const rol = localStorage.getItem('role')
+    // 1 es Sa y 2 es Administrador
+    return rol ==='1' || rol==='2'
+  }
+
+
 }

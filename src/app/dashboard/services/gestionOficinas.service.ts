@@ -102,7 +102,7 @@ export class GestionOficinasService {
 
     const carpetasPadres = await this.indexdbService.obtenerCarpetasPadre()
     this.oficinasFiltradas.next(carpetasPadres)
-    console.log(carpetasPadres,'notificacion de nueva carpeta creada');
+    // console.log(carpetasPadres,'notificacion de nueva carpeta creada');
 
     // this.oficinasSubject.next(carpetasPadres)
   }

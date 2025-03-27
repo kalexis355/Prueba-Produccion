@@ -187,8 +187,8 @@ export class ArchivosPageComponent implements OnInit, OnDestroy,OnChanges {
     // this.permisoCortarPegar();
     // this.permisoAdminOpciones(carpeta);
     // this.usuarioEsDelegado(carpeta);
-    this.usuarioEsAdminsitrador();
-    this.usuarioEsEncargado();
+    // this.usuarioEsAdminsitrador();
+    // this.usuarioEsEncargado();
     // this.usuarioEsDelegadoOpciones(carpeta);
     // const hayCarpetaAOperar = localStorage.getItem('elementoAOperar');
     // this.hayCarpetaSeleccionada = hayCarpetaAOperar !== null;
@@ -441,9 +441,6 @@ export class ArchivosPageComponent implements OnInit, OnDestroy,OnChanges {
   }
 
    ngOnInit() {
-
-
-
     this.obtenerUSuarios();
 
     this.obtenerEstadoCarpeta();
@@ -462,6 +459,7 @@ export class ArchivosPageComponent implements OnInit, OnDestroy,OnChanges {
         if (this.carpetaActualId !== null) {
           this.cargarCarpetasHijas(this.carpetaActualId)
           this.obtenerContenidoCarpetaIndex(this.carpetaActualId)
+          // this.usuarioPuedeCrearCarpetas()
 
         } else {
         }
@@ -492,9 +490,14 @@ export class ArchivosPageComponent implements OnInit, OnDestroy,OnChanges {
       this.carpetaPadre = navigation?.extras.state?.['carpeta'];
       this.carpetaHija = navigation?.extras.state?.['carpetaHija'];
 
-      this.usuarioPuedeSubirArchivos();
-      this.usuarioPuedeCrearCarpetas();
-      this.usuarioEsDelegado();
+      setTimeout(() => {
+        this.usuarioPuedeSubirArchivos();
+        this.usuarioPuedeCrearCarpetas();
+        this.usuarioEsDelegado();
+      }, 100); // Un pequeño retraso para dar tiempo a que localStorage se actualice
+      // this.usuarioPuedeSubirArchivos();
+      // this.usuarioPuedeCrearCarpetas();
+      // this.usuarioEsDelegado();
 
       if (id !== null && id !== this.carpetaActualId) {
 
@@ -714,6 +717,8 @@ obtenerContenidoCarpetaIndex(cod:number){
             this.DocumentoContenido = resultado.archivos;
 
            })
+
+           this.usuarioPuedeCrearCarpetas();
 }
 
 
@@ -755,82 +760,153 @@ obtenerContenidoCarpetaIndex(cod:number){
 
   }
 
-  usuarioPuedeCrearCarpetas(){
-    // console.log('No es serie o subserie 2',this.NoEsSerieOSubserie);
-    // console.log('es subserie', this.esSubserie);
-    //se puede crear carpetas en cualquier tipo en una serie o subserie o expediente o generica
-    //lo unico es que no se puede crear una subserie dentro de una generica o expediente
-    //solo se puede crear dentro de una serie o una subserie
+  // usuarioPuedeCrearCarpetas(){
+  //   // console.log('No es serie o subserie 2',this.NoEsSerieOSubserie);
+  //   // console.log('es subserie', this.esSubserie);
+  //   //se puede crear carpetas en cualquier tipo en una serie o subserie o expediente o generica
+  //   //lo unico es que no se puede crear una subserie dentro de una generica o expediente
+  //   //solo se puede crear dentro de una serie o una subserie
+  //   this.rolesUsuario = this.auth2Service.getRolesUsuario();
+  //   const rolAdmin = localStorage.getItem('role');
+  //   const idOficina = localStorage.getItem('idOficina')
+
+  //     if (rolAdmin === '2') {
+  //     this.puedeCrearCarpetas = true;
+  //     this.puedeSubirArchivos = true;
+  //     // console.log('Acceso completo como Administrador');
+  //     // return;
+  //   }
+
+  //   //Validacion para saber si es encargado
+  //   if(idOficina){
+  //     this.esEncargado = this.rolesUsuario.some(
+  //       (rol)=> rol.Rol === 3 && rol.Oficina === +idOficina
+  //     );
+
+  //     this.puedeCrearCarpetas = this.esEncargado;
+  //     this.puedeSubirArchivos = this.esEncargado;
+
+  //   }else{
+  //     console.log('no entro al if');
+  //   }
+
+
+  // // Validacion para usuario Razo
+
+  // if(idOficina ){
+  //   console.log('es usuario razo');
+
+  //   let usuarioRazo = this.rolesUsuario.some(
+  //     (rol) => rol.Rol === 5 && rol.Oficina ===+idOficina
+  //   );
+
+  //   this.puedeCrearCarpetas= usuarioRazo;
+  //   this.puedeSubirArchivos = usuarioRazo;
+  // }
+
+  //     //   this.puedeCrearCarpetas = true;
+  //     // this.puedeSubirArchivos = true;
+
+
+  // }
+
+  // usuarioEsAdminsitrador(){
+
+  //   const rolAdmin = localStorage.getItem('role');
+  //   if (rolAdmin === '2') {
+  //     console.log('soy admin');
+
+  //     this.habilitarOpcionEliminar = true;
+  //     this.habilitarOpcionCortar = true;
+  //     this.habilitarOpcionPegar = true
+  //     this.habilitarOpcionCopiar = true
+  //   }
+  // }
+
+  usuarioPuedeCrearCarpetas() {
     this.rolesUsuario = this.auth2Service.getRolesUsuario();
     const rolAdmin = localStorage.getItem('role');
-    const idOficina = localStorage.getItem('idOficina')
+    const idOficina = localStorage.getItem('idOficina');
+    const usuarioLogueado = this.auth2Service.currentUSer2()?.Cod;
 
-      if (rolAdmin === '2') {
+    // Reiniciar permisos
+    this.puedeCrearCarpetas = false;
+    this.puedeSubirArchivos = false;
+
+    // Si es administrador, tiene todos los permisos
+    if (rolAdmin === '2') {
       this.puedeCrearCarpetas = true;
       this.puedeSubirArchivos = true;
-      // console.log('Acceso completo como Administrador');
-      return;
+      return; // Importante: salir del método para que no se sobrescriba
     }
 
+      // Verificar si es delegado
+  const carpeta = this.carpetaPadre || this.carpetaHija;
+  if (carpeta && usuarioLogueado === carpeta.Delegado) {
+    console.log('soy delegado');
+    this.puedeCrearCarpetas = true;
+    this.puedeSubirArchivos = true;
+    this.esDelegado = true;
+    return; // Salir del método porque delegado tiene todos los permisos
+  }
 
-      if (rolAdmin === '3' && idOficina) {
-      this.esEncargado = this.rolesUsuario.some(
+    // Si hay ID de oficina, verificar roles específicos
+    if (idOficina) {
+      // Verificar si es encargado
+      const esEncargado = this.rolesUsuario.some(
         (rol) => rol.Rol === 3 && rol.Oficina === +idOficina
       );
-      console.log(this.rolesUsuario,'roleeeeees');
 
-      this.puedeCrearCarpetas = this.esEncargado;
-      this.puedeSubirArchivos = this.esEncargado;
-      console.log(this.puedeCrearCarpetas,'encargado');
+      // Verificar si es usuario razo
+      const esUsuarioRazo = this.rolesUsuario.some(
+        (rol) => rol.Rol === 5 && rol.Oficina === +idOficina
+      );
 
-  }
+      // Asignar permisos basados en cualquiera de los roles
+      this.puedeCrearCarpetas = esEncargado || esUsuarioRazo;
+      this.puedeSubirArchivos = esEncargado || esUsuarioRazo;
 
-  }
-
-  usuarioEsAdminsitrador(){
-
-    const rolAdmin = localStorage.getItem('role');
-    if (rolAdmin === '2') {
-      console.log('soy admin');
-
-      this.habilitarOpcionEliminar = true;
-      this.habilitarOpcionCortar = true;
-      this.habilitarOpcionPegar = true
-      this.habilitarOpcionCopiar = true
+      // Guardar el estado para referencia
+      this.esEncargado = esEncargado;
+    } else {
+      console.log('No se encontró ID de oficina');
     }
   }
 
   usuarioEsEncargado(){
-    const rol = localStorage.getItem('role');
-    const idOficina = localStorage.getItem('idOficina')
-    this.rolesUsuario = this.auth2Service.getRolesUsuario();
+    // const rol = localStorage.getItem('role');
+    // const idOficina = localStorage.getItem('idOficina')
+    // this.rolesUsuario = this.auth2Service.getRolesUsuario();
 
-    if(rol ==='3'&& idOficina){
-      console.log('entro como usuario');
-      const encargado =this.rolesUsuario.some(
-        (rol) => rol.Rol === 3 && rol.Oficina === +idOficina
-      );
-      console.log('soy encargado?',encargado);
+    // if(rol ==='3'&& idOficina){
+    //   console.log('entro como usuario');
+    //   const encargado =this.rolesUsuario.some(
+    //     (rol) => rol.Rol === 3 && rol.Oficina === +idOficina
+    //   );
+    //   console.log('soy encargado?',encargado);
 
-      this.habilitarOpcionEliminar = encargado
-      this.habilitarOpcionCortar = encargado
-      this.habilitarOpcionPegar = encargado
-      this.habilitarOpcionCopiar = encargado
-    }
+    //   this.puedeSubirArchivos=encargado
+    //   this.puedeCrearCarpetas = encargado
+
+    //   this.habilitarOpcionEliminar = encargado
+    //   this.habilitarOpcionCortar = encargado
+    //   this.habilitarOpcionPegar = encargado
+    //   this.habilitarOpcionCopiar = encargado
+    // }
   }
 
   usuarioEsDelegado(){
-    const carpeta = this.carpetaPadre || this.carpetaHija;
-    const usuarioLogueado = this.auth2Service.currentUSer2()?.Cod;
-    if(carpeta){
-      const carpetaDelegado =  carpeta.Delegado;
+    // const carpeta = this.carpetaPadre || this.carpetaHija;
+    // const usuarioLogueado = this.auth2Service.currentUSer2()?.Cod;
+    // if(carpeta){
+    //   const carpetaDelegado =  carpeta.Delegado;
 
-      if(usuarioLogueado === carpetaDelegado){
-        console.log('soy delegado');
-        this.puedeCrearCarpetas = true;
-        this.puedeSubirArchivos = true;
-      }
-    }
+    //   if(usuarioLogueado === carpetaDelegado){
+    //     console.log('soy delegado');
+    //     this.puedeCrearCarpetas = true;
+    //     this.puedeSubirArchivos = true;
+    //   }
+    // }
   }
 
   usuarioEsDelegadoOpciones(carpeta:CarpetaContenido){

@@ -159,7 +159,7 @@ async obtenerCarpetasPadre() {
   const db = await this.dbPromise;
   const carpetas = await db.getAll('carpetas');
   const carpetasPadres=carpetas.filter(carpeta => carpeta.CarpetaPadre === 0);
-  console.log(carpetasPadres,'carpetas=0');
+  // console.log(carpetasPadres,'carpetas=0');
   return carpetasPadres;
 }
 
