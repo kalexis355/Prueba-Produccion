@@ -52,6 +52,8 @@ import { DetallesArchivosComponent } from './components/detalles-archivos/detall
 import { DashboardMigradoComponent } from './layouts/dashboard-migrado/dashboard-migrado.component';
 import { DialogoDescargarCarpetaComponent } from './components/dialogo-descargar-carpeta/dialogo-descargar-carpeta.component';
 import { DialogoEditarComponent } from './components/dialogo-editar/dialogo-editar.component';
+import { GestionSoloUsuariosPageComponent } from './pages/gestion-solo-usuarios-page/gestion-solo-usuarios-page.component';
+import { FirmaElectronicaPageComponent } from './pages/firma-electronica-page/firma-electronica-page.component';
 
 @NgModule({
   declarations: [
@@ -97,7 +99,8 @@ import { DialogoEditarComponent } from './components/dialogo-editar/dialogo-edit
     DashboardMigradoComponent,
     DialogoDescargarCarpetaComponent,
     DialogoEditarComponent,
-
+    GestionSoloUsuariosPageComponent,
+    FirmaElectronicaPageComponent
   ],
   imports: [
     CommonModule,

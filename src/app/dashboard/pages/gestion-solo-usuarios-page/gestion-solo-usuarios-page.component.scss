@@ -1,0 +1,28 @@
+.gestion{
+  font-family: Inter;
+  font-size: 32px;
+  color: #465666;
+  font-weight: 500;
+}
+.boton-plus{
+  font-size: 20px;
+  padding-top: 2px;
+}
+.crear-usuario{
+
+  color: white;
+  background-color: #205468;
+  padding-left: 5px;
+  font-family: Inter;
+  font-size: 12px;
+  letter-spacing: 1px;
+  height: 30px;         /* O establece una altura específica como height: 30px; */
+  font-weight: 300;
+  border-radius: 5px;
+  border: none;
+}
+
+.crear-usuario:hover{
+  background-color: #286b86;
+
+}

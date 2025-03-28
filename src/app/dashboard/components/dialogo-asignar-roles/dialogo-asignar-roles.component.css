@@ -6,3 +6,40 @@
   border-top: 1px solid #dee2e6;
   z-index: 10;
 }
+.titulo{
+  font-family: Inter;
+  font-size: 20px;
+  font-weight: 600;
+  color: #636578;
+  margin-bottom: 15px;
+  margin-top: 10px;
+}
+
+th{
+  font-family: Inter;
+  font-size: 14px;
+  color: #3E4C5B;
+  background-color: #E9E9E9;
+}
+
+td{
+  font-family: Inter;
+  font-size: 13px;
+  color: #8c9298;
+}
+.btn-cancelar{
+  font-family: Inter;
+  font-size: 15px;
+  letter-spacing: 1px;
+  color: #707B8F;
+  background-color: white;
+  border: 1px solid #C7CCD3;
+}
+
+.btn-guardar{
+  font-family: Inter;
+  font-size: 15px;
+  letter-spacing: 1px;
+  color: white;
+  background-color: #00BCD4;
+}

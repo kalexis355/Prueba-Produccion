@@ -19,6 +19,8 @@ export class TodosUsuariosComponent implements OnInit {
 
 
   public usuarios: UsuarioConsultado[] = [];
+
+  @Input()
   public usuariosFiltrados: UsuarioConsultado[] = [];
 
   public roles:Roles[]=[]

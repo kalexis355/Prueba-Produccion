@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Component } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardLayoutComponent } from './layouts/dashboard-layout/dashboard-layout.component';
 import { PaginaPrincipalComponent } from './pages/pagina-principal/pagina-principal.component';
@@ -13,6 +13,8 @@ import { TodosUsuariosComponent } from './components/todos-usuarios/todos-usuari
 import { FormularioComponent } from './components/formulario/formulario.component';
 import { DefaultGestionComponent } from './components/default-gestion/default-gestion.component';
 import { DashboardMigradoComponent } from './layouts/dashboard-migrado/dashboard-migrado.component';
+import { GestionSoloUsuariosPageComponent } from './pages/gestion-solo-usuarios-page/gestion-solo-usuarios-page.component';
+import { FirmaElectronicaPageComponent } from './pages/firma-electronica-page/firma-electronica-page.component';
 
 const routes: Routes = [
   {
@@ -26,17 +28,19 @@ const routes: Routes = [
         {path:'**', redirectTo:'cuadricula'}
         ]},
       {path:'carpeta/:id',component:ArchivosPageComponent},
-      {path:'gestion', component:GestionUsuariosPageComponent,
-        children:[
-          {path:'oficina', component:FormOficinaComponent},
-          {path:'usuarios',component:FormularioComponent},
-          {path:'procesos',component:FormProcesosComponent},
-          {path:'all',component:TodosUsuariosComponent},
-          {path:'default',component:DefaultGestionComponent},
-          {path:'**', redirectTo:'default'},
-        ],
-        // canActivate: [rolGuard]
-      },
+      // {path:'gestion', component:GestionUsuariosPageComponent,
+      //   children:[
+      //     // {path:'oficina', component:FormOficinaComponent},
+      //     // {path:'usuarios',component:FormularioComponent},
+      //     // {path:'procesos',component:FormProcesosComponent},
+      //     // {path:'all',component:TodosUsuariosComponent},
+      //     {path:'default',component:DefaultGestionComponent},
+      //     {path:'**', redirectTo:'default'},
+      //   ],
+      //   // canActivate: [rolGuard]
+      // },
+      {path:'users',component:GestionSoloUsuariosPageComponent},
+      {path:'firma',component:FirmaElectronicaPageComponent},
       {path:'**',redirectTo:'principal'}
     ]
   }

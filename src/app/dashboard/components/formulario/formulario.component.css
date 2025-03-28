@@ -5,3 +5,45 @@
 .form-check-input {
   cursor: pointer;
 }
+
+.btn-roles{
+  font-family: Inter;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: white;
+  background-color: #00BCD4;
+
+}
+
+.btn-cancelar{
+  font-family: Inter;
+  font-size: 15px;
+  letter-spacing: 1px;
+  color: #707B8F;
+  background-color: white;
+  border: 1px solid #C7CCD3;
+}
+
+.btn-guardar{
+  font-family: Inter;
+  font-size: 15px;
+  letter-spacing: 1px;
+  color: white;
+  background-color: #00BCD4;
+}
+
+label{
+  font-family: Inter;
+  font-size: 19px;
+  font-weight: 600;
+  color: #636578;
+}
+
+.titulo{
+  font-family: Inter;
+  font-size: 20px;
+  font-weight: 600;
+  color: #636578;
+  margin-bottom: 15px;
+  margin-top: 10px;
+}

@@ -1,0 +1,21 @@
+<div class="row d-flex justify-content-between mt-3">
+  <div class="col-4 ">
+    <span class="gestion">Gestión de usuarios</span>
+  </div>
+  <div class="col-8 d-flex align-items-center justify-content-end ">
+    <div class="mx-3 col-6">
+      <app-buscador-generico placeHolder="Buscar usuarios" (emitirModeloPresionando)="onBuscarUsuario($event)" ></app-buscador-generico>
+    </div>
+    <div class="mx-3" >
+      <button class="d-flex align-items-center crear-usuario" (click)="openUserModal()">
+       <span class="ps-2">AGREGAR USUARIO</span>
+       <mat-icon class="boton-plus">add_circle_outline</mat-icon>
+      </button>
+    </div>
+</div>
+
+<div>
+  <app-todos-usuarios [usuariosFiltrados]="usuariosFiltrados"></app-todos-usuarios>
+</div>
+
+

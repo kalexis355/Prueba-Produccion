@@ -1,13 +1,12 @@
 <div class="container-fluid">
   <div class="row d-flex justify-content-center align-items-center">
-    <div class="col-10">
-      <h1 class="text-center mb-4 fs-3 mt-4">Usuarios Creados</h1>
-      <app-buscador-generico placeHolder="Buscar en Usuarios..." (emitirModeloPresionando)="onBuscarUsuario($event)"></app-buscador-generico>
+    <div class="col-12 mt-3">
+      <!-- <app-buscador-generico placeHolder="Buscar en Usuarios..." (emitirModeloPresionando)="onBuscarUsuario($event)"></app-buscador-generico> -->
       <div class="container-fluid">
         <div class="row d-flex justify-content-center align-content-center">
-            <table class="table table-striped table-bordered">
-              <thead class="table-info text-center">
-                <tr>
+            <table class="table  ">
+              <thead class=" text-start ">
+                <tr >
                   <th scope="col">Nombre</th>
                   <th scope="col">Apellidos</th>
                   <th scope="col">Teléfono</th>
@@ -17,17 +16,19 @@
                   <th scope="col">
                     <div style="overflow-x: auto; ">Rol</div>
                   </th>
-                  <th scope="col">Gestion</th>
+                  <th scope="col">Acciones</th>
                 </tr>
               </thead>
               <tbody *ngIf="usuarios">
-                <tr *ngFor="let usuario of usuariosFiltrados" class="text-center">
+                <tr *ngFor="let usuario of usuariosFiltrados" class="text-start">
                   <td class="estilosColumnas">{{ usuario.Nombres }}</td>
                   <td class="estilosColumnas">{{ usuario.Apellidos }}</td>
                   <td class="estilosColumnas">{{ usuario.Telefono }}</td>
                   <td class="estilosColumnas">{{ usuario.Documento }}</td>
                   <td class="estilosColumnas">{{ usuario.Usuario }}</td>
-                  <td class="estilosColumnas">{{ usuario.DescripcionEstado }}</td>
+                  <td class="estilosColumnas  ">
+                    <span class="estado">{{ usuario.DescripcionEstado }}</span>
+                  </td>
                   <td class="estilosColumnas">
                     <div style="white-space: nowrap; overflow-x: auto; max-width: 150px;">
                       <!-- {{ obtenerNombresRoles(usuario.RolesUsuario!) || 'No tiene Roles' }} -->
@@ -35,32 +36,37 @@
                     </div>
                   </td>
                   <td class="estilosColumnas">   <!-- Botón para modificar -->
-                    <button class="btn btn-primary me-2"
+                    <button class="btn  me-2"
                     (click)="modificarUsuario(usuario)"
                     title="Modificar usuario">
-                      <i class="fa-regular fa-pen-to-square " ></i>
+                     <mat-icon class="material-icons-outlined" style="color: #475767;  font-size: 22px;">
+                      edit_outlined</mat-icon>
                     </button>
 
                     <!-- Botón para eliminar -->
 
-                    <button class="btn btn-danger me-2"
+                    <button class="btn me-2"
                      (click)="eliminarUsuario(+usuario.Cod!)"
                      title="Eliminar usuario">
-                      <i class="fa-regular fa-trash-can"></i>
+                      <mat-icon class="material-icons-outlined" style="color: #475767; font-size: 22px;">
+                        delete_outline_outlined</mat-icon>
                     </button>
 
-                    <button class="btn btn-warning"
+                    <button class="btn"
                     *ngIf="usuario.Estado === true"
                     title="Deshabilitar usuario"
                     (click)="modificarEstadoUsuario(usuario)">
-                      <i class="fa-solid fa-user-slash"></i>
+                      <mat-icon class="material-icons-outlined" style="color: #475767; font-size: 22px;">
+                        hide_source_outlined</mat-icon>
                     </button>
 
-                    <button class="btn btn-success"
+                    <button class="btn"
                     *ngIf="usuario.Estado === false"
                     title="Habilitar usuario"
                     (click)="modificarEstadoUsuario(usuario)">
-                    <i class="fa-solid fa-user"></i>
+                    <mat-icon class="material-icons-outlined" style="color: #475767; font-size: 22px;">
+                      account_circle_outlined</mat-icon>
+
                     </button>
                   </td>
 
