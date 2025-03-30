@@ -55,6 +55,7 @@ export class GestionSoloUsuariosPageComponent implements OnInit {
         width: '1000px',
         height: '550px',
         maxWidth: '100%', // Desactiva el ancho máximo
+        data:{usuario:null}
       });
     }
 }

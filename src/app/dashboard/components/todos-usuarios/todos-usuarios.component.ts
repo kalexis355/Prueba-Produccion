@@ -7,6 +7,7 @@ import { RolesService } from '../../services/obtencionRoles.service';
 import { catchError } from 'rxjs';
 import { error } from 'console';
 import { MatDialog } from '@angular/material/dialog';
+import { DialogoGestionUsuariosComponent } from '../dialogo-gestion-usuarios/dialogo-gestion-usuarios.component';
 
 @Component({
   selector: 'app-todos-usuarios',
@@ -139,6 +140,15 @@ export class TodosUsuariosComponent implements OnInit {
       usuario.Nombres.toLowerCase().includes(termino.toLowerCase())
     );
   }
+
+      openUserModal(usuarioAModificar?:UsuarioConsultado) {
+        this.dialog.open(DialogoGestionUsuariosComponent, {
+          width: '1000px',
+          height: '550px',
+          maxWidth: '100%', // Desactiva el ancho máximo
+          data:{usuario:usuarioAModificar}
+        });
+      }
 
 
 

@@ -46,7 +46,20 @@ export class FormularioComponent implements OnInit,OnChanges {
               private fb: FormBuilder,
               private validatorService: ValidatorsService,
               private dialog:MatDialog,
-  ) { }
+  ) {
+     // Inicializar el formulario en el constructor
+     this.userForm = this.fb.group({
+      nombre: ['', Validators.required],
+      apellido: ['', Validators.required],
+      telefono: ['', Validators.required],
+      identificacion: ['', [Validators.required]],
+      usuario: ['', Validators.required],
+      contrasena: ['', [Validators.required]],
+      repetircontraseña: ['', [Validators.required]],
+      estado: [],
+    },
+    {validators: this.validatorService.passwordsMatchValidator()});
+  }
 
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -69,17 +82,18 @@ export class FormularioComponent implements OnInit,OnChanges {
   }
 
   ngOnInit(): void {
-    this.userForm = this.fb.group({
-      nombre:['Cristian',Validators.required],
-      apellido:['Gomez',Validators.required],
-      telefono:['23456',Validators.required],
-      identificacion:['12347674',[Validators.required]],
-      usuario:['Cris',Validators.required],
-      contrasena:['123456',[Validators.required]],
-      repetircontraseña:['123456',[Validators.required]],
-      estado: [],
-    },
-  {validators: this.validatorService.passwordsMatchValidator()});
+
+  //   this.userForm = this.fb.group({
+  //     nombre:['Cristian',Validators.required],
+  //     apellido:['Gomez',Validators.required],
+  //     telefono:['23456',Validators.required],
+  //     identificacion:['12347674',[Validators.required]],
+  //     usuario:['Cris',Validators.required],
+  //     contrasena:['123456',[Validators.required]],
+  //     repetircontraseña:['123456',[Validators.required]],
+  //     estado: [],
+  //   },
+  // {validators: this.validatorService.passwordsMatchValidator()});
 
   this.oficinaService.obtenerOficinas().subscribe(oficinas =>{
     this.Oficinas=oficinas
