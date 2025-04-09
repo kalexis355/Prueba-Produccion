@@ -10,6 +10,7 @@ import { DialogoCompartirComponent } from '../dialogo-compartir/dialogo-comparti
 import { DialogoDescargarCarpetaComponent } from '../dialogo-descargar-carpeta/dialogo-descargar-carpeta.component';
 import { DialogoComponent } from '../dialogo/dialogo.component';
 import { DialogoEditarComponent } from '../dialogo-editar/dialogo-editar.component';
+import { IndiceElectronicoComponent } from '../indice-electronico/indice-electronico.component';
 
 @Component({
   selector: 'app-carpetas-contenido',
@@ -171,6 +172,15 @@ export class CarpetasContenidoComponent {
    openEditar(){
     const dialogRef = this.dialog.open(DialogoEditarComponent, {
       width: '900px',
+      height: '550px',
+      maxWidth: '100%',
+      // disableClose: true,
+    });
+   }
+
+   openIndice(){
+    const dialogRef = this.dialog.open(IndiceElectronicoComponent, {
+      width: '1400px',
       height: '550px',
       maxWidth: '100%',
       // disableClose: true,

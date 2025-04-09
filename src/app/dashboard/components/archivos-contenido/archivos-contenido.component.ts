@@ -24,24 +24,27 @@ export class ArchivosContenidoComponent {
   obtenerImagenPrevisualizacion(formato: string): string {
     switch (formato) {
       case 'jpg':
-        return 'assets/imgs/imagenDefault.png'; // Crea una URL para mostrar imagen
+      case 'jpeg':
+        return 'assets/iconos/jpg.png'; // Crea una URL para mostrar imagen
       case 'png':
-        return 'assets/imgs/imagenDefault.png'; // Crea una URL para mostrar imagen
+        return 'assets/iconos/png.png'; // Crea una URL para mostrar imagen
       case 'gif':
-        return 'assets/imgs/imagenDefault.png'; // Crea una URL para mostrar imagen
+        return 'assets/iconos/gif.png'; // Crea una URL para mostrar imagen
       case 'pdf':
-        return 'assets/imgs/pdf.png';
+        return 'assets/iconos/pdf.png';
       case 'docx':
-        return 'assets/imgs/word.png';
+        return 'assets/iconos/doc.png';
       case 'xlsx':
-        return 'assets/imgs/excel.png';
+        return 'assets/iconos/xls.png';
       case 'mp4':
-        return 'assets/imgs/video.png';
+        return 'assets/iconos/mp4.png';
       case 'zip':
       case 'rar':
-        return 'assets/imgs/winrar.png';
+        return 'assets/iconos/rar.png';
       case 'pptx':
-        return 'assets/imgs/power.png';
+        return 'assets/iconos/ppt.png';
+      case 'mp3':
+        return 'assets/iconos/mp3.png';
       default:
         return 'assets/imgs/archivoDe.png';
     }

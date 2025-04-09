@@ -1,0 +1,82 @@
+.contenedor::-webkit-scrollbar {
+  width: 0.3em; /* Ancho de la barra de desplazamiento */
+  border-radius: 5px;
+}
+
+.contenedor::-webkit-scrollbar-thumb {
+  background-color: #2E7895;
+  border-radius: 4px; /* Color del pulgar de la barra de desplazamiento */
+
+}
+
+.contenedor::-webkit-scrollbar-thumb:active {
+  background-color: #2E7895; /* Cambia el color a tu preferencia */
+}
+
+
+.contenedor-detalles{
+  border-radius: 10px;
+  border: 1px solid #E8E8ED;
+  box-shadow: 2px 2px 8px 2px #c5c5c9;
+  background-color: white;
+}
+
+.contenedor-contraseña{
+  border-radius: 10px;
+  border: 1px solid #E8E8ED;
+  box-shadow: 2px 2px 8px 2px #c5c5c9;
+  background-color: white;
+}
+
+.btn-cargar{
+  font-family: Inter;
+  font-size: 14px;
+  color: white;
+  border-radius: 10px;
+  background-color: #2E7895;
+}
+
+.btn-eliminar{
+  font-family: Inter;
+  font-size: 14px;
+  color: #FF4E4A;
+  border-radius: 10px;
+  background-color: white;
+  border: 1px solid #FF4E4A;
+}
+
+.formato-permitido{
+  font-family: Inter;
+  font-size: 14px;
+  color: #808B96;
+}
+
+.detalles-perfil{
+  font-family: Inter;
+  font-size: 22px;
+  font-weight: 500;
+  color: #475767;
+}
+
+.btn-cancelar{
+  font-family: Inter;
+  font-size: 14px;
+  color: #6D788D;
+  border-radius: 10px;
+  background-color: white;
+  border: 1px solid #6D788D;
+}
+
+.propiedad-intelectual{
+  font-family: Inter;
+  color: #7E8994;
+  font-size: 14px;
+
+}
+
+.terminos{
+  font-family: Inter;
+  color: #347C98;
+  font-size: 14px;
+  font-weight: 400;
+}

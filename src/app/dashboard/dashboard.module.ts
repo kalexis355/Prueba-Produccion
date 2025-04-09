@@ -54,6 +54,9 @@ import { DialogoDescargarCarpetaComponent } from './components/dialogo-descargar
 import { DialogoEditarComponent } from './components/dialogo-editar/dialogo-editar.component';
 import { GestionSoloUsuariosPageComponent } from './pages/gestion-solo-usuarios-page/gestion-solo-usuarios-page.component';
 import { FirmaElectronicaPageComponent } from './pages/firma-electronica-page/firma-electronica-page.component';
+import { TableroPrincipalPageComponent } from './pages/tablero-principal-page/tablero-principal-page.component';
+import { IndiceElectronicoComponent } from './components/indice-electronico/indice-electronico.component';
+import { PerfilPersonalComponent } from './pages/perfil-personal/perfil-personal.component';
 
 @NgModule({
   declarations: [
@@ -100,7 +103,10 @@ import { FirmaElectronicaPageComponent } from './pages/firma-electronica-page/fi
     DialogoDescargarCarpetaComponent,
     DialogoEditarComponent,
     GestionSoloUsuariosPageComponent,
-    FirmaElectronicaPageComponent
+    FirmaElectronicaPageComponent,
+    TableroPrincipalPageComponent,
+    IndiceElectronicoComponent,
+    PerfilPersonalComponent
   ],
   imports: [
     CommonModule,

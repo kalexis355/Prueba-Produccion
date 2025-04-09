@@ -19,3 +19,100 @@
 .subtitulo2{
   color: rgb(107, 107, 107);
 }
+.offcanvas.offcanvas-end {
+  width: 650px; /* Ancho mayor (predeterminado es 400px) */
+}
+
+.detalle-expediente{
+  font-family: Inter;
+  font-size: 25px;
+  font-weight: 600;
+  color: #636578;
+}
+
+.contenedor-usuarios{
+  border-radius: 8px;
+  border: 1px solid #F8F8F9;
+  box-shadow: 2px 2px 8px 2px #dddddd;
+}
+
+.btn-añadir{
+  border-radius: 10px;
+  background-color: #2E7895;
+  color: white;
+  font-family: Inter;
+  font-size: 13px;
+}
+
+.btn-exportar{
+  border: 1px solid #6D788D;
+  border-radius: 10px;
+  background-color: white;
+  color: #6D788D;
+  font-family: Inter;
+  font-size: 13px;
+}
+
+th{
+  font-family: Inter;
+  font-size: 13px;
+  color: #757575;
+}
+
+.contenedor-iniciales{
+  border-radius: 50%;
+  background-color: #BDBDBD;
+}
+
+.inciales{
+  font-family: Inter;
+  font-size: 19px;
+  color: white;
+}
+
+.nombre-user{
+  font-family: Inter;
+  font-size: 13px;
+  font-weight: 500;
+  color: #475767;
+}
+
+.texto-dafault{
+  font-family: Inter;
+  font-size: 13px;
+  color: #808B96;
+}
+
+.titulo-detalles{
+  font-family: Inter;
+  font-size: 18px;
+  font-weight: 500;
+  color: #475767;
+}
+
+.subtitulo-detalles{
+  font-family: Inter;
+  font-size: 15px;
+  color: #475767;
+}
+
+.trazabilidad{
+  font-family: Inter;
+  font-size: 18px;
+  font-weight: 600;
+  color: #475767;
+}
+
+
+.texto-trazabilidad{
+  font-family: Inter;
+  font-size: 14px;
+  font-weight: 600;
+  color: #4A5A6A;
+}
+
+.texto-fechas{
+  font-family: Inter;
+  font-family: 13px;
+  color: #98A1AA;
+}

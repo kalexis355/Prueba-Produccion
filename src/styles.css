@@ -24,3 +24,8 @@ body {
   font-family:  Inter;
   /* background-color: cadetblue; */
 }
+
+.custom-spinner .mat-mdc-progress-spinner .mdc-circular-progress__indeterminate-circle-graphic,
+.custom-spinner .mat-mdc-progress-spinner .mdc-circular-progress__determinate-circle {
+  stroke: #bc1c4e !important;
+}

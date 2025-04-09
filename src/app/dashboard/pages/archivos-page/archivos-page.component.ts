@@ -841,8 +841,8 @@ obtenerContenidoCarpetaIndex(cod:number){
     }
 
       // Verificar si es delegado
-  const carpeta = this.carpetaPadre || this.carpetaHija;
-  if (carpeta && usuarioLogueado === carpeta.Delegado) {
+    const carpeta = this.carpetaPadre || this.carpetaHija;
+    if (carpeta && usuarioLogueado === carpeta.Delegado) {
     console.log('soy delegado');
     this.puedeCrearCarpetas = true;
     this.puedeSubirArchivos = true;

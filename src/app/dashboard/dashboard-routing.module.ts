@@ -15,6 +15,8 @@ import { DefaultGestionComponent } from './components/default-gestion/default-ge
 import { DashboardMigradoComponent } from './layouts/dashboard-migrado/dashboard-migrado.component';
 import { GestionSoloUsuariosPageComponent } from './pages/gestion-solo-usuarios-page/gestion-solo-usuarios-page.component';
 import { FirmaElectronicaPageComponent } from './pages/firma-electronica-page/firma-electronica-page.component';
+import { TableroPrincipalPageComponent } from './pages/tablero-principal-page/tablero-principal-page.component';
+import { PerfilPersonalComponent } from './pages/perfil-personal/perfil-personal.component';
 
 const routes: Routes = [
   {
@@ -27,6 +29,8 @@ const routes: Routes = [
         {path:'lista', component:VistaListaComponent},
         {path:'**', redirectTo:'cuadricula'}
         ]},
+      {path:'board',component:TableroPrincipalPageComponent},
+      {path:'perfil',component:PerfilPersonalComponent},
       {path:'carpeta/:id',component:ArchivosPageComponent},
       // {path:'gestion', component:GestionUsuariosPageComponent,
       //   children:[

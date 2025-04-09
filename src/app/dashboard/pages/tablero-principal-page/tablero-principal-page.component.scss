@@ -1,0 +1,267 @@
+.texto-bienvenida{
+  font-family: Inter;
+  font-size: 20px;
+  font-weight: 500;
+  color: #465666;
+}
+
+.texto-bienvenida-negrilla{
+  font-family: Inter;
+  font-size: 20px;
+  font-weight: 600;
+  color: #465666;
+}
+
+.contenedor-info-1{
+  border: 1px solid #ECECF0;
+  border-radius: 10px;
+  box-shadow: 2px 2px 8px 2px #cdcdcf;
+}
+
+.estado-general{
+  font-family: Inter;
+  font-size: 16px;
+  font-weight: 500;
+  color: #475767;
+}
+
+.numero-info{
+  font-family: Inter;
+  font-size: 18px;
+  font-weight: 500;
+  color: #44515f;
+}
+
+.titulo-numero{
+  font-family: Inter;
+  font-size: 13px;
+  color: #A0A8B0;
+}
+
+.chip-font{
+  font-family: Inter;
+  font-size: 12px;
+  color: #798590;
+}
+
+.chip{
+  background-color: white;
+  border-radius: 10px;
+  width: 100px;
+}
+
+.card-header{
+  border: 1px solid #ECECEF;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+
+}
+
+.card-body{
+  border: 1px solid #ECECEF;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+
+}
+
+.carpeta-icono{
+  height: 30px;
+  width: 30px;
+  background-color: #d7f4ff90;
+  border-radius: 50%;
+}
+
+.cuarenta-archivos-contenedor{
+  height: 20px;
+  width: auto;
+  border-radius: 10px;
+  background-color: #d7f4ff90;
+
+}
+.cuarenta-archivos{
+  font-family: Inter;
+  font-size: 12px;
+  color: #02BCD4;
+}
+
+.avatar-group {
+  display: flex;
+}
+
+.avatar {
+  padding: 0px;
+  font-size: 13px;
+  width: 30px;
+  height:30px;
+  border-radius: 50%;
+  background-color: #BDBDBD;
+  overflow: hidden;
+  border: 2px solid #fff;
+  position: relative;
+  margin-left: -10px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar.more {
+  background-color: #e0e0e0;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.carpeta-nombre{
+  font-family: Inter;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+}
+
+.modificacion{
+  font-family: Inter;
+  font-size: 13px;
+  color: white;
+}
+
+.contenedor-doc-reciente{
+  border: 1px solid #ECECEF;
+  border-radius: 10px;
+  box-shadow: 2px 2px 8px 2px #d0d0d4;
+}
+
+.contenedor::-webkit-scrollbar {
+  width: 0.3em; /* Ancho de la barra de desplazamiento */
+  border-radius: 5px;
+}
+
+.contenedor::-webkit-scrollbar-thumb {
+  background-color: #2E7895;
+  border-radius: 4px; /* Color del pulgar de la barra de desplazamiento */
+
+}
+
+.contenedor::-webkit-scrollbar-thumb:active {
+  background-color: #2E7895; /* Cambia el color a tu preferencia */
+}
+
+
+.texto-reciente{
+  font-family: Inter;
+  font-size: 13px;
+  color: #475767;
+}
+
+.contenedor-notificaciones{
+  border: 1px solid #C0C0C8;
+  border-radius: 8px;
+  background-color:  white;
+}
+
+.contenedor-en-espera{
+  border: 1px solid #C0C0C8;
+  border-radius: 8px;
+  background-color:  white;
+}
+
+.notificaciones{
+  font-family: Inter;
+  font-size: 13px;
+  color: #475767;
+}
+
+.sin-leer{
+  background-color: #51CC28;
+  border-radius: 50px;
+}
+
+.sin-leer-texto{
+  font-family: Inter;
+  font-size: 12px;
+  color: white;
+}
+
+.op-contenedor{
+  border-radius: 50%;
+  background-color: #BDBDBD;
+}
+
+.op{
+  font-family: Inter;
+  font-size: 16px;
+  color: white;
+}
+
+.texto-notificacion{
+  font-family: Inter;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475767;
+}
+
+.fecha{
+  font-family: Inter;
+  font-size: 12px;
+  color: #B9BFC4;
+}
+
+.propiedad-intelectual{
+  font-family: Inter;
+  color: #7E8994;
+  font-size: 14px;
+
+}
+
+.terminos{
+  font-family: Inter;
+  color: #347C98;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+
+
+
+
+
+
+
+.spinner-container {
+  position: relative;
+  height: 110px;
+  width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-spinner {
+  position: absolute;
+}
+
+.icon-container {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Para cambiar el color del spinner a un color azul similar */
+::ng-deep .custom-spinner .mat-progress-spinner-circle {
+  stroke: #bc1c4e !important;
+}
+
+.texto-firma{
+  font-family: Inter;
+  font-size: 12px;
+  color: #818C97;
+}
+
+.contenedor-imagen{
+  background-color: #D4D6FF;
+  border-radius: 10px;
+}

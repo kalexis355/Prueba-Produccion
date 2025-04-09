@@ -1,0 +1,124 @@
+<div class="contenedor" style="height: 90% !important; overflow-y: auto;">
+
+  <div class="contenedor-detalles p-3 ">
+    <span class="detalles-perfil">Detalles del perfil</span>
+
+    <div class="d-flex align-items-center ">
+      <img src="assets/imgs/usuarioPerfil.jpg" class="rounded float-start" alt="perfil personal" width="100">
+      <div class="d-flex flex-column ms-4">
+        <div class="d-flex align-items-center ">
+          <button type="button" class="btn btn-cargar p-2 ps-3 pe-3 me-3" >GARGAR NUEVA FOTO</button>
+          <button type="button" class="btn btn-eliminar p-2 ps-3 pe-3">ELIMINAR</button>
+        </div>
+        <span class="formato-permitido mt-3">Formato permitido JPG, GIF o PNG. Tamaño máximo 800kb</span>
+      </div>
+    </div>
+
+    <div class="mt-4">
+
+      <form action="">
+        <div class="d-flex">
+          <div class="col-6 pe-3 ps-3 pt-3 ">
+            <mat-form-field appearance="outline" class="w-100" >
+              <mat-label>Primer Nombre</mat-label>
+              <input matInput style="color: #65677A;"/>
+            </mat-form-field>
+          </div>
+          <div class="col-6 pe-3 ps-3 pt-3">
+            <mat-form-field appearance="outline" class="w-100" >
+              <mat-label>Segundo Nombre</mat-label>
+              <input matInput style="color: #65677A;"/>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="d-flex">
+          <div class="col-6 pe-3 ps-3 ">
+            <mat-form-field appearance="outline" class="w-100" >
+              <mat-label>Primer Apellido</mat-label>
+              <input matInput style="color: #65677A;"/>
+            </mat-form-field>
+          </div>
+          <div class="col-6 pe-3 ps-3">
+            <mat-form-field appearance="outline" class="w-100" >
+              <mat-label>Segundo Apellido</mat-label>
+              <input matInput style="color: #65677A;"/>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="d-flex">
+          <div class="col-6 pe-3 ps-3 ">
+            <mat-form-field appearance="outline" class="w-100" >
+              <mat-label>Seleccione tipo de documento</mat-label>
+              <mat-select matInput style="color: #65677A;">
+                <mat-option value="dni">DNI</mat-option>
+                <mat-option value="pasaporte">Pasaporte</mat-option>
+                <mat-option value="cedula">Cédula de Identidad</mat-option>
+                <mat-option value="ruc">RUC</mat-option>
+                <!-- Puedes agregar más opciones según sea necesario -->
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-6 pe-3 ps-3">
+            <mat-form-field appearance="outline" class="w-100" >
+              <mat-label>Documento</mat-label>
+              <input matInput style="color: #65677A;"/>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div>
+          <div class="col-12 pe-3 ps-3">
+            <mat-form-field appearance="outline" class="w-100" >
+              <mat-label>Email</mat-label>
+              <input matInput style="color: #65677A;"/>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="d-flex pe-3 ps-3">
+          <button class="btn btn-cargar me-3">GUARDAR CAMBIOS</button>
+          <button class="btn btn-cancelar">CANCELAR</button>
+        </div>
+
+
+
+
+      </form>
+    </div>
+
+  </div>
+
+  <div class="contenedor-contraseña p-2 mt-3">
+    <span class="detalles-perfil ps-2">Cambio de contraseña</span>
+
+    <div class="d-flex ">
+      <div class="col-6 ps-2 pe-3 mt-2">
+        <div class="">
+          <input type="password" class="form-control " style="height: 50px;"
+            placeholder="Ingrese la contraseña" required>
+        </div>
+      </div>
+      <div class="col-6 ps-3 pe-3 mt-2">
+        <div class="">
+          <input type="password" class="form-control" style="height: 50px;"
+            placeholder="Confirme la contraseña" required>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="d-flex pe-3 ps-2 mt-3">
+      <button class="btn btn-cargar me-3">ACTUALIZAR</button>
+      <button class="btn btn-cancelar">CANCELAR</button>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-between mt-3">
+    <span class="propiedad-intelectual">© 2025 NUBLU - Gestion Documental Inteligente</span>
+    <span class="terminos">Términos y condiciones | Políticas de privacidad  Contacto: soporte&#64;nublu.com</span>
+  </div>
+  <br>
+
+</div>
