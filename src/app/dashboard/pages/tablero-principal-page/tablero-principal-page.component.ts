@@ -5,6 +5,7 @@ import { CarpetaBase, CarpetasPadre } from '../../interfaces/carpeta.interface';
 import { DocumentoContenido } from '../../interfaces/contenidoCarpeta';
 import { MatDialog } from '@angular/material/dialog';
 import { VisualizadorArchivosComponent } from '../../components/visualizador-archivos/visualizador-archivos.component';
+import { GestionCarpetasService } from '../../services/gestionCarpetas.service';
 
 @Component({
   selector: 'app-tablero-principal-page',
@@ -15,6 +16,7 @@ export class TableroPrincipalPageComponent implements OnInit {
 
   private indexdbService = inject(IndexDbService)
   public authService2 = inject(Auth2Service);
+  public carpetaService = inject(GestionCarpetasService);
   public user = computed(() => this.authService2.currentUSer2());
 
   carpetasFrecuentes: CarpetasPadre[] | CarpetaBase[] = [];
@@ -28,6 +30,10 @@ export class TableroPrincipalPageComponent implements OnInit {
       localStorage.removeItem('nombreOficina')
       this.cargarCarpetasFrecuentes();
       this.cargarArchivosFrecuentes();
+    }
+
+    guardarEnRuta(carpeta:CarpetasPadre|CarpetaBase){
+      this.carpetaService.agregarACamino(carpeta.Cod,carpeta.Nombre)
     }
 
     async cargarArchivosFrecuentes(): Promise<void>{

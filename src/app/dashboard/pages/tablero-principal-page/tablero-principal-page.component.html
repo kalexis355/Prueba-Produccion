@@ -60,6 +60,7 @@
 
         <div class="col-6" *ngIf="carpetasFrecuentes.length >= 1">
           <div class="card-header d-flex justify-content-between align-items-center p-3 " style="cursor: pointer;"
+          (click)="guardarEnRuta(carpetasFrecuentes[0])"
           [routerLink]="['/dashboard/carpeta',carpetasFrecuentes[0].Cod]"
           >
 
@@ -100,6 +101,7 @@
         <div class="col-6 " *ngIf="carpetasFrecuentes.length >= 2">
           <div class="card-header d-flex justify-content-between align-items-center p-3 " style="cursor: pointer;"
           [routerLink]="['/dashboard/carpeta',carpetasFrecuentes[1].Cod]"
+          (click)="guardarEnRuta(carpetasFrecuentes[1])"
           >
 
             <div class="carpeta-icono d-flex align-items-center justify-content-center">
@@ -141,6 +143,7 @@
         <div class="col-6 " *ngIf="carpetasFrecuentes.length >= 3">
           <div class="card-header d-flex justify-content-between align-items-center p-3 " style="cursor: pointer;"
           [routerLink]="['/dashboard/carpeta',carpetasFrecuentes[2].Cod]"
+          (click)="guardarEnRuta(carpetasFrecuentes[2])"
           >
 
             <div class="carpeta-icono d-flex align-items-center justify-content-center">
@@ -180,6 +183,7 @@
         <div class="col-6" *ngIf="carpetasFrecuentes.length >= 4">
           <div class="card-header d-flex justify-content-between align-items-center p-3 " style="cursor: pointer;"
           [routerLink]="['/dashboard/carpeta',carpetasFrecuentes[3].Cod]"
+          (click)="guardarEnRuta(carpetasFrecuentes[3])"
           >
 
             <div class="carpeta-icono d-flex align-items-center justify-content-center">
