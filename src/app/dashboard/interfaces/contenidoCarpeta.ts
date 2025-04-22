@@ -30,7 +30,7 @@ export interface DocumentoContenido {
   Formato: string;
   NumeroHojas: number;
   Duracion: string;  // Formato de tiempo
-  Tamano: string;    // Formato de tamaño
+  Tamaño: string;    // Formato de tamaño
   Estado: boolean;
   Indice: number;
   NombreTipoArchivo: string;

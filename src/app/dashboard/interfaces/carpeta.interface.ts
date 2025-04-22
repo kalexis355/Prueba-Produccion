@@ -196,7 +196,7 @@ export interface ArchivoGenericoExpediente {
   Formato: string;
   NumeroHojas: number;
   Duracion: string;
-  Tamano: string;
+  Tamaño: string;
   Estado: boolean;
   Indice: number;
   TipoNodo: 'archivo';

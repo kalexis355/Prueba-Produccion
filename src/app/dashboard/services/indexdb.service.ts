@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import { ArchivoGenericoExpediente, Carpeta, CarpetaBase, CarpetaEstructura, CarpetasPadre, ContenidoCarpetaResponse } from '../interfaces/carpeta.interface';
 import { Oficinas, RespuestaBackend, RespuestaOficinaCreada } from '../../login/interfaces/oficina.interface';
+import { DocumentoContenido } from '../interfaces/contenidoCarpeta';
+import { timestamp } from 'rxjs';
 
 interface MyDB extends DBSchema {
   carpetas: {
@@ -35,6 +37,10 @@ interface MyDB extends DBSchema {
   carpetasFrecuentes:{
     key:number;
     value: CarpetasPadre;
+  };
+  archivosFrecuentes:{
+    key:number;
+    value:DocumentoContenido;
   }
 
 
@@ -46,7 +52,7 @@ export class IndexDbService {
   private dbPromise: Promise<IDBPDatabase<MyDB>>;
 
   constructor() {
-    this.dbPromise = openDB<MyDB>('MiBaseDeDatos', 4, {
+    this.dbPromise = openDB<MyDB>('MiBaseDeDatos', 5, {
       upgrade(db) {
         if (!db.objectStoreNames.contains('carpetas')) {
           db.createObjectStore('carpetas', { keyPath: 'Cod' });
@@ -67,8 +73,37 @@ export class IndexDbService {
         if(!db.objectStoreNames.contains('carpetasFrecuentes')){
           db.createObjectStore('carpetasFrecuentes',{keyPath:'Cod'})
         }
+        if(!db.objectStoreNames.contains('archivosFrecuentes')){
+          db.createObjectStore('archivosFrecuentes',{keyPath:'Cod'})
+        }
       },
     });
+   }
+
+   async guardarArchivosFrecuentes(archivo:DocumentoContenido):Promise<void>{
+    const db = await this.dbPromise;
+    const tx = db.transaction('archivosFrecuentes','readwrite');
+    const store = tx.objectStore('archivosFrecuentes')
+
+    const archivoConTimestamp = {
+      ...archivo,
+      timestamp: Date.now()
+    };
+
+    await store.put(archivoConTimestamp);
+    await tx.done;
+   }
+
+   async obtenerArchivosFrecuentes(limit= 5): Promise<DocumentoContenido[]>{
+    const db = await this.dbPromise;
+    const tx = db.transaction('archivosFrecuentes','readonly');
+    const store = tx.objectStore('archivosFrecuentes');
+
+    const archivos = await store.getAll();
+
+    return archivos
+      .sort((a:any, b:any) => b.timestamp - a.timestamp)
+      .slice(0,limit);
    }
 
 

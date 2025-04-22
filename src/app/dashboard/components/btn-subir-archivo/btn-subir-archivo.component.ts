@@ -285,7 +285,7 @@ export class BtnSubirArchivoComponent {
                       Formato: event.response[0].Formato,
                       NumeroHojas: event.response[0].NumeroHojas,
                       Duracion: event.response[0].Duracion,
-                      Tamano: event.response[0].Tamaño,
+                      Tamaño: event.response[0].Tamaño,
                       Estado: event.response[0].Estado,
                       Indice: event.response[0].Indice,
                       TipoNodo: 'archivo',

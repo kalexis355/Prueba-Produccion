@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { DocumentoContenido } from '../../interfaces/contenidoCarpeta';
 import { MatDialog } from '@angular/material/dialog';
 import { VisualizadorArchivosComponent } from '../visualizador-archivos/visualizador-archivos.component';
+import { IndexDbService } from '../../services/indexdb.service';
 
 @Component({
   selector: 'app-archivos-contenido',
@@ -14,6 +15,8 @@ export class ArchivosContenidoComponent {
 
   @Output() contextMenu = new EventEmitter<{event: MouseEvent, cod:number}>();
   @Input() tipoVista: 'cuadricula' | 'lista' = 'cuadricula';
+
+  private indexdbService = inject(IndexDbService)
 
   constructor(public dialog: MatDialog){}
 
@@ -53,6 +56,10 @@ export class ArchivosContenidoComponent {
 
 
   openVisualizador(documento: DocumentoContenido) {
+
+    this.indexdbService.guardarArchivosFrecuentes(documento)
+
+
     const dialogRef = this.dialog.open(VisualizadorArchivosComponent, {
       width: '900px',
       height: '550px',

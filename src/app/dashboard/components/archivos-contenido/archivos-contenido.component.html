@@ -31,7 +31,7 @@
             <img class="mt-2" [src]="obtenerImagenPrevisualizacion(archivo.Formato)" alt="archivo" width="80"
               height="80">
             <span class="mt-1 texto" [title]="archivo.Nombre">{{archivo.Nombre}}</span>
-            <span class="tamano">{{archivo.Tamano}} 100 GB</span>
+            <span class="tamano">{{archivo?.['Tamaño']}}</span>
             <mat-divider class="division "></mat-divider>
           </button>
           <div class="d-flex justify-content-between mt-2">
