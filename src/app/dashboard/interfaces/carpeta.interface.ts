@@ -154,6 +154,8 @@ export interface CarpetasPadre{
     TipoCarpeta: number;
     NivelVisualizacion: number;
     SerieRaiz: number;
+  Descripcion?: string;
+
 }
 
 

@@ -31,6 +31,10 @@ interface MyDB extends DBSchema {
   oficinas:{
     key:string;
     value: Oficinas;
+  };
+  carpetasFrecuentes:{
+    key:number;
+    value: CarpetasPadre;
   }
 
 
@@ -42,7 +46,7 @@ export class IndexDbService {
   private dbPromise: Promise<IDBPDatabase<MyDB>>;
 
   constructor() {
-    this.dbPromise = openDB<MyDB>('MiBaseDeDatos', 3, {
+    this.dbPromise = openDB<MyDB>('MiBaseDeDatos', 4, {
       upgrade(db) {
         if (!db.objectStoreNames.contains('carpetas')) {
           db.createObjectStore('carpetas', { keyPath: 'Cod' });
@@ -59,9 +63,46 @@ export class IndexDbService {
         if(!db.objectStoreNames.contains('oficinas')){
           db.createObjectStore('oficinas',{keyPath:'Cod'})
         }
+
+        if(!db.objectStoreNames.contains('carpetasFrecuentes')){
+          db.createObjectStore('carpetasFrecuentes',{keyPath:'Cod'})
+        }
       },
     });
    }
+
+
+   async guardarCarpetaFrecuente(carpeta: CarpetasPadre | CarpetaBase): Promise<void> {
+    const db = await this.dbPromise;
+    const tx = db.transaction('carpetasFrecuentes', 'readwrite');
+    const store = tx.objectStore('carpetasFrecuentes');
+
+    // Crear la versión de la carpeta con timestamp
+    const carpetaConTimestamp = {
+      ...carpeta,
+      timestamp: Date.now() // Timestamp actual
+    };
+
+    // Usar put en lugar de add
+    // put: actualiza si existe, añade si no existe
+    await store.put(carpetaConTimestamp);
+    console.log(`Carpeta ${carpeta.Nombre} actualizada como reciente`);
+
+    await tx.done;
+  }
+
+  async obtenerCarpetasFrecuentes(limit = 4): Promise<CarpetasPadre[] | CarpetaBase[]> {
+    const db = await this.dbPromise;
+    const tx = db.transaction('carpetasFrecuentes', 'readonly');
+    const store = tx.objectStore('carpetasFrecuentes');
+
+    const carpetas = await store.getAll();
+
+    return carpetas
+      .sort((a: any, b: any) => b.timestamp - a.timestamp)
+      .slice(0, limit);
+  }
+
 
    async guardarCarpetas(carpetas: CarpetaEstructura['estructura_documental']) {
     const db = await this.dbPromise;

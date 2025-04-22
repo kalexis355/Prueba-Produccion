@@ -33,12 +33,13 @@ export class CarpetasContenidoComponent {
   //Inyeccion de servicios
   public auth2Service = inject(Auth2Service);
 
-
   constructor(public dialog: MatDialog){
 
   }
 
   onCarpetaClick(carpeta: CarpetasPadre): void {
+    console.log(carpeta, 'carpeta a la cual se esta navegando');
+    this.indexdbService.guardarCarpetaFrecuente(carpeta)
     this.carpetaClick.emit(carpeta);
 
 
