@@ -18,7 +18,7 @@
         <tr  *ngFor="let carpeta of oficinasFiltradas; let i=index">
           <td>
             <div [routerLink]="['/dashboard/carpeta',carpeta.Cod]"
-            (click)="clicCarpeta(carpeta.Cod)"
+            (click)="clicCarpeta(carpeta.Cod, carpeta.Nombre)"
              class="busines me-2" [ngStyle]="{'background-color': getColor3(i), 'color': getColor(i)}">
               <mat-icon >business</mat-icon>
             </div>

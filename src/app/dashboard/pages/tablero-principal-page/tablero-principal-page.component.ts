@@ -25,7 +25,7 @@ export class TableroPrincipalPageComponent implements OnInit {
 
 
     ngOnInit(): void {
-
+      localStorage.removeItem('nombreOficina')
       this.cargarCarpetasFrecuentes();
       this.cargarArchivosFrecuentes();
     }

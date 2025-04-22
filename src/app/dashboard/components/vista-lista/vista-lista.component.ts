@@ -146,8 +146,8 @@ export class VistaListaComponent implements OnInit,OnDestroy{
 
   }
 
-  clicCarpeta(cod:number){
-    this.gestionCarpetaService.agregarACamino(cod)
+  clicCarpeta(cod:number,nombreOficina:string){
+    this.gestionCarpetaService.agregarACamino(cod,nombreOficina)
 
 
     this.indexdbService.obtenerOficinas()

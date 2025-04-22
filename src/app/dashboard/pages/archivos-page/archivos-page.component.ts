@@ -11,7 +11,7 @@ import { CheckBoxService } from '../../services/checkBox.service';
 import { Auth2Service } from '../../../login/services/auth2.service';
 import { RolesUsuario, UserResponse } from '../../../login/interfaces';
 import { GestionCarpetasService } from '../../services/gestionCarpetas.service';
-import {CarpetaContenido,DocumentoContenido,} from '../../interfaces/contenidoCarpeta';
+import {CarpetaContenido,DocumentoContenido, EntradaHistorico,} from '../../interfaces/contenidoCarpeta';
 import { Subscription, take } from 'rxjs';
 import { GestionUsuariosService } from '../../services/gestionUsuarios.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -105,7 +105,8 @@ export class ArchivosPageComponent implements OnInit, OnDestroy,OnChanges {
 
   rolesUsuario: RolesUsuario[]=[]
 
-  ruta:number[]=[]
+  // ruta:number[]=[]
+  rutaHistorica: EntradaHistorico[]=[]
 
   constructor(public dialog: MatDialog, private router: Router) {}
 
@@ -120,6 +121,8 @@ export class ArchivosPageComponent implements OnInit, OnDestroy,OnChanges {
   carpetaParaCopiar:number | null = null;
   submenuPosition: 'left' | 'right' = 'right';
   tipoVista: 'cuadricula' | 'lista' = 'cuadricula'; // Valor por defecto
+  nombreOficina:string = '';
+
 
   obtenerEstadoCarpeta() {
     this.gestionCarpetaService
@@ -157,11 +160,11 @@ export class ArchivosPageComponent implements OnInit, OnDestroy,OnChanges {
 
   cargarCarpeta(id: number) {
     // Actualizar el historial de navegación
-    this.gestionCarpetaService.agregarACamino(id);
+    // this.gestionCarpetaService.agregarACamino(id);
 
     // Obtener la ruta actual
-    this.ruta = this.gestionCarpetaService.obtenerCaminoActual();
-    console.log(this.ruta,'esta es la ruta');
+    // this.ruta = this.gestionCarpetaService.obtenerCaminoActual();
+    // console.log(this.ruta,'esta es la ruta');
 
   }
 
@@ -441,6 +444,9 @@ export class ArchivosPageComponent implements OnInit, OnDestroy,OnChanges {
   }
 
    ngOnInit() {
+
+      this.nombreOficina = localStorage.getItem('nombreOficina')!
+
     this.obtenerUSuarios();
 
     this.obtenerEstadoCarpeta();
@@ -505,10 +511,10 @@ export class ArchivosPageComponent implements OnInit, OnDestroy,OnChanges {
         this.carpetaActualId = id;
         console.log('id a navegar',id);
 
-        this.gestionCarpetaService.agregarACamino(id)
-        this.ruta = this.gestionCarpetaService.obtenerCaminoActual()
+        // this.gestionCarpetaService.agregarACamino(id)
+        this.rutaHistorica = this.gestionCarpetaService.obtenerCaminoActual()
 
-        console.log('la ruta va asi',this.ruta);
+        console.log('la ruta va asi',this.rutaHistorica);
 
         // Usar método síncrono sin await
         this.indexdbService.obtenerCarpeta(id).then(carpeta=>{
@@ -549,6 +555,12 @@ export class ArchivosPageComponent implements OnInit, OnDestroy,OnChanges {
 
   }
 
+
+  volverANivel(cod:number){
+   this.rutaHistorica = this.gestionCarpetaService.volverANivel(cod);
+
+
+  }
 
 
   puedeElimarCarpetas(carpeta:CarpetaContenido){

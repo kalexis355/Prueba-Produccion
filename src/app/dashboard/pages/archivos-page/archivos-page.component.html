@@ -39,24 +39,30 @@
         <!-- <a class="ruta me-2 mt-1 fs-5" [routerLink]="['/dashboard']">Mis archivos</a>
         <img src="assets/imgs/flechas-a-la-derecha.png" alt="" height="20" width="20" class="me-2">
         <a *ngFor="let rutaNavegada of ruta">Carpeta {{rutaNavegada}}-</a> -->
-        <button class="btn d-flex align-items-center">
+        <button class="btn d-flex align-items-center" [routerLink]="['/dashboard/board']" >
           <mat-icon style="color: #9192A0; font-size: 20px;">dashboard</mat-icon>
           <span class="texto-ruta">Tablero de inicio</span>
         </button>
 
          <mat-icon style="color: #9192A0;  font-size: 20px;">keyboard_arrow_right</mat-icon>
 
-         <button class="btn d-flex align-items-center">
+         <button class="btn d-flex align-items-center" [routerLink]="['/dashboard/carpeta',this.rutaHistorica[0].codigo]"
+         (click)="volverANivel(0)">
           <mat-icon style="color: #9192A0; font-size: 20px;">business</mat-icon>
-          <span class="texto-ruta">Recursos Humanos</span>
+          <span class="texto-ruta">{{this.rutaHistorica[0].nombre}}</span>
          </button>
 
          <mat-icon style="color: #9192A0; font-size: 20px;">keyboard_arrow_right</mat-icon>
 
-         <button class="btn d-flex align-items-center">
-          <mat-icon style="color: #9192A0; font-size: 20px;">folder_open</mat-icon>
-          <span class="texto-ruta">Contratos</span>
-         </button>
+         <ng-container *ngFor="let ruta of rutaHistorica.slice(1); let i = index">
+           <button class="btn d-flex align-items-center"
+           [routerLink]="['/dashboard/carpeta', ruta.codigo]"
+           (click)="volverANivel(i+1)" >
+            <mat-icon style="color: #9192A0; font-size: 20px;">folder_open</mat-icon>
+            <span class="texto-ruta">{{ruta.nombre}}</span>
+           </button>
+           <mat-icon style="color: #9192A0; font-size: 20px;">keyboard_arrow_right</mat-icon>
+         </ng-container>
       </div>
 
       <!-- Botones derecha -->

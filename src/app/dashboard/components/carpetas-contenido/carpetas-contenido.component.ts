@@ -11,6 +11,7 @@ import { DialogoDescargarCarpetaComponent } from '../dialogo-descargar-carpeta/d
 import { DialogoComponent } from '../dialogo/dialogo.component';
 import { DialogoEditarComponent } from '../dialogo-editar/dialogo-editar.component';
 import { IndiceElectronicoComponent } from '../indice-electronico/indice-electronico.component';
+import { GestionCarpetasService } from '../../services/gestionCarpetas.service';
 
 @Component({
   selector: 'app-carpetas-contenido',
@@ -32,6 +33,7 @@ export class CarpetasContenidoComponent {
   @Output() carpetaClick = new EventEmitter<CarpetasPadre>();
   //Inyeccion de servicios
   public auth2Service = inject(Auth2Service);
+  public carpetaService = inject(GestionCarpetasService);
 
   constructor(public dialog: MatDialog){
 
@@ -39,6 +41,7 @@ export class CarpetasContenidoComponent {
 
   onCarpetaClick(carpeta: CarpetasPadre): void {
     console.log(carpeta, 'carpeta a la cual se esta navegando');
+    this.carpetaService.agregarACamino(carpeta.Cod, carpeta.Nombre)
     this.indexdbService.guardarCarpetaFrecuente(carpeta)
     this.carpetaClick.emit(carpeta);
 

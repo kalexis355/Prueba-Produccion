@@ -154,10 +154,13 @@ export class VistaCuadriculaComponent implements OnInit, OnDestroy {
   respuesta: any;
   error: string = '';
 
-  agregarAlaRuta(cod:number){
+  agregarAlaRuta(cod:number, nombreOficina?:string){
+
     console.log('entro a la ruta');
 
-    this.gestionCarpetaService.agregarACamino(cod)
+    localStorage.setItem('nombreOficina',nombreOficina!)
+
+    this.gestionCarpetaService.agregarACamino(cod,nombreOficina!)
 
     console.log(this.gestionCarpetaService.obtenerCaminoActual());
 

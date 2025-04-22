@@ -48,6 +48,7 @@ import {
 import {
   CarpetaContenido,
   DocumentoContenido,
+  EntradaHistorico,
 } from '../interfaces/contenidoCarpeta';
 import { LoaderService } from './gestionLoader.service';
 import { IndexDbService } from './indexdb.service';
@@ -91,37 +92,46 @@ export class GestionCarpetasService implements OnDestroy {
   private actualizacionIniciada = false; // Nuevo flag para controlar el estado
   private primeraVezIniciado = false;
   private subscription: Subscription | null = null;
-  private historicoNavegacion: number[] = [];
+  historicoNavegacion: EntradaHistorico[] = [];
+
 
 
 
   constructor() {}
 
 
-  agregarACamino(codigoCarpeta: number) {
+  agregarACamino(codigoCarpeta: number, nombreCarpeta: string) {
     // Verificar si el código ya existe en el historial
-    const indiceExistente = this.historicoNavegacion.indexOf(codigoCarpeta);
+    const indiceExistente = this.historicoNavegacion.findIndex(
+      entrada => entrada.codigo === codigoCarpeta
+    );
 
     if (indiceExistente !== -1) {
       // Si existe, cortar el historial hasta ese punto
       this.historicoNavegacion = this.historicoNavegacion.slice(0, indiceExistente + 1);
     } else {
       // Si no existe, agregarlo al final
-      this.historicoNavegacion.push(codigoCarpeta);
+      this.historicoNavegacion.push({
+        codigo: codigoCarpeta,
+        nombre: nombreCarpeta
+      });
     }
   }
 
 
-  obtenerCaminoActual(): number[] {
+  obtenerCaminoActual(): EntradaHistorico[] {
     return [...this.historicoNavegacion];
   }
 
-  volverANivel(nivel: number) {
+  volverANivel(nivel: number): EntradaHistorico[] {
     if (nivel >= 0 && nivel < this.historicoNavegacion.length) {
+      // Cortamos el historial hasta el nivel indicado
       this.historicoNavegacion = this.historicoNavegacion.slice(0, nivel + 1);
-      return this.historicoNavegacion[nivel];
+
+      // Ahora retornamos el objeto completo (con código y nombre) en ese nivel
+      return this.historicoNavegacion;
     }
-    return null;
+    return this.historicoNavegacion;
   }
 
   volverAtras() {

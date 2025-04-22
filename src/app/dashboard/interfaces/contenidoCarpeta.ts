@@ -35,3 +35,9 @@ export interface DocumentoContenido {
   Indice: number;
   NombreTipoArchivo: string;
 }
+
+
+export interface EntradaHistorico {
+  codigo: number;
+  nombre: string;
+}

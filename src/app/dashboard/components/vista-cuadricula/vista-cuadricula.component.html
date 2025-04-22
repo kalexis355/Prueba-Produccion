@@ -7,7 +7,7 @@
        <div class="card" (contextmenu)="mostrarMenuContextual($event,carpeta.Cod)"
        [routerLink]="['/dashboard/carpeta',carpeta.Cod]"
        [state]="{ carpeta: carpeta }"
-       (click)="agregarAlaRuta(carpeta.Cod)">
+       (click)="agregarAlaRuta(carpeta.Cod,carpeta.Nombre)">
         <div class="card-header d-flex align-items-center p-3  "[ngStyle]="{'background-color': getColor(i)}">
           <div class="busines me-2" [ngStyle]="{'background-color': getColor2(i)}">
             <mat-icon >business</mat-icon>
