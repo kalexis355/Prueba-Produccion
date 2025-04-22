@@ -45,7 +45,7 @@ const routes: Routes = [
       // },
       {path:'users',component:GestionSoloUsuariosPageComponent},
       {path:'firma',component:FirmaElectronicaPageComponent},
-      {path:'**',redirectTo:'principal'}
+      {path:'**',redirectTo:'board'}
     ]
   }
 ];
