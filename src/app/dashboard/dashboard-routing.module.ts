@@ -17,6 +17,7 @@ import { GestionSoloUsuariosPageComponent } from './pages/gestion-solo-usuarios-
 import { FirmaElectronicaPageComponent } from './pages/firma-electronica-page/firma-electronica-page.component';
 import { TableroPrincipalPageComponent } from './pages/tablero-principal-page/tablero-principal-page.component';
 import { PerfilPersonalComponent } from './pages/perfil-personal/perfil-personal.component';
+import { GestionExpedientesComponent } from './pages/gestion-expedientes/gestion-expedientes.component';
 
 const routes: Routes = [
   {
@@ -30,6 +31,7 @@ const routes: Routes = [
         {path:'**', redirectTo:'cuadricula'}
         ]},
       {path:'board',component:TableroPrincipalPageComponent},
+      {path:'expediente',component:GestionExpedientesComponent},
       {path:'perfil',component:PerfilPersonalComponent},
       {path:'carpeta/:id',component:ArchivosPageComponent},
       // {path:'gestion', component:GestionUsuariosPageComponent,

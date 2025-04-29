@@ -106,7 +106,8 @@
         <tr *ngFor="let carpeta of carpetasFiltradas; let i = index">
           <td>
             <div class="d-flex align-items-center "
-            style="cursor: pointer;" [routerLink]="['/dashboard/carpeta',carpeta.Cod]"
+            style="cursor: pointer;"
+            [routerLink]="['/dashboard/carpeta',carpeta.Cod]"
             [state]="{ carpetaHija: carpeta }"
             (click)="onCarpetaClick(carpeta)"
             [ngStyle]="{'color': getColor(i)}"

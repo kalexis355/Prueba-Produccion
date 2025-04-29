@@ -31,6 +31,7 @@ import {
   CarpetaBase,
   CarpetaEstructura,
   CarpetaRaiz,
+  CarpetasPadre,
   CarpetasResponse,
   ContenidoCarpetaProcesado,
   ContenidoCarpetaResponse,
@@ -94,10 +95,25 @@ export class GestionCarpetasService implements OnDestroy {
   private subscription: Subscription | null = null;
   historicoNavegacion: EntradaHistorico[] = [];
 
+  public carpetasDelegado:CarpetasPadre[]=[]
+
 
 
 
   constructor() {}
+
+  async obtenerCarpetasDelegado(delegado:number){
+    try {
+      // Asumiendo que modificaste el servicio para devolver las carpetas
+      this.carpetasDelegado = await this.indexService.guardarCarpetasDelegado(delegado);
+
+      return this.carpetasDelegado;
+    } catch (error) {
+      console.error('Error al obtener carpetas del delegado:', error);
+      this.carpetasDelegado = [];
+      return [];
+    }
+  }
 
 
   agregarACamino(codigoCarpeta: number, nombreCarpeta: string) {

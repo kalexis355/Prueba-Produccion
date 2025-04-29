@@ -143,7 +143,7 @@ export interface CarpetaEstructura {
 }
 
 export interface CarpetasPadre{
-  Cod: number;
+    Cod: number;
     CodSerie: number;
     CodSubSerie: number;
     Estado: boolean;
@@ -154,7 +154,7 @@ export interface CarpetasPadre{
     TipoCarpeta: number;
     NivelVisualizacion: number;
     SerieRaiz: number;
-  Descripcion?: string;
+    Descripcion?: string;
 
 }
 

@@ -57,6 +57,7 @@ import { FirmaElectronicaPageComponent } from './pages/firma-electronica-page/fi
 import { TableroPrincipalPageComponent } from './pages/tablero-principal-page/tablero-principal-page.component';
 import { IndiceElectronicoComponent } from './components/indice-electronico/indice-electronico.component';
 import { PerfilPersonalComponent } from './pages/perfil-personal/perfil-personal.component';
+import { GestionExpedientesComponent } from './pages/gestion-expedientes/gestion-expedientes.component';
 
 @NgModule({
   declarations: [
@@ -106,7 +107,8 @@ import { PerfilPersonalComponent } from './pages/perfil-personal/perfil-personal
     FirmaElectronicaPageComponent,
     TableroPrincipalPageComponent,
     IndiceElectronicoComponent,
-    PerfilPersonalComponent
+    PerfilPersonalComponent,
+    GestionExpedientesComponent
   ],
   imports: [
     CommonModule,

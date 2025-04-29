@@ -1,0 +1,171 @@
+.oficinas{
+  font-family: Inter;
+  font-size: 32px;
+  color: #465666;
+  font-weight: 500;
+}
+
+.crear-oficina{
+
+  color: white;
+  background-color: #205468;
+  padding-left: 5px;
+  font-family: Inter;
+  font-size: 12px;
+  letter-spacing: 1px;
+  height: 30px;         /* O establece una altura específica como height: 30px; */
+  font-weight: 300;
+  border-radius: 5px;
+  border: none;
+}
+
+.crear-oficina:hover{
+  background-color: #286b86;
+
+}
+
+.btn1{
+  background-color: white;
+  border: none;
+  height: 30px;
+}
+
+.btn1:hover{
+  background-color: rgba(219, 219, 219, 0.473);
+}
+
+.icono-grid{
+  font-size: 20px;
+}
+
+.acceso-rapido{
+  font-family: Inter;
+  font-size: 22px;
+  font-weight: 500;
+  color: #465666;
+}
+
+.contenedor::-webkit-scrollbar {
+  width: 0.3em; /* Ancho de la barra de desplazamiento */
+  border-radius: 5px;
+}
+
+.contenedor::-webkit-scrollbar-thumb {
+  background-color: #55cfd3b9;
+  border-radius: 4px; /* Color del pulgar de la barra de desplazamiento */
+
+}
+
+.contenedor::-webkit-scrollbar-thumb:active {
+  background-color: #1cc4cade; /* Cambia el color a tu preferencia */
+}
+
+.card{
+  box-shadow: 2px 2px 3px 2px #E8E8EC;
+}
+
+
+.carpeta-icono{
+  height: 30px;
+  width: 30px;
+  background-color: #d7f4ff90;
+  border-radius: 50%;
+}
+.cuarenta-archivos-contenedor{
+  height: 20px;
+  width: auto;
+  border-radius: 10px;
+  background-color: #d7f4ff90;
+
+}
+
+.cuarenta-archivos{
+  font-family: Inter;
+  font-size: 12px;
+  color: #02BCD4;
+}
+
+.avatar-group {
+  display: flex;
+}
+
+.avatar {
+  padding: 0px;
+  font-size: 13px;
+  width: 30px;
+  height:30px;
+  border-radius: 50%;
+  background-color: #BDBDBD;
+  overflow: hidden;
+  border: 2px solid #fff;
+  position: relative;
+  margin-left: -10px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-body{
+  border: 1px solid #ECECEF;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+
+}
+
+.carpeta-nombre{
+  font-family: Inter;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+}
+
+.modificacion{
+  font-family: Inter;
+  font-size: 13px;
+  color: white;
+}
+
+.division{
+  border: none;
+  height: 1.5px;
+  background-color: white;
+}
+.active {
+  background-color: #2E7895 !important; /* Ejemplo de color de fondo para el botón activo */
+  color: white;
+}
+
+.nombre-lista{
+  font-family: Inter;
+  font-weight: 400;
+  font-size: 15px;
+  color: #536271;
+
+}
+th{
+  font-family: Inter;
+  font-size: 14px;
+  color: #5F6D7B;
+  font-weight: 500;
+  border: none;
+}
+
+
+.offcanvas.offcanvas-end {
+  width: 650px; /* Ancho mayor (predeterminado es 400px) */
+}
+.btun {
+  width: 140px;
+}
+.detalles-carpeta {
+  max-height: 400px;   /* Ajusta este valor según el tamaño deseado */
+  overflow-y: auto;
+}
+.subtitulo{
+  font-size: 14px;
+}
+
+.subtitulo2{
+  color: rgb(107, 107, 107);
+}

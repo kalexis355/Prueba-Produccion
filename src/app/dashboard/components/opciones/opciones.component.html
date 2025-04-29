@@ -3,15 +3,15 @@
 <div class="container">
   <ul class="list-group list-unstyled ps-3 py-3 me-2">
 
-    <li class="item align-content-center" routerLinkActive="active">
-      <a  class="a-tablero-inicial" routerLink="board">
+    <li class="item align-content-center" routerLinkActive="active" >
+      <a  class="a-tablero-inicial" routerLink="board" (click)="borrarTodaRuta()">
         <mat-icon class="" style="color: #475767; ">dashboard</mat-icon>
         <span class="ps-2 tablero-inicio">Tablero de inicio</span>
       </a>
     </li>
 
     <li class="item mt-3" routerLinkActive="active">
-      <a class="a-tablero-inicial" routerLink="perfil">
+      <a class="a-tablero-inicial" routerLink="perfil" (click)="borrarTodaRuta()">
         <mat-icon style="color: #475767;">person_outline</mat-icon>
         <span class="ps-2 tablero-inicio">Perfil personal</span>
       </a>
@@ -26,8 +26,8 @@
       </a>
     </li>
 
-    <li class="item mt-3">
-      <a class="a-tablero-inicial">
+    <li class="item mt-3" routerLinkActive="active">
+      <a class="a-tablero-inicial" routerLink="expediente" (click)="borrarTodaRuta()">
         <mat-icon style="color: #475767;">folder_open</mat-icon>
         <span class="ps-2 tablero-inicio">Expedientes</span>
       </a>
@@ -44,7 +44,7 @@
     <span class="mt-4 gestion-documental" style="color: #475767ae ;">Firma y seguridad</span>
 
     <li class="item mt-3" routerLinkActive="active">
-      <a class="a-tablero-inicial" routerLink="firma">
+      <a class="a-tablero-inicial" routerLink="firma" (click)="borrarTodaRuta()">
         <mat-icon class="material-icons-outlined" style="color: #475767;">edit_outline</mat-icon>
         <span class="ps-2 tablero-inicio">Firma electrónica</span>
       </a>
@@ -60,7 +60,7 @@
     <span class="mt-4 gestion-documental" style="color: #475767ae ;">Ajustes</span>
 
     <li class="item mt-3"  routerLinkActive="active" *ngIf="rolAdminSa()">
-      <a class="a-tablero-inicial" routerLink="users">
+      <a class="a-tablero-inicial" routerLink="users" (click)="borrarTodaRuta()">
         <mat-icon class="material-icons-outlined" style="color: #475767;">manage_accounts</mat-icon>
         <span class="ps-2 tablero-inicio">Usuarios y roles</span>
       </a>

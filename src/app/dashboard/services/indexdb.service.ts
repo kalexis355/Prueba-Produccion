@@ -80,6 +80,29 @@ export class IndexDbService {
     });
    }
 
+   async guardarCarpetasDelegado(delegado: number):Promise<any>{
+    const db = await this.dbPromise;
+    const tx = db.transaction('carpetas','readonly');
+    const store = tx.objectStore('carpetas');
+
+    const carpetas = await store.getAll();
+
+    const carpetasDelegado = carpetas.filter(carpeta=>{
+      return carpeta.Delegado === delegado
+    });
+
+    if(carpetasDelegado.length >0){
+      console.log('El usuario es delegado de las siguientes carpetas ',carpetasDelegado);
+
+    } else {
+      console.log('El usuario no es delegado de ninguna carpeta');
+
+    }
+
+    return carpetasDelegado;
+
+   }
+
    async guardarArchivosFrecuentes(archivo:DocumentoContenido):Promise<void>{
     const db = await this.dbPromise;
     const tx = db.transaction('archivosFrecuentes','readwrite');

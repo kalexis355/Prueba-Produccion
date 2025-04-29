@@ -2,7 +2,7 @@ import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { CarpetaContenido } from '../../interfaces/contenidoCarpeta';
 import { RolesUsuario } from '../../../login/interfaces';
 import { Auth2Service } from '../../../login/services/auth2.service';
-import { CarpetaBase, CarpetasPadre } from '../../interfaces/carpeta.interface';
+import { CarpetaBase, CarpetaEstructura, CarpetasPadre } from '../../interfaces/carpeta.interface';
 import { log } from 'console';
 import { IndexDbService } from '../../services/indexdb.service';
 import { MatDialog } from '@angular/material/dialog';

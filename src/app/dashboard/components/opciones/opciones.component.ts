@@ -4,6 +4,7 @@ import { DashboardService } from '../../services/dashboard.service';
 import { Carpeta } from '../../interfaces/carpeta.interface';
 import { RutaService } from '../../services/ruta.service';
 import { Auth2Service } from '../../../login/services/auth2.service';
+import { GestionCarpetasService } from '../../services/gestionCarpetas.service';
 
 @Component({
   selector: 'app-opciones',
@@ -17,6 +18,7 @@ export class OpcionesComponent {
   private authService2 = inject(Auth2Service)
 
   private dashService = inject(DashboardService)
+  private carpetaService = inject(GestionCarpetasService)
   private rutaService = inject(RutaService)
 
   //controlar el despliegue y cambio de icono
@@ -78,7 +80,7 @@ export class OpcionesComponent {
     this.isActive = !this.isActive;
   }
   borrarTodaRuta(){
-    this.rutaService.guardarRuta.set([])
+    this.carpetaService.reiniciarRuta();
   }
 
 }

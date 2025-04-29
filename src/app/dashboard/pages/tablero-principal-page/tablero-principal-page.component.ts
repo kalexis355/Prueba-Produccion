@@ -30,6 +30,9 @@ export class TableroPrincipalPageComponent implements OnInit {
       localStorage.removeItem('nombreOficina')
       this.cargarCarpetasFrecuentes();
       this.cargarArchivosFrecuentes();
+
+      this.carpetaService.obtenerCarpetasDelegado(this.authService2.currentUSer2()!.Cod)
+
     }
 
     guardarEnRuta(carpeta:CarpetasPadre|CarpetaBase){
