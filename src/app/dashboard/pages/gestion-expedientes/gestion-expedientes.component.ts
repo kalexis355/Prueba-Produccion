@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { GestionCarpetasService } from '../../services/gestionCarpetas.service';
-import { CarpetaEstructura, CarpetasPadre, DetalleCarpeta } from '../../interfaces/carpeta.interface';
+import { CarpetaBase, CarpetaEstructura, CarpetasPadre, DetalleCarpeta } from '../../interfaces/carpeta.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogoCompartirComponent } from '../../components/dialogo-compartir/dialogo-compartir.component';
 import { DialogoDescargarCarpetaComponent } from '../../components/dialogo-descargar-carpeta/dialogo-descargar-carpeta.component';
@@ -91,11 +91,12 @@ export class GestionExpedientesComponent implements OnInit{
       });
      }
 
-     openIndice(){
+     openIndice(carpeta: CarpetasPadre | CarpetaBase){
       const dialogRef = this.dialog.open(IndiceElectronicoComponent, {
         width: '1400px',
         height: '550px',
         maxWidth: '100%',
+        data: carpeta,
         // disableClose: true,
       });
      }

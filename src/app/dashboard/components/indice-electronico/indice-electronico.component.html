@@ -23,7 +23,12 @@
     <mat-divider style="border-top-color: #c4c4c4;"></mat-divider>
   </div>
 
-  <div class="p-3">
+  <div *ngIf="contenidoCarpeta.contenido.length ===0 " class="d-flex flex-column justify-content-center align-items-center">
+    <img src="assets/iconos/indiceVacio.png" alt="IndiceVacio" height="300" width="300">
+    <span class="indice">El indice esta vacio</span>
+  </div>
+
+  <div class="p-3" *ngIf="contenidoCarpeta.contenido.length>0">
     <table class="table">
       <thead>
         <tr>
@@ -43,45 +48,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td >112233445566778899AB</td>
-          <td>Contrato #145</td>
+        <tr *ngFor="let contenido of contenidoCarpeta.contenido; let i = index">
+          <td >11223344556677889{{contenido.Cod}}</td>
+          <td>{{contenido.Nombre}}</td>
           <td>Contrato</td>
           <td>25-02-2025</td>
           <td>01-03-2025</td>
           <td>TLFRNZPLI6389</td>
           <td>MD5</td>
-          <td>1</td>
-          <td>1</td>
-          <td>4</td>
-          <td>PDF/A</td>
-          <td>50 KB</td>
-          <td>Digital</td>
-        </tr>
-        <tr>
-          <td >112233445566778899AB</td>
-          <td>Contrato #145</td>
-          <td>Contrato</td>
-          <td>25-02-2025</td>
-          <td>01-03-2025</td>
-          <td>TLFRNZPLI6389</td>
-          <td>MD5</td>
-          <td>1</td>
-          <td>1</td>
-          <td>4</td>
-          <td>PDF/A</td>
-          <td>50 KB</td>
-          <td>Digital</td>
-        </tr>
-        <tr>
-          <td >112233445566778899AB</td>
-          <td>Contrato #145</td>
-          <td>Contrato</td>
-          <td>25-02-2025</td>
-          <td>01-03-2025</td>
-          <td>TLFRNZPLI6389</td>
-          <td>MD5</td>
-          <td>1</td>
+          <td>{{i+1}}</td>
           <td>1</td>
           <td>4</td>
           <td>PDF/A</td>
@@ -92,3 +67,49 @@
     </table>
   </div>
 </div>
+
+<!--         <tr>
+          <td >112233445566778899AB</td>
+          <td>Contrato #145</td>
+          <td>Contrato</td>
+          <td>25-02-2025</td>
+          <td>01-03-2025</td>
+          <td>TLFRNZPLI6389</td>
+          <td>MD5</td>
+          <td>1</td>
+          <td>1</td>
+          <td>4</td>
+          <td>PDF/A</td>
+          <td>50 KB</td>
+          <td>Digital</td>
+        </tr>
+        <tr>
+          <td >112233445566778899AB</td>
+          <td>Contrato #145</td>
+          <td>Contrato</td>
+          <td>25-02-2025</td>
+          <td>01-03-2025</td>
+          <td>TLFRNZPLI6389</td>
+          <td>MD5</td>
+          <td>1</td>
+          <td>1</td>
+          <td>4</td>
+          <td>PDF/A</td>
+          <td>50 KB</td>
+          <td>Digital</td>
+        </tr>
+        <tr>
+          <td >112233445566778899AB</td>
+          <td>Contrato #145</td>
+          <td>Contrato</td>
+          <td>25-02-2025</td>
+          <td>01-03-2025</td>
+          <td>TLFRNZPLI6389</td>
+          <td>MD5</td>
+          <td>1</td>
+          <td>1</td>
+          <td>4</td>
+          <td>PDF/A</td>
+          <td>50 KB</td>
+          <td>Digital</td>
+        </tr> -->

@@ -12,6 +12,7 @@ import { DialogoComponent } from '../dialogo/dialogo.component';
 import { DialogoEditarComponent } from '../dialogo-editar/dialogo-editar.component';
 import { IndiceElectronicoComponent } from '../indice-electronico/indice-electronico.component';
 import { GestionCarpetasService } from '../../services/gestionCarpetas.service';
+import { json } from 'stream/consumers';
 
 @Component({
   selector: 'app-carpetas-contenido',
@@ -182,11 +183,15 @@ export class CarpetasContenidoComponent {
     });
    }
 
-   openIndice(){
+   openIndice(carpeta:CarpetasPadre | CarpetaBase){
+    console.log(carpeta);
+
+
     const dialogRef = this.dialog.open(IndiceElectronicoComponent, {
       width: '1400px',
       height: '550px',
       maxWidth: '100%',
+      data:carpeta
       // disableClose: true,
     });
    }

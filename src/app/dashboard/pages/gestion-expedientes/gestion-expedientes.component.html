@@ -97,7 +97,7 @@
                 <button class="btn" (click)="openEditar()">
                   <mat-icon  style="color: white">drive_file_rename_outline</mat-icon>
                 </button>
-                <button class="btn" (click)="openIndice()">
+                <button class="btn" (click)="openIndice(carpeta)" *ngIf="carpeta.TipoCarpeta===3 || carpeta.TipoCarpeta ===4">
                   <mat-icon  style="color: white" >drive_file_move</mat-icon>
                 </button>
                 <button class="btn"
@@ -167,7 +167,7 @@
                   <button class="btn p-0 m-0" (click)="openEditar()">
                     <mat-icon  style="color: #475767">drive_file_rename_outline</mat-icon>
                   </button>
-                  <button class="btn p-0 m-0" (click)="openIndice()">
+                  <button class="btn p-0 m-0" (click)="openIndice(carpeta)" *ngIf="carpeta.TipoCarpeta===3 || carpeta.TipoCarpeta ===4">
                     <mat-icon  style="color: #475767">drive_file_move</mat-icon>
                   </button>
                   <button class="btn p-0 m-0"
