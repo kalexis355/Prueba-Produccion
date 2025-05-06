@@ -2,6 +2,7 @@ import { Component, inject, Inject, OnInit } from '@angular/core';
 import { CarpetasPadre, CarpetaBase, ContenidoCarpetaResponse } from '../../interfaces/carpeta.interface';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GestionCarpetasService } from '../../services/gestionCarpetas.service';
+import { IndexDbService } from '../../services/indexdb.service';
 
 @Component({
   selector: 'app-indice-electronico',
@@ -11,6 +12,7 @@ import { GestionCarpetasService } from '../../services/gestionCarpetas.service';
 export class IndiceElectronicoComponent implements OnInit{
 
   private carpetaService = inject(GestionCarpetasService)
+  private indexService = inject(IndexDbService)
 
   carpetaActual!: CarpetasPadre | CarpetaBase;
   contenidoCarpeta!: ContenidoCarpetaResponse;
@@ -38,7 +40,17 @@ export class IndiceElectronicoComponent implements OnInit{
 
       },
       error: (error)=>{
-        console.error('Error al cargar contenido de carpeta:', error);
+        // console.error('Error al cargar contenido de carpeta:', error);
+        this.indexService.obtenerContenidoCarpetaDesdeIndexDB(this.carpetaActual.Cod)
+        .then(resultado =>{
+          console.log(resultado,'este es el resultado señores y señoras');
+
+          this.contenidoCarpeta = {
+            ...this.contenidoCarpeta, // Mantiene las propiedades existentes
+            contenido: [...resultado.carpetas, ...resultado.archivos] // Combina carpetas y archivos en un solo array
+          };
+        })
+
       }
     })
   }
