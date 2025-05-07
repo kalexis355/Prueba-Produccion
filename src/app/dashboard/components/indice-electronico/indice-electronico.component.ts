@@ -3,8 +3,8 @@ import { CarpetasPadre, CarpetaBase, ContenidoCarpetaResponse } from '../../inte
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GestionCarpetasService } from '../../services/gestionCarpetas.service';
 import { IndexDbService } from '../../services/indexdb.service';
-import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
@@ -63,26 +63,53 @@ export class IndiceElectronicoComponent implements OnInit{
   }
 
   descargarPdf(): void {
-   // Da tiempo para asegurar que Angular renderice todo
-   setTimeout(() => {
-    const DATA = this.tablaPDF.nativeElement;
+    const doc = new jsPDF('l', 'mm', 'a4'); // Landscape A4
 
-    html2canvas(DATA, {
-      scale: 2,
-      useCORS: true,
-      allowTaint: true
-    }).then(canvas => {
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('l', 'mm', 'a4'); // Apaisado
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    // Define las columnas del encabezado
+    const head = [[
+      'ID', 'Nombre Documento', 'Tipología Documental', 'Fecha Declaración',
+      'Fecha Incorporación', 'Valor Huella', 'Función Resumen',
+      'Orden Documento', 'Página Inicio', 'Página Fin',
+      'Formato', 'Tamaño', 'Origen'
+    ]];
 
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save('indice-electronico.pdf');
-    }).catch(error => {
-      console.error('Error al generar el PDF:', error);
+    // Cuerpo de la tabla
+    const body = this.contenidoCarpeta.contenido.map((contenido, i) => ([
+      `11223344556677889${contenido.Cod}`,
+      contenido.Nombre,
+      'Contrato',
+      '25-02-2025',
+      '01-03-2025',
+      'TLFRNZPLI6389',
+      'MD5',
+      i + 1,
+      '1',
+      '4',
+      'PDF/A',
+      '50 KB',
+      'Digital'
+    ]));
+
+    autoTable(doc, {
+      head,
+      body,
+      startY: 20,
+      theme: 'grid',
+      styles: {
+        fontSize: 7,
+        cellPadding: 2
+      },
+      headStyles: {
+        fillColor: [22, 160, 133], // Verde-azulado
+        textColor: 255
+      },
+      didDrawPage: (data) => {
+        doc.setFontSize(10);
+        doc.text('Índice Electrónico de Documentos', 14, 10);
+      }
     });
-  }, 100); // Puede ajustarse según el tiempo de carga de datosM esté listo
+
+    doc.save('indice-electronico.pdf');
   }
 
   descargarExcel(){
