@@ -7,13 +7,13 @@
 
 
     <div class="d-flex align-items-center">
-      <button class="btn btn-descargar d-flex align-items-center me-4">
+      <button class="btn btn-descargar d-flex align-items-center me-4" (click)="descargarExcel()">
         <span class="texto-btn me-2">EXCEL</span>
         <mat-icon class="" style="color: white;">download_for_offline</mat-icon>
       </button>
 
-      <button class="btn  btn-descargar d-flex align-items-center ">
-        <span class="texto-btn me-2">CSV</span>
+      <button class="btn  btn-descargar d-flex align-items-center " (click)="descargarPdf()">
+        <span class="texto-btn me-2">PDF</span>
         <mat-icon style="color: white;">download_for_offline</mat-icon>
       </button>
     </div>
@@ -29,42 +29,44 @@
   </div>
 
   <div class="p-3" *ngIf="contenidoCarpeta && contenidoCarpeta.contenido && contenidoCarpeta.contenido.length>0">
-    <table class="table">
-      <thead>
-        <tr>
-          <th style="width: 9%;">Id</th>
-          <th style="width: 10%;">Nombre Documento</th>
-          <th style="width: 5%;">Tipologia Documental</th>
-          <th style="width: 10%;">Fecha Declaración Documento</th>
-          <th style="width: 10%;">Fecha Incorporación Expediente</th>
-          <th style="width: 10%;">Valor Huella</th>
-          <th style="width: 5%;">Función Resumen</th>
-          <th style="width: 5%;">Orden Documento Expediente</th>
-          <th style="width: 5%;">Pagina Inicio</th>
-          <th style="width: 5%;">Pagina Fin</th>
-          <th style="width: 8%;">Formato</th>
-          <th style="width: 8%;">Tamaño</th>
-          <th style="width: 10%;">Origen</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let contenido of contenidoCarpeta.contenido; let i = index">
-          <td >11223344556677889{{contenido.Cod}}</td>
-          <td>{{contenido.Nombre}}</td>
-          <td>Contrato</td>
-          <td>25-02-2025</td>
-          <td>01-03-2025</td>
-          <td>TLFRNZPLI6389</td>
-          <td>MD5</td>
-          <td>{{i+1}}</td>
-          <td>1</td>
-          <td>4</td>
-          <td>PDF/A</td>
-          <td>50 KB</td>
-          <td>Digital</td>
-        </tr>
-      </tbody>
-    </table>
+    <div #tablaPDF>
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width: 9%;">Id</th>
+            <th style="width: 10%;">Nombre Documento</th>
+            <th style="width: 5%;">Tipologia Documental</th>
+            <th style="width: 10%;">Fecha Declaración Documento</th>
+            <th style="width: 10%;">Fecha Incorporación Expediente</th>
+            <th style="width: 10%;">Valor Huella</th>
+            <th style="width: 5%;">Función Resumen</th>
+            <th style="width: 5%;">Orden Documento Expediente</th>
+            <th style="width: 5%;">Pagina Inicio</th>
+            <th style="width: 5%;">Pagina Fin</th>
+            <th style="width: 8%;">Formato</th>
+            <th style="width: 8%;">Tamaño</th>
+            <th style="width: 10%;">Origen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let contenido of contenidoCarpeta.contenido; let i = index">
+            <td >11223344556677889{{contenido.Cod}}</td>
+            <td>{{contenido.Nombre}}</td>
+            <td>Contrato</td>
+            <td>25-02-2025</td>
+            <td>01-03-2025</td>
+            <td>TLFRNZPLI6389</td>
+            <td>MD5</td>
+            <td>{{i+1}}</td>
+            <td>1</td>
+            <td>4</td>
+            <td>PDF/A</td>
+            <td>50 KB</td>
+            <td>Digital</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
